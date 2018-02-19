@@ -1,0 +1,51 @@
+x.x xxxxxxxx
+ - orphan media cleaner
+ - ajouter dossier /var dans la liste des caches
+
+0.7.2 20180213 - Pierre Van Glabeke
+ * réintégration modifs v0.5.1
+
+0.7.1 20180127 - Pierre Van Glabeke
+ * identification resources dc
+ * modif css admin
+
+0.7 20180126 - Pierre Van Glabeke
+ * mise à jour des ressources de dc (plugins, thèmes, versions, settings, tables)
+ * modif css admin
+ * dc2.9 requis
+
+0.6.1 20180124 - Pierre Van Glabeke
+ * modif localisation
+
+0.6 20180123 - Pierre Van Glabeke
+ * ajout favori, modif icône
+ * cosmétique dc2.6
+ * modifs localisation
+
+0.5.1 20101112
+ * Fixed install on nightly build
+
+0.5 20100606
+ * Switched to DC 2.2
+ * Fixed bug in tabs
+
+0.4 20100416
+ * Fixed list of tables (closes #440)
+ * Fixed direct uninstaller
+ * Added readable errors return
+ * Added DC 2.2 compatibility (new settings)
+ * Changed admin design
+
+0.3 20091212
+ * Fixed localized strings
+ * Prepared DC 2.2 break
+ * Added versioning
+ * Added support for plugin activityReport
+
+0.2 20091010
+ * Fixed ''delete_all'' settings
+ * Fixed typo
+ * Added license
+
+0.1 20090828
+ * First public release
