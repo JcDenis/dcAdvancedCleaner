@@ -6,5 +6,5 @@
 	padding:14px 0 2px 36px;
 	background:url(index.php?pf=dcAdvancedCleaner/icon-b.png) no-repeat;
 }
-.offline {background: url("index.php?pf=info/images/icons/dotclear.png") no-repeat scroll 18em 7px;}
+.offline {background: url("index.php?pf=dcAdvancedCleaner/dotclear.png") no-repeat scroll 18em 7px;}
 .offline label{font-weight:bold;color:#c44d58;}

@@ -16,7 +16,7 @@ $this->registerModule(
 	/* Name */			"Advanced cleaner",
 	/* Description*/		"Make a huge cleaning of dotclear",
 	/* Author */			"JC Denis",
-	/* Version */			'0.7.2',
+	/* Version */			'0.7.3',
 	/* Properties */
 	array(
 		'permissions' => null,

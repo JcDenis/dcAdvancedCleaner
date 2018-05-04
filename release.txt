@@ -2,6 +2,9 @@ x.x xxxxxxxx
  - orphan media cleaner
  - ajouter dossier /var dans la liste des caches
 
+0.7.3 20180312 - Pierre Van Glabeke
+ * pb image liée au plugin informations
+
 0.7.2 20180213 - Pierre Van Glabeke
  * réintégration modifs v0.5.1
 
