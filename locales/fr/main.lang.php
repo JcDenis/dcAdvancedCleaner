@@ -188,5 +188,3 @@ $GLOBALS['__l10n']['Hide Dotclear default properties in actions tabs'] = 'Cacher
 $GLOBALS['__l10n']['Prevent from deleting Dotclear important properties.'] = 'Évite de supprimer des propriétés importantes de Dotclear.';
 
 $GLOBALS['__l10n']['Make a huge cleaning of dotclear'] = 'Faites un énorme nettoyage de dotclear';
-
-?>

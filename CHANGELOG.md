@@ -6,7 +6,8 @@
 - [ ] fix php7.3+ and php8.0
 - [ ] fix PSR(1)2 coding style
 - [ ] fix translation
-- [ ] update license
+- [x] add dcstore (pre release)
+- [x] update license
 - [x] update readme
 
 0.7.3 - 2018.03.12 - Pierre Van Glabeke

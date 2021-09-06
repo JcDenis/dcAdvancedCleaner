@@ -12,5 +12,5 @@
 if (!defined('DC_RC_PATH')){return;}
 if (!isset($__resources['help']['dcAdvancedCleaner']))
 {
-	$__resources['help']['dcAdvancedCleaner'] = dirname(__FILE__).'/help/dcAdvancedCleaner.html';
+    $__resources['help']['dcAdvancedCleaner'] = dirname(__FILE__).'/help/dcAdvancedCleaner.html';
 }

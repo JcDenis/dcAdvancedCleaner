@@ -32,7 +32,7 @@ Once it's done you can manage your reports from menu
  * Source & contribution : [GitHub Page](https://github.com/JcDenis/dcAdvancedCleaner)
  * Packages & details:  [Dotaddict Page](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner)
  * Discuss and help : [Dotclear Forum](https://forum.dotclear.org/viewtopic.php?id=40381)
- 
+
 ## CONTRIBUTORS
 
  * Jean-Christian Denis
