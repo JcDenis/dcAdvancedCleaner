@@ -11,25 +11,30 @@
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 
-if (!defined('DC_CONTEXT_ADMIN')){return;}
+if (!defined('DC_CONTEXT_ADMIN')) {
+    return null;
+}
 
 $_menu['Plugins']->addItem(
     __('Advanced cleaner'),
-    'plugin.php?p=dcAdvancedCleaner',
-    'index.php?pf=dcAdvancedCleaner/icon.png',
-    preg_match('/plugin.php\?p=dcAdvancedCleaner(&.*)?$/',$_SERVER['REQUEST_URI']),
+    $core->adminurl->get('admin.plugin.dcAdvancedCleaner'),
+    dcPage::getPF('dcAdvancedCleaner/icon.png'),
+    preg_match(
+        '/' . preg_quote($core->adminurl->get('admin.plugin.dcAdvancedCleaner')) . '(&.*)?$/', 
+        $_SERVER['REQUEST_URI']
+    ),
     $core->auth->isSuperAdmin()
 );
 
-$core->addBehavior('adminDashboardFavorites','dcAdvancedCleanerDashboardFavorites');
+$core->addBehavior('adminDashboardFavorites', 'dcAdvancedCleanerDashboardFavorites');
 
-function dcAdvancedCleanerDashboardFavorites($core,$favs)
+function dcAdvancedCleanerDashboardFavorites(dcCore $core, $favs)
 {
-    $favs->register('dcAdvancedCleaner', array(
+    $favs->register('dcAdvancedCleaner', [
         'title' => __('Advanced cleaner'),
-        'url' => 'plugin.php?p=dcAdvancedCleaner',
-        'small-icon' => 'index.php?pf=dcAdvancedCleaner/icon.png',
-        'large-icon' => 'index.php?pf=dcAdvancedCleaner/icon-big.png',
-        'permissions' => 'usage,contentadmin'
-    ));
+        'url' => $core->adminurl->get('admin.plugin.dcAdvancedCleaner'),
+        'small-icon' => dcPage::getPF('dcAdvancedCleaner/icon.png'),
+        'large-icon' => dcPage::getPF('dcAdvancedCleaner/icon-big.png'),
+        'permissions' => $core->auth->isSuperAdmin()
+    ]);
 }

@@ -11,7 +11,9 @@
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 
-if (!defined('DC_ADMIN_CONTEXT')){return;}
+if (!defined('DC_ADMIN_CONTEXT')) {
+    return null;
+}
 
 /**
 @brief Modules uninstall features handler
@@ -24,9 +26,9 @@ class dcUninstaller
 {
     protected $path;
 
-    protected $modules = array();    ///< <b>array</b> Modules informations array
-    protected $actions = array('user'=>array(),'callback'=>array());
-    protected $callbacks = array('user'=>array(),'callback'=>array());
+    protected $modules = [];    ///< <b>array</b> Modules informations array
+    protected $actions = ['user' => [], 'callback' => []];
+    protected $callbacks = ['user' => [], 'callback' => []];
 
     protected $id = null;
     protected $mroot = null;
@@ -40,36 +42,36 @@ class dcUninstaller
     'caches' : if module has files on DC caches path,
     'versions' : if module set a versions on DC table 'version' 
     */
-    protected static $allowed_properties = array(
-        'versions' => array(
+    protected static $allowed_properties = [
+        'versions' => [
             'delete' => 'delete version in dc'
-        ),
-        'settings' => array(
+        ],
+        'settings' => [
             'delete_global' => 'delete global settings',
             'delete_local' => 'delete local settings',
             'delete_all' => 'delete all settings'
-        ),
-        'tables' => array(
+        ],
+        'tables' => [
             'empty' => 'empty table',
             'delete' => 'delete table'
-        ),
-        'plugins' => array(
+        ],
+        'plugins' => [
             'empty' => 'empty plugin folder',
             'delete' => 'delete plugin folder'
-        ),
-        'themes' => array(
+        ],
+        'themes' => [
             'empty' => 'empty theme folder',
             'delete' => 'delete theme folder'
-        ),
-        'caches' => array(
+        ],
+        'caches' => [
             'empty' => 'empty cache folder',
             'delete' => 'delete cache folder'
-        )
-    );
+        ]
+    ];
 
-    protected static $priority_properties = array(
+    protected static $priority_properties = [
         'versions','settings','tables','themes','plugins','caches'
-    );
+    ];
 
     public $core;    ///< <b>dcCore</b>    dcCore instance
 
@@ -78,7 +80,7 @@ class dcUninstaller
 
     @param    core        <b>dcCore</b>    dcCore instance
     */
-    public function __construct($core)
+    public function __construct(dcCore $core)
     {
         $this->core =& $core;
     }
@@ -100,20 +102,20 @@ class dcUninstaller
     {
         $this->path = explode(PATH_SEPARATOR,$path);
 
-        foreach ($this->path as $root)
-        {
-            if (!is_dir($root) || !is_readable($root)) continue;
+        foreach ($this->path as $root) {
+            if (!is_dir($root) || !is_readable($root)) {
+                continue;
+            }
+            if (substr($root, -1) != '/') {
+                $root .= '/';
+            }
+            if (($d = @dir($root)) === false) {
+                continue;
+            }
+            while (($entry = $d->read()) !== false) {
+                $full_entry = $root . '/' . $entry;
 
-            if (substr($root,-1) != '/') $root .= '/';
-
-            if (($d = @dir($root)) === false) continue;
-
-            while (($entry = $d->read()) !== false)
-            {
-                $full_entry = $root.'/'.$entry;
-
-                if ($entry != '.' && $entry != '..' && is_dir($full_entry))
-                {
+                if ($entry != '.' && $entry != '..' && is_dir($full_entry)) {
                     $this->loadModule($full_entry);
                 }
             }
@@ -121,7 +123,7 @@ class dcUninstaller
         }
 
         # Sort modules by name
-        uasort($this->modules,array($this,'sortModules'));
+        uasort($this->modules, [$this, 'sortModules']);
     }
 
     /**
@@ -133,14 +135,14 @@ class dcUninstaller
     */
     public function loadModule($root)
     {
-        if (file_exists($root.'/_define.php')
-         && file_exists($root.'/_uninstall.php')) {
+        if (file_exists($root . '/_define.php')
+         && file_exists($root . '/_uninstall.php')) {
 
             $this->id = basename($root);
             $this->mroot = $root;
 
-            require $root.'/_define.php';
-            require $root.'/_uninstall.php';
+            require $root . '/_define.php';
+            require $root . '/_uninstall.php';
 
             $this->id = null;
             $this->mroot = null;
@@ -148,25 +150,24 @@ class dcUninstaller
     }
 
     /**
-    This method registers a module in modules list. You should use 
-    this to register a new module.
+    This method registers a module in modules list.
 
     @param    name            <b>string</b>        Module name
     @param    desc            <b>string</b>        Module description
     @param    author        <b>string</b>        Module author name
     @param    version        <b>string</b>        Module version
     */
-    public function registerModule($name,$desc,$author,$version)
+    public function registerModule($name, $desc, $author, $version, $properties = [])
     {
         if ($this->id) {
-            $this->modules[$this->id] = array(
-            'root' => $this->mroot,
-            'name' => $name,
-            'desc' => $desc,
-            'author' => $author,
-            'version' => $version,
-            'root_writable' => is_writable($this->mroot)
-            );
+            $this->modules[$this->id] = [
+                'root' => $this->mroot,
+                'name' => $name,
+                'desc' => $desc,
+                'author' => $author,
+                'version' => $version,
+                'root_writable' => is_writable($this->mroot)
+            ];
         }
     }
 
@@ -177,7 +178,7 @@ class dcUninstaller
     @param    id        <b>string</b>        Optionnal module ID
     @return    <b>array</b>
     */
-    public function getModules($id=null)
+    public function getModules($id = null)
     {
         if ($id && isset($this->modules[$id])) {
             return $this->modules[$id];
@@ -205,33 +206,37 @@ class dcUninstaller
     @param    ns        <b>string</b>        Name of setting related to module.
     @param    desc        <b>string</b>        Description of action
     */
-    protected function addUserAction($type,$action,$ns,$desc='')
+    protected function addUserAction($type, $action, $ns, $desc = '')
     {
-        $this->addAction('user',$type,$action,$ns,$desc);
+        $this->addAction('user', $type, $action, $ns, $desc);
     }
 
-    protected function addDirectAction($type,$action,$ns,$desc='')
+    protected function addDirectAction($type, $action, $ns, $desc = '')
     {
-        $this->addAction('direct',$type,$action,$ns,$desc);
+        $this->addAction('direct', $type, $action, $ns, $desc);
     }
 
-    private function addAction($group,$type,$action,$ns,$desc)
+    private function addAction($group, $type, $action, $ns, $desc)
     {
         $group = self::group($group);
 
-        if (null === $this->id) return;
-
-        if (empty($type) || empty($ns)) return;
-
-        if (!isset(self::$allowed_properties[$type][$action])) return;
-
-        if (empty($desc)) $desc = __($action);
-
-        $this->actions[$group][$this->id][$type][] = array(
+        if (null === $this->id) {
+            return null;
+        }
+        if (empty($type) || empty($ns)) {
+            return null;
+        }
+        if (!isset(self::$allowed_properties[$type][$action])) {
+            return null;
+        }
+        if (empty($desc)) {
+            $desc = __($action);
+        }
+        $this->actions[$group][$this->id][$type][] = [
             'ns' => $ns,
             'action' => $action,
             'desc' => $desc
-        );
+        ];
     }
 
     /**
@@ -243,27 +248,28 @@ class dcUninstaller
     */
     public function getUserActions($id)
     {
-        return $this->getActions('user',$id);
+        return $this->getActions('user', $id);
     }
 
     public function getDirectActions($id)
     {
-        return $this->getActions('direct',$id);
+        return $this->getActions('direct', $id);
     }
 
-    protected function getActions($group,$id)
+    protected function getActions($group, $id)
     {
         $group = self::group($group);
 
-        if (!isset($this->actions[$group][$id])) return array();
-
-        $res = array();
-        foreach(self::$priority_properties as $k => $v)
-        {
-            if (!isset($this->actions[$group][$id][$v])) continue;
+        if (!isset($this->actions[$group][$id])) {
+            return [];
+        }
+        $res = [];
+        foreach(self::$priority_properties as $k => $v) {
+            if (!isset($this->actions[$group][$id][$v])) {
+                continue;
+            }
             $res[$v] = $this->actions[$group][$id][$v];
         }
-
         return $res;
     }
 
@@ -274,30 +280,33 @@ class dcUninstaller
     @param    func        <b>string</b>        Callable function
     @param    desc        <b>string</b>        Description of action
     */
-    protected function addUserCallback($func,$desc='')
+    protected function addUserCallback($func, $desc= '')
     {
-        $this->addCallback('user',$func,$desc);
+        $this->addCallback('user', $func, $desc);
     }
 
-    protected function addDirectCallback($func,$desc='')
+    protected function addDirectCallback($func, $desc = '')
     {
-        $this->addCallback('direct',$func,$desc);
+        $this->addCallback('direct', $func, $desc);
     }
 
-    private function addCallback($group,$func,$desc)
+    private function addCallback($group, $func, $desc)
     {
         $group = self::group($group);
 
-        if (null === $this->id) return;
-
-        if (empty($desc)) $desc = __('extra action');
-
-        if (!is_callable($func)) return;
-
-        $this->callbacks[$group][$this->id][] = array(
+        if (null === $this->id) {
+            return null;
+        }
+        if (empty($desc)) {
+            $desc = __('extra action');
+        }
+        if (!is_callable($func)) {
+            return null;
+        }
+        $this->callbacks[$group][$this->id][] = [
             'func' => $func,
             'desc' => $desc
-        );
+        ];
     }
 
     /**
@@ -308,20 +317,21 @@ class dcUninstaller
     */
     public function getUserCallbacks($id)
     {
-        return $this->getCallbacks('user',$id);
+        return $this->getCallbacks('user', $id);
     }
 
     public function getDirectCallbacks($id)
     {
-        return $this->getCallbacks('direct',$id);
+        return $this->getCallbacks('direct', $id);
     }
 
-    protected function getCallbacks($group,$id)
+    protected function getCallbacks($group, $id)
     {
         $group = self::group($group);
 
-        if (!isset($this->callbacks[$group][$id])) return array();
-
+        if (!isset($this->callbacks[$group][$id])) {
+            return [];
+        }
         return $this->callbacks[$group][$id];
     }
 
@@ -334,22 +344,23 @@ class dcUninstaller
     @param    ns        <b>string</b>        Name of setting related to module.
     @return    <b>array</b>
     */
-    public function execute($type,$action,$ns)
+    public function execute($type, $action, $ns)
     {
         $prop = $this->getAllowedProperties();
 
-        if (!isset($prop[$type][$action]) || empty($ns)) return;
-
-        dcAdvancedCleaner::execute($this->core,$type,$action,$ns);
+        if (!isset($prop[$type][$action]) || empty($ns)) {
+            return null;
+        }
+        dcAdvancedCleaner::execute($this->core, $type, $action, $ns);
     }
 
-    private function sortModules($a,$b)
+    private function sortModules($a, $b)
     {
-        return strcasecmp($a['name'],$b['name']);
+        return strcasecmp($a['name'], $b['name']);
     }
 
     private function group($group)
     {
-        return in_array($group,array('user','direct')) ? $group : null;
+        return in_array($group, ['user','direct']) ? $group : null;
     }
 }

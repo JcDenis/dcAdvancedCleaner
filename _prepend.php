@@ -11,41 +11,28 @@
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 
-if (!defined('DC_RC_PATH')) return;
+if (!defined('DC_RC_PATH')) {
+    return null;
+}
 
-global $__autoload, $core;
+$d = dirname(__FILE__) . '/inc/';
+
 $core->blog->settings->addNamespace('dcAdvancedCleaner');
 
-# Main class
-$__autoload['dcAdvancedCleaner'] = 
-    dirname(__FILE__).'/inc/class.dc.advanced.cleaner.php';
+$__autoload['dcAdvancedCleaner'] = $d . 'class.dc.advanced.cleaner.php';
+$__autoload['behaviorsDcAdvancedCleaner'] = $d . 'lib.dc.advanced.cleaner.behaviors.php';
+$__autoload['dcUninstaller'] = $d . 'class.dc.uninstaller.php';
+$__autoload['dcAdvancedCleanerActivityReportBehaviors'] = $d . 'lib.dc.advanced.cleaner.activityreport.php';
 
-# Behaviors class
-$__autoload['behaviorsDcAdvancedCleaner'] = 
-    dirname(__FILE__).'/inc/lib.dc.advanced.cleaner.behaviors.php';
-
-# Unsintaller class
-$__autoload['dcUninstaller'] = 
-    dirname(__FILE__).'/inc/class.dc.uninstaller.php';
-
-# Add tab on plugin admin page
 $core->addBehavior('pluginsToolsTabs',
-    array('behaviorsDcAdvancedCleaner','pluginsToolsTabs'));
-
-# Action on plugin deletion
+    ['behaviorsDcAdvancedCleaner', 'pluginsToolsTabs']);
 $core->addBehavior('pluginsBeforeDelete',
-    array('behaviorsDcAdvancedCleaner','pluginsBeforeDelete'));
-
-# Action on theme deletion
+    ['behaviorsDcAdvancedCleaner', 'pluginsBeforeDelete']);
 $core->addBehavior('themeBeforeDelete',
-    array('behaviorsDcAdvancedCleaner','themeBeforeDelete'));
-
-# Tabs of dcAvdancedCleaner admin page
+    ['behaviorsDcAdvancedCleaner', 'themeBeforeDelete']);
 $core->addBehavior('dcAdvancedCleanerAdminTabs',
-    array('behaviorsDcAdvancedCleaner','dcAdvancedCleanerAdminTabs'));
+    ['behaviorsDcAdvancedCleaner', 'dcAdvancedCleanerAdminTabs']);
 
-# Add dcac events on plugin activityReport
-if (defined('ACTIVITY_REPORT'))
-{
-    require_once dirname(__FILE__).'/inc/lib.dc.advanced.cleaner.activityreport.php';
+if (defined('ACTIVITY_REPORT')) {
+    dcAdvancedCleanerActivityReportBehaviors::add($core);
 }
