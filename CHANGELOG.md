@@ -7,7 +7,7 @@
 - [ ] fix PSR(1)2 coding style
 - [ ] fix translation
 - [ ] update license
-- [ ] update readme
+- [x] update readme
 
 0.7.3 - 2018.03.12 - Pierre Van Glabeke
 - pb image liée au plugin informations
