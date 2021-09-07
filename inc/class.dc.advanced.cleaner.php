@@ -63,7 +63,7 @@ class dcAdvancedCleaner
             'default', 'customCSS', 'blueSilence', 'berlin', 'ductile'
         ],
         'caches' => [
-            'cbfeed', 'dcrepo', 'versions'
+            'cbfeed', 'cbtpl', 'dcrepo', 'versions'
         ],
         'versions' => [
             'antispam', 'blogroll', 'blowupConfig', 'core', 'dcCKEditor', 'dcLegacyEditor', 'pages', 'pings', 'simpleMenu', 'tags', 'widgets'
@@ -73,6 +73,21 @@ class dcAdvancedCleaner
     public static $exclude = [
         '.', '..', '__MACOSX', '.svn', 'CVS', '.DS_Store', 'Thumbs.db'
     ];
+
+    public static function getOfficial($type = '')
+    {
+        $official = array_merge(
+            self::$dotclear,
+            [
+                'plugins' => explode(',', DC_DISTRIB_PLUGINS),
+                'themes' => explode(',', DC_DISTRIB_THEMES)
+            ]
+        );
+        if (empty($type)) {
+            return $official;
+        }
+        return array_key_exists($type, $official) ? $official[$type] : [];
+    }
 
     public static function getSettings($core)
     {
@@ -351,7 +366,7 @@ class dcAdvancedCleaner
         $files = files::scandir($path);
 
         foreach($files AS $file) {
-            if (in_array($file,$exclude)) {
+            if (in_array($file, $exclude)) {
                 continue;
             }
             if (is_dir($path . '/' . $file)) {

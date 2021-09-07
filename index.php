@@ -87,8 +87,9 @@ function drawDcAdvancedCleanerLists($core, $type)
         '<th>' . __('Name') . '</th><th>' . __('Objects') . '</th>' .
         '</tr></thead><tbody>';
 
+        $official = dcAdvancedCleaner::getOfficial($type);
         foreach($rs as $k => $v) {
-            $offline = in_array($v['key'], dcAdvancedCleaner::$dotclear[$type]);
+            $offline = in_array($v['key'], $official);
 
             if ($core->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_dcproperty_hide && $offline) {
                 continue;
