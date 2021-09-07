@@ -173,4 +173,3 @@ $GLOBALS['__l10n']['Beware: All actions done here are irreversible and are direc
 $GLOBALS['__l10n']['Default values of Dotclear are hidden. You can change this in settings tab'] = 'Les valeurs par défaut de Dotclear sont cachées. Vous pouvez changer cela dans l\'onglet des paramètres.';
 
 $GLOBALS['__l10n']['Make a huge cleaning of dotclear'] = 'Faites un énorme nettoyage de dotclear';
-
