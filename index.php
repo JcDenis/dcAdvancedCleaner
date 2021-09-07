@@ -168,20 +168,6 @@ $combo_type = [
     'versions' => ['delete']
 ];
 
-# This plugin settings
-if ($tab == 'dcac' && $action == 'dcadvancedcleaner_settings') {
-    try {
-        $s->put('dcAdvancedCleaner_behavior_active', isset($_POST['dcadvancedcleaner_behavior_active']), 'boolean');
-        $s->put('dcAdvancedCleaner_dcproperty_hide', isset($_POST['dcadvancedcleaner_dcproperty_hide']), 'boolean');
-
-        dcPage::addSuccessNotice(__('Settings successfuly updated'));
-        $core->adminurl->redirect('admin.plugin.dcAdvancedCleaner', ['tab' => 'dcac', 'part' => '']);
-    }
-    catch(Exception $e) {
-        $core->error->add($e->getMessage());
-    }
-}
-
 # Actions
 if ($tab == 'lists' && !empty($entries) 
  && isset($combo_type[$type]) 
@@ -240,36 +226,6 @@ echo '</div>';
 
 # --BEHAVIOR-- dcAdvancedCleanerAdminTabs
 $core->callBehavior('dcAdvancedCleanerAdminTabs', $core, $core->adminurl->get('admin.plugin.dcAdvancedCleaner', ['tab' => $tab, 'part' => $part]));
-
-echo '
-<div class="multi-part" id="dcac" title="' . __('This plugin settings') . '">
-<fieldset><legend>' . __('This plugin settings') . '</legend>
-<form method="post" action="' . $core->adminurl->get('admin.plugin.dcAdvancedCleaner', ['tab' => 'dcac', 'part' => '']) . '">
-<p><label class="classic" for="dcadvancedcleaner_behavior_active">' .
-form::checkbox(
-    'dcadvancedcleaner_behavior_active',
-    1,
-    $s->dcAdvancedCleaner_behavior_active
-) . __('Activate behaviors') . '</label></p>
-<p class="form-note">' . __('Enable actions set in _uninstall.php files.') . '</p>
-<p><label class="classic" for="dcadvancedcleaner_dcproperty_hide">' .
-form::checkbox(
-    'dcadvancedcleaner_dcproperty_hide', 
-    1,
-    $s->dcAdvancedCleaner_dcproperty_hide
-).
-__('Hide Dotclear default properties in actions tabs') . '
-</label></p>
-<p class="form-note">' . __('Prevent from deleting Dotclear important properties.') . '</p>
-<p><input type="submit" name="submit" value="' . __('Save') . '" />' .
-form::hidden(['p'],'dcAdvancedCleaner') .
-form::hidden(['tab'],'dcac') .
-form::hidden(['part'],'') .
-form::hidden(['action'], 'dcadvancedcleaner_settings') .
-$core->formNonce() . '</p>
-</form>
-</fieldset>
-</div>';
 
 dcPage::helpBlock('dcAdvancedCleaner');
 
