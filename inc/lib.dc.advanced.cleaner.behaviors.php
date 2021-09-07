@@ -139,14 +139,13 @@ class behaviorsDcAdvancedCleaner
         '<p>' . __('List of modules with advanced uninstall features') . '</p>' .
         '<form method="post" action="' . $redir . '">' .
         '<table class="clear"><tr>' .
-        '<th>' . __('id') . '</th>' .
-        '<th>' . __('v') . '</th>';
+        '<th colspan="2">' . __('module') . '</th>';
 
         foreach($props as $pro_id => $prop) {
             echo '<th>' . __($pro_id) . '</th>';
         }
 
-        echo '<th>' . __('extra') . '</th>' . '</tr>';
+        echo '<th>' . __('other') . '</th>' . '</tr>';
 
         $i = 0;
         foreach($modules as $module_id => $module) {

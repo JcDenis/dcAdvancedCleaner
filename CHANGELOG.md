@@ -5,7 +5,7 @@
 - [x] fix admin design
 - [x] fix php7.3+ and php8.0
 - [x] fix PSR(1)2 coding style
-- [ ] fix translation
+- [x] fix translation
 - [x] add dcstore (pre release)
 - [x] update license
 - [x] update readme
