@@ -1,10 +1,10 @@
 0.7.3.1 - dev
 - [ ] orphan media cleaner
 - [ ] ajouter dossier /var dans la liste des caches
-- [ ] update DC official values (themes,settings,tables...)
-- [ ] fix admin design
-- [ ] fix php7.3+ and php8.0
-- [ ] fix PSR(1)2 coding style
+- [x] update DC official values (themes,settings,tables...)
+- [x] fix admin design
+- [x] fix php7.3+ and php8.0
+- [x] fix PSR(1)2 coding style
 - [ ] fix translation
 - [x] add dcstore (pre release)
 - [x] update license

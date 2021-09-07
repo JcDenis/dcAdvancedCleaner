@@ -31,7 +31,7 @@ class dcAdvancedCleanerActivityReportBehaviors
             'dcadvancedcleaner',
              __('Plugin dcAdvancedCleaner')
          );
-        
+
         // from BEHAVIOR dcAdvancedCleanerBeforeAction 
         // in dcAdvancedCleaner/inc/class.dc.advanced.cleaner.php
         $core->activityReport->addAction(

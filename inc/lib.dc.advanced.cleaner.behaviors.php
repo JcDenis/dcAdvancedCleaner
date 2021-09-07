@@ -60,17 +60,16 @@ class behaviorsDcAdvancedCleaner
         }
     }
 
-    public static function dcAdvancedCleanerAdminTabs($core, $p_url)
+    public static function dcAdvancedCleanerAdminTabs($core)
     {
-        self::modulesTabs($core,DC_PLUGINS_ROOT,$p_url.'&tab=uninstaller');
+        self::modulesTabs($core, DC_PLUGINS_ROOT, $core->adminurl->get('admin.plugin.dcAdvancedCleaner', ['tab' => 'uninstaller']));
     }
 
     public static function pluginsToolsTabs($core)
     {
-        self::modulesTabs($core, DC_PLUGINS_ROOT, 'plugins.php?tab=uninstaller');
+        self::modulesTabs($core, DC_PLUGINS_ROOT, $core->adminurl->get('admin.plugins', ['tab' => 'uninstaller']));
     }
 
-    // Generic module tabs
     public static function modulesTabs($core, $path, $redir, $title = '')
     {
         if (!$core->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_behavior_active) {
@@ -119,13 +118,14 @@ class behaviorsDcAdvancedCleaner
                         }
                     }
                 }
-                http::redirect($redir . '&msg=1');
+                dcPage::addSuccessNotice(__('Action successfuly excecuted'));
+                http::redirect($redir);
             } catch(Exception $e) {
                 $err = $e->getMessage();
             }
         }
 
-        echo '<div class="multi-part" id="uninstaller" title="' . __($title) . '">';
+        echo '<div class="multi-part" id="uninstaller" title="' . __($title) . '"><h3>' . __($title) . '</h3>';
 
         if($err) {
             echo '<p class="error">' . $err . '</p>';
@@ -214,7 +214,8 @@ class behaviorsDcAdvancedCleaner
         form::hidden(['action'], 'uninstall') .
         '<input type="submit" name="submit" value="' . __('Perform selected actions') . '" /> ' .
         '</p>' .
-        '</form>' .
-        '</div>';
+        '</form>';
+
+        echo '</div>';
     }
 }
