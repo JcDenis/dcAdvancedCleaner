@@ -60,11 +60,6 @@ class behaviorsDcAdvancedCleaner
         }
     }
 
-    public static function dcAdvancedCleanerAdminTabs($core)
-    {
-        self::modulesTabs($core, DC_PLUGINS_ROOT, $core->adminurl->get('admin.plugin.dcAdvancedCleaner', ['tab' => 'uninstaller']));
-    }
-
     public static function pluginsToolsTabs($core)
     {
         self::modulesTabs($core, DC_PLUGINS_ROOT, $core->adminurl->get('admin.plugins', ['tab' => 'uninstaller']));

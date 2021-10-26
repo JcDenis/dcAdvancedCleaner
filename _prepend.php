@@ -30,8 +30,6 @@ $core->addBehavior('pluginsBeforeDelete',
     ['behaviorsDcAdvancedCleaner', 'pluginsBeforeDelete']);
 $core->addBehavior('themeBeforeDelete',
     ['behaviorsDcAdvancedCleaner', 'themeBeforeDelete']);
-$core->addBehavior('dcAdvancedCleanerAdminTabs',
-    ['behaviorsDcAdvancedCleaner', 'dcAdvancedCleanerAdminTabs']);
 
 if (defined('ACTIVITY_REPORT')) {
     dcAdvancedCleanerActivityReportBehaviors::add($core);

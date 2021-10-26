@@ -14,9 +14,8 @@
 if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
-if (!$core->auth->isSuperAdmin()) {
-    return null;
-}
+
+dcPage::checkSuper();
 
 # Localized l10n
 __('Settings'); __('settings'); __('setting');
@@ -41,59 +40,56 @@ __('delete %s theme file');
 __('delete %s cache files');
 
 # vars
-$tab = $_REQUEST['tab'] ?? 'lists';
-$part = $_REQUEST['part'] ?? 'caches';
+$part    = $_REQUEST['part'] ?? 'caches';
 $entries = $_POST['entries'] ?? [];
-$action = $_POST['action'] ?? '';
-$s = $core->blog->settings->dcAdvancedCleaner;
-$p_url = $core->adminurl->get('admin.plugin.dcAdvancedCleaner', ['tab' => $tab, 'part' => $part]);
+$action  = $_POST['action'] ?? '';
 
 # Combos
 $combo_title = [
     'settings' => __('Settings'),
-    'tables' => __('Tables'),
-    'plugins' => __('Extensions'),
-    'themes' => __('Themes'),
-    'caches' => __('Cache'),
+    'tables'   => __('Tables'),
+    'plugins'  => __('Extensions'),
+    'themes'   => __('Themes'),
+    'caches'   => __('Cache'),
     'versions' => __('Versions')
 ];
 $combo_type = [
     'settings' => ['delete_global', 'delete_local', 'delete_all'],
-    'tables' => ['empty', 'delete'],
-    'plugins' => ['empty', 'delete'],
-    'themes' => ['empty', 'delete'],
-    'caches' => ['empty', 'delete'],
+    'tables'   => ['empty', 'delete'],
+    'plugins'  => ['empty', 'delete'],
+    'themes'   => ['empty', 'delete'],
+    'caches'   => ['empty', 'delete'],
     'versions' => ['delete']
 ];
 $combo_funcs = [
     'settings' => ['dcAdvancedCleaner', 'getSettings'],
-    'tables' => ['dcAdvancedCleaner', 'getTables'],
-    'plugins' => ['dcAdvancedCleaner', 'getPlugins'],
-    'themes' => ['dcAdvancedCleaner', 'getThemes'],
-    'caches' => ['dcAdvancedCleaner', 'getCaches'],
+    'tables'   => ['dcAdvancedCleaner', 'getTables'],
+    'plugins'  => ['dcAdvancedCleaner', 'getPlugins'],
+    'themes'   => ['dcAdvancedCleaner', 'getThemes'],
+    'caches'   => ['dcAdvancedCleaner', 'getCaches'],
     'versions' => ['dcAdvancedCleaner', 'getVersions']
 ];
 $combo_actions = [
     'settings' => [
         __('delete global settings') => 'delete_global',
-        __('delete blog settings') => 'delete_local',
-        __('delete all settings') =>'delete_all'
+        __('delete blog settings')   => 'delete_local',
+        __('delete all settings')   =>'delete_all'
     ],
-    'tables' => [
+    'tables'   => [
         __('delete') => 'delete',
-        __('empty') => 'empty'
+        __('empty')  => 'empty'
     ],
-    'plugins' => [
+    'plugins'  => [
         __('delete') => 'delete',
-        __('empty') => 'empty'
+        __('empty')  => 'empty'
     ],
-    'themes' => [
+    'themes'   => [
         __('delete') => 'delete',
-        __('empty') => 'empty'
+        __('empty')  => 'empty'
     ],
-    'caches' => [
+    'caches'   => [
         __('delete') => 'delete',
-        __('empty') => 'empty'
+        __('empty')  => 'empty'
     ],
     'versions' => [
         __('delete') => 'delete'
@@ -101,16 +97,15 @@ $combo_actions = [
 ];
 $combo_help = [
     'settings' => __('Namespaces registered in dcSettings'),
-    'tables' => __('All database tables of Dotclear'),
-    'plugins' => __('Folders from plugins directories'),
-    'themes' => __('Folders from blog themes directory'),
-    'caches' => __('Folders from cache directory'),
+    'tables'   => __('All database tables of Dotclear'),
+    'plugins'  => __('Folders from plugins directories'),
+    'themes'   => __('Folders from blog themes directory'),
+    'caches'   => __('Folders from cache directory'),
     'versions' => __('Versions registered in table "version" of Dotclear')
 ];
 
 # Actions
-if ($tab == 'lists' 
-    && !empty($entries) 
+if (!empty($entries) 
     && isset($combo_type[$part]) 
     && in_array($action, $combo_type[$part])
 ) {
@@ -121,7 +116,7 @@ if ($tab == 'lists'
         dcPage::addSuccessNotice(__('Action successfuly excecuted'));
         $core->adminurl->redirect(
             'admin.plugin.dcAdvancedCleaner', 
-            ['tab' => 'lists', 'part' => $part]
+            ['part' => $part]
         );
     }
     catch(Exception $e) {
@@ -130,35 +125,30 @@ if ($tab == 'lists'
 }
 
 echo '<html><head><title>' . __('Advanced cleaner') . '</title>' .
-dcPage::cssLoad('index.php?pf=dcAdvancedCleaner/style.css') .
-dcPage::jsPageTabs($tab);
+dcPage::cssLoad(dcPage::getPF('dcAdvancedCleaner/style.css')) .
+dcPage::jsLoad(dcPage::getPF('dcAdvancedCleaner/js/index.js'));
 
 # --BEHAVIOR-- dcAdvancedCleanerAdminHeader
-$core->callBehavior('dcAdvancedCleanerAdminHeader', $core, $p_url, $tab);
+$core->callBehavior('dcAdvancedCleanerAdminHeader', $core);
 
 echo '</head><body>' .
 dcPage::breadcrumb([
-    html::escapeHTML($core->blog->name) => '',
-    '<span class="page-title">' . __('Advanced cleaner') . '</span>' => ''
+    __('Plugins') => '',
+    __('Advanced cleaner') => ''
 ]) . 
-dcPage::notices() . '
-<div class="multi-part" id="lists" title="' . __('Records and folders') . '">
-<h3>'. __('Records and folders') .'</h3><p>';
+dcPage::notices();
 
-foreach($combo_title as $k => $v) {
-    echo sprintf(
-        '<a class="button" href="%s">%s</a>',
-        $core->adminurl->get(
-            'admin.plugin.dcAdvancedCleaner', 
-            ['tab' => 'lists', 'part' => $k]
-        ),
-        $v
-    );
-}
-echo '</p>';
+# select menu list
+echo
+'<form method="get" action="' . $core->adminurl->get('admin.plugin.dcAdvancedCleaner') . '" id="parts_menu">' .
+'<p class="anchor-nav"><label for="part" class="classic">' . __('Goto:') . ' </label>' .
+form::combo('part', array_flip($combo_title), $part) . ' ' .
+'<input type="submit" value="' . __('Ok') . '" />' .
+form::hidden('p', 'dcAdvancedCleaner') . '</p>' .
+'</form>';
 
 if (isset($combo_funcs[$part])) {
-    echo '<h4>' . $combo_title[$part] . '</h4><p>' . $combo_help[$part] . '</p>';
+    echo '<h3>' . $combo_title[$part] . '</h3><p>' . $combo_help[$part] . '</p>';
 
     $rs = call_user_func($combo_funcs[$part], $core);
 
@@ -166,39 +156,36 @@ if (isset($combo_funcs[$part])) {
         echo '<p>' . sprintf(__('There is no %s'), __(substr($part, 0, -1))) . '</p>';
     } else {
         echo
-        '<p>' . sprintf(__('There are %s %s'), count($rs), __($part)) . '</p>' .
-        '<form method="post" action="' . $p_url . '">' .
+        '<form method="post" action="' . $core->adminurl->get('admin.plugin.dcAdvancedCleaner') . '" id="form-funcs">' .
         '<div class="table-outer">' .
-        '<table><caption class="hidden">' . __($part) . '</caption><thead><tr>' .
-        '<th>' . __('Name') . '</th><th>' . __('Objects') . '</th>' .
+        '<table><caption>' . sprintf(__('There are %s %s'), count($rs), __($part)) . '</caption><thead><tr>' .
+        '<th colspan="2">' . __('Name') . '</th><th>' . __('Objects') . '</th>' .
         '</tr></thead><tbody>';
 
         $official = dcAdvancedCleaner::getOfficial($part);
         foreach($rs as $k => $v) {
             $offline = in_array($v['key'], $official);
 
-            if ($s->dcAdvancedCleaner_dcproperty_hide && $offline) {
+            if ($offline && $core->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_dcproperty_hide) {
                 continue;
             }
             echo 
-            '<tr class="line' .
-            ($offline ? ' offline' : '') .
-            '">' .
-            '<td class="nowrap"><label class="classic">' .
-            form::checkbox(
-                ['entries[' . $k . ']'], 
-                html::escapeHTML($v['key'])
-            ) . ' ' . $v['key'] . '</label></td>' .
-            '<td class="nowrap">' . $v['value'] . '</td>' .
+            '<tr class="line' . ($offline ? ' offline' : '') . '">' .
+            '<td class="nowrap">' .
+                form::checkbox(
+                    ['entries[' . $k . ']', 'entries_' . $k], 
+                    html::escapeHTML($v['key'])
+                ) . '</td> ' .
+            '<td class="nowrap"><label for="entries_' . $k . '" class="classic">' . $v['key'] . '</label></td>' .
+            '<td class="nowrap maximal">' . $v['value'] . '</td>' .
             '</tr>';
         }
         echo
         '</tbody></table></div>' .
         '<p class="field">' . __('Action on selected rows:') . ' ' .
         form::combo(['action'], $combo_actions[$part]) .
-        '<input type="submit" value="' . __('Save') . '" />' .
+        '<input id="do-action" type="submit" value="' . __('ok') . '" />' .
         form::hidden(['p'], 'dcAdvancedCleaner') .
-        form::hidden(['tab'], 'lists') .
         form::hidden(['part'], $part) .
         $core->formNonce() . '</p>' .
         '<p class="info">' . 
@@ -207,16 +194,11 @@ if (isset($combo_funcs[$part])) {
         '</form>';
     }
 }
-if ($s->dcAdvancedCleaner_dcproperty_hide) {
+if ($core->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_dcproperty_hide) {
     echo '<p class="info">' . 
-    __('Default values of Dotclear are hidden. You can change this in settings tab') . 
+    __('Default values of Dotclear are hidden. You can change this in settings') . 
     '</p>';
 }
-
-echo '</div>';
-
-# --BEHAVIOR-- dcAdvancedCleanerAdminTabs
-$core->callBehavior('dcAdvancedCleanerAdminTabs', $core);
 
 dcPage::helpBlock('dcAdvancedCleaner');
 
