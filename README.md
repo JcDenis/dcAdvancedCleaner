@@ -1,5 +1,12 @@
 # README
 
+[![Release](https://img.shields.io/github/v/release/JcDenis/dcAdvancedCleaner)](https://github.com/JcDenis/dcAdvancedCleaner/releases)
+[![Date](https://img.shields.io/github/release-date/JcDenis/dcAdvancedCleaner)](https://github.com/JcDenis/dcAdvancedCleaner/releases)
+[![Issues](https://img.shields.io/github/issues/JcDenis/dcAdvancedCleaner)](https://github.com/JcDenis/dcAdvancedCleaner/issues)
+[![Dotclear](https://img.shields.io/badge/dotclear-v2.19-blue.svg)](https://fr.dotclear.org/download)
+[![Dotaddict](https://img.shields.io/badge/dotaddict-official-green.svg)](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner)
+[![License](https://img.shields.io/github/license/JcDenis/dcAdvancedCleaner)](https://github.com/JcDenis/dcAdvancedCleaner/blob/master/LICENSE)
+
 ## WHAT IS DCADVANCEDCLEANER ?
 
 _dcAdvancedCleaner_ is a plugin for the open-source 
@@ -26,9 +33,9 @@ go to ''configure plugin'', fill in form.
 Once it's done you can manage your reports from menu 
 ''Advanced cleaner'' on sidebar or you can add dashboard icon.
 
-## MORE
+## LINKS
 
- * License : GNU GPL v2
+ * License : [GNU GPL v2](https://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)
  * Source & contribution : [GitHub Page](https://github.com/JcDenis/dcAdvancedCleaner)
  * Packages & details:  [Dotaddict Page](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner)
  * Discuss and help : [Dotclear Forum](https://forum.dotclear.org/viewtopic.php?id=40381)
@@ -37,3 +44,5 @@ Once it's done you can manage your reports from menu
 
  * Jean-Christian Denis
  * Pierre Van Glabeke
+
+ You are welcome to contribute to this code.
