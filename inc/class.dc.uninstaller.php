@@ -15,89 +15,75 @@ if (!defined('DC_ADMIN_CONTEXT')) {
     return null;
 }
 
-/**
-@brief Modules uninstall features handler
+# Localized l10n
+__('delete table');
+__('delete cache files');
+__('delete plugin files');
+__('delete theme files');
+__('delete the version number');
+__('Uninstall extensions');
+__('delete %s blog settings');
+__('delete %s global settings');
+__('delete all %s settings');
+__('delete %s table');
+__('delete %s version number');
+__('delete %s plugin files');
+__('delete %s theme file');
+__('delete %s cache files');
 
-Provides an object to handle modules uninstall features
-(themes or plugins). 
-This class used dcAdvancedCleaner.
-*/
+/**
+ * @brief Modules uninstall features handler
+ *
+ * Provides an object to handle modules uninstall features
+ * (themes or plugins). 
+ * This class used dcAdvancedCleaner.
+ */
 class dcUninstaller
 {
     protected $path;
 
-    protected $modules = [];    ///< <b>array</b> Modules informations array
+    protected $modules = [];
     protected $actions = ['user' => [], 'callback' => []];
     protected $callbacks = ['user' => [], 'callback' => []];
 
     protected $id = null;
     protected $mroot = null;
 
-    /**
-    Array of all allowed properties to uninstall parts of modules.
-    'settings' : settings set on dcSettings,
-    'tables' : if module creates table,
-    'plugins' : if module has files on plugin path,
-    'themes' : if module has files on theme path, (on current blog)
-    'caches' : if module has files on DC caches path,
-    'versions' : if module set a versions on DC table 'version' 
-    */
-    protected static $allowed_properties = [
-        'versions' => [
-            'delete' => 'delete version in dc'
-        ],
-        'settings' => [
-            'delete_global' => 'delete global settings',
-            'delete_local' => 'delete local settings',
-            'delete_all' => 'delete all settings'
-        ],
-        'tables' => [
-            'empty' => 'empty table',
-            'delete' => 'delete table'
-        ],
-        'plugins' => [
-            'empty' => 'empty plugin folder',
-            'delete' => 'delete plugin folder'
-        ],
-        'themes' => [
-            'empty' => 'empty theme folder',
-            'delete' => 'delete theme folder'
-        ],
-        'caches' => [
-            'empty' => 'empty cache folder',
-            'delete' => 'delete cache folder'
-        ]
-    ];
-
-    protected static $priority_properties = [
-        'versions','settings','tables','themes','plugins','caches'
-    ];
-
-    public $core;    ///< <b>dcCore</b>    dcCore instance
+    public $core;
+    private $ac;
+    private $allowed_actions = null;
 
     /**
-    Object constructor.
-
-    @param    core        <b>dcCore</b>    dcCore instance
-    */
+     * Object constructor.
+     * 
+     * @param   dcCore  $core   dcCore instance
+     */
     public function __construct(dcCore $core)
     {
         $this->core =& $core;
+        $this->ac = new dcAdvancedCleaner($core);
+
+        $res = [];
+        foreach($this->ac->get() as $cleaner) {
+            $res[$cleaner->id] = $cleaner->getActions();
+        }
+        $this->allowed_actions = $res;
     }
 
-    public static function getAllowedProperties()
+    public function getAllowedActions()
     {
-        return self::$allowed_properties;
+        return $this->allowed_actions;
     }
 
     /**
-    Loads modules.
-    Files _defines.php and _uninstall.php must be present on module 
-    to be recognized.
-    (path separator depends on your OS).
-
-    @param    path            <b>string</b>        Separated list of paths
-    */
+     * Loads modules.
+     * 
+     * Files _defines.php and _uninstall.php must be present on module 
+     * to be recognized.
+     * (path separator depends on your OS).
+     * 
+     * @param   string  $path   Separated list of paths
+     */
     public function loadModules($path)
     {
         $this->path = explode(PATH_SEPARATOR,$path);
@@ -127,12 +113,13 @@ class dcUninstaller
     }
 
     /**
-    Load one module.
-    Files _defines.php and _uninstall.php must be present on module 
-    to be recognized.
-
-    @param    root            <b>string</b>        path of module
-    */
+     * Load one module.
+     * 
+     * Files _defines.php and _uninstall.php must be present on module 
+     * to be recognized.
+     * 
+     * @param   string  $root   path of module
+     */
     public function loadModule($root)
     {
         if (file_exists($root . '/_define.php')
@@ -150,13 +137,13 @@ class dcUninstaller
     }
 
     /**
-    This method registers a module in modules list.
-
-    @param    name            <b>string</b>        Module name
-    @param    desc            <b>string</b>        Module description
-    @param    author        <b>string</b>        Module author name
-    @param    version        <b>string</b>        Module version
-    */
+     * This method registers a module in modules list.
+     * 
+     * @param   string  $name       Module name
+     * @param   string  $desc       Module description
+     * @param   string  $author     Module author name
+     * @param   string  $version    Module version
+     */
     public function registerModule($name, $desc, $author, $version, $properties = [])
     {
         if ($this->id) {
@@ -172,12 +159,13 @@ class dcUninstaller
     }
 
     /**
-    Returns all modules associative array or only one module if <var>$id</var>
-    is present.
-
-    @param    id        <b>string</b>        Optionnal module ID
-    @return    <b>array</b>
-    */
+     * Returns all modules associative array or only one module if <var>$id</var>
+     * is present.
+     * 
+     * @param   string  $id     Optionnal module ID
+     * 
+     * @return  array   Modules
+     */
     public function getModules($id = null)
     {
         if ($id && isset($this->modules[$id])) {
@@ -187,25 +175,27 @@ class dcUninstaller
     }
 
     /**
-    Returns true if the module with ID <var>$id</var> exists.
-
-    @param    id        <b>string</b>        Module ID
-    @return    <b>boolean</b>
-    */
+     * Returns true if the module with ID <var>$id</var> exists.
+     * 
+     * @param   string  $idModule ID
+     * 
+     * @return  boolean     Success
+     */
     public function moduleExists($id)
     {
         return isset($this->modules[$id]);
     }
 
     /**
-    Add a predefined action to unsintall features.
-    This action is set in _uninstall.php.
-
-    @param    type        <b>string</b>        Type of action (from $allowed_properties)
-    @param    action    <b>string</b>        Action (from $allowed_properties)
-    @param    ns        <b>string</b>        Name of setting related to module.
-    @param    desc        <b>string</b>        Description of action
-    */
+     * Add a predefined action to unsintall features.
+     * 
+     * This action is set in _uninstall.php.
+     * 
+     * @param   string  $type       Type of action (from $allowed_actions)
+     * @param   string  $action     Action (from $allowed_actions)
+     * @param   string  $ns         Name of setting related to module.
+     * @param   string  $desc       Description of action
+     */
     protected function addUserAction($type, $action, $ns, $desc = '')
     {
         $this->addAction('user', $type, $action, $ns, $desc);
@@ -226,26 +216,25 @@ class dcUninstaller
         if (empty($type) || empty($ns)) {
             return null;
         }
-        if (!isset(self::$allowed_properties[$type][$action])) {
+        if (!isset($this->allowed_actions[$type][$action])) {
             return null;
         }
         if (empty($desc)) {
             $desc = __($action);
         }
         $this->actions[$group][$this->id][$type][] = [
-            'ns' => $ns,
+            'ns'     => $ns,
             'action' => $action,
-            'desc' => $desc
+            'desc'   => $desc
         ];
     }
 
     /**
-    Returns modules <var>$id</var> predefined actions associative array
-    ordered by priority
-
-    @param    id        <b>string</b>        Optionnal module ID
-    @return    <b>array</b>
-    */
+     * Returns modules <var>$id</var> predefined actions associative array
+     * 
+     * @param   string  $id     Optionnal module ID
+     * @return  array   Modules id
+     */
     public function getUserActions($id)
     {
         return $this->getActions('user', $id);
@@ -264,22 +253,23 @@ class dcUninstaller
             return [];
         }
         $res = [];
-        foreach(self::$priority_properties as $k => $v) {
-            if (!isset($this->actions[$group][$id][$v])) {
+        foreach($this->allowed_actions as $k => $v) {
+            if (!isset($this->actions[$group][$id][$k])) {
                 continue;
             }
-            $res[$v] = $this->actions[$group][$id][$v];
+            $res[$k] = $this->actions[$group][$id][$k];
         }
         return $res;
     }
 
     /**
-    Add a callable function for unsintall features.
-    This action is set in _uninstall.php.
-
-    @param    func        <b>string</b>        Callable function
-    @param    desc        <b>string</b>        Description of action
-    */
+     * Add a callable function for unsintall features.
+     * 
+     * This action is set in _uninstall.php.
+     * 
+     * @param   string  $func   Callable function
+     * @param   string  $desc   Description of action
+     */
     protected function addUserCallback($func, $desc= '')
     {
         $this->addCallback('user', $func, $desc);
@@ -310,11 +300,12 @@ class dcUninstaller
     }
 
     /**
-    Returns modules <var>$id</var> callback actions associative array
+     * Returns modules <var>$id</var> callback actions associative array
 
-    @param    id        <b>string</b>        Optionnal module ID
-    @return    <b>array</b>
-    */
+     * @param   string  $id     Optionnal module ID
+     * 
+     * @return  array   Modules id
+     */
     public function getUserCallbacks($id)
     {
         return $this->getCallbacks('user', $id);
@@ -336,22 +327,24 @@ class dcUninstaller
     }
 
     /**
-    Execute a predifined action. This function call dcAdvancedCleaner 
-    to do actions.
-
-    @param    type        <b>string</b>        Type of action (from $allowed_properties)
-    @param    action    <b>string</b>        Action (from $allowed_properties)
-    @param    ns        <b>string</b>        Name of setting related to module.
-    @return    <b>array</b>
-    */
+     * Execute a predifined action. 
+     * 
+     * This function call dcAdvancedCleaner to do actions.
+     * 
+     * @param   string      $type       Type of action (from $allowed_actions)
+     * @param   string      $action     Action (from $allowed_actions)
+     * @param   string      $ns         Name of setting related to module.
+     *
+     * @return boolean      Success
+     */
     public function execute($type, $action, $ns)
     {
-        $prop = $this->getAllowedProperties();
-
-        if (!isset($prop[$type][$action]) || empty($ns)) {
-            return null;
+        if (!isset($this->allowed_actions[$type][$action]) || empty($ns)) {
+            return false;
         }
-        dcAdvancedCleaner::execute($this->core, $type, $action, $ns);
+        $this->ac->set($type, $action, $ns);
+
+        return true;
     }
 
     private function sortModules($a, $b)

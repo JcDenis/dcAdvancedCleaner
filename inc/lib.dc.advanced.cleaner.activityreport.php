@@ -19,9 +19,7 @@ class dcAdvancedCleanerActivityReportBehaviors
 {
     public static function maintenance($type, $action, $ns)
     {
-        $logs = array($type ,$action, $ns);
-
-        $GLOBALS['core']->activityReport->addLog('dcadvancedcleaner', 'maintenance', $logs);
+        $GLOBALS['core']->activityReport->addLog('dcadvancedcleaner', 'maintenance', [$type ,$action, $ns]);
     }
 
     public static function add($core)

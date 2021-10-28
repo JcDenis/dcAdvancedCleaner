@@ -15,6 +15,8 @@ if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
 
+$core->blog->settings->addNamespace('dcAdvancedCleaner');
+
 $_menu['Plugins']->addItem(
     __('Advanced cleaner'),
     $core->adminurl->get('admin.plugin.dcAdvancedCleaner'),
@@ -25,16 +27,3 @@ $_menu['Plugins']->addItem(
     ),
     $core->auth->isSuperAdmin()
 );
-
-$core->addBehavior('adminDashboardFavorites', 'dcAdvancedCleanerDashboardFavorites');
-
-function dcAdvancedCleanerDashboardFavorites(dcCore $core, $favs)
-{
-    $favs->register('dcAdvancedCleaner', [
-        'title' => __('Advanced cleaner'),
-        'url' => $core->adminurl->get('admin.plugin.dcAdvancedCleaner'),
-        'small-icon' => dcPage::getPF('dcAdvancedCleaner/icon.png'),
-        'large-icon' => dcPage::getPF('dcAdvancedCleaner/icon-big.png'),
-        'permissions' => $core->auth->isSuperAdmin()
-    ]);
-}

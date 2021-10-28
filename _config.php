@@ -14,7 +14,7 @@
 if (!defined('DC_CONTEXT_MODULE')) {
     return null;
 }
-if (!$core->auth->isSuperAdmin()) {
+if (!dPage::checkSuper()) {
     return null;
 }
 if (!empty($_POST['save'])) {

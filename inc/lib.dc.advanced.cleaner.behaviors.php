@@ -17,6 +17,17 @@ if (!defined('DC_ADMIN_CONTEXT')) {
 
 class behaviorsDcAdvancedCleaner
 {
+    public static function adminDashboardFavorites(dcCore $core, $favs)
+    {
+        $favs->register('dcAdvancedCleaner', [
+            'title'       => __('Advanced cleaner'),
+            'url'         => $core->adminurl->get('admin.plugin.dcAdvancedCleaner'),
+            'small-icon'  => dcPage::getPF('dcAdvancedCleaner/icon.png'),
+            'large-icon'  => dcPage::getPF('dcAdvancedCleaner/icon-big.png'),
+            'permissions' => $core->auth->isSuperAdmin()
+        ]);
+    }
+
     public static function pluginsBeforeDelete($plugin)
     {
         self::moduleBeforeDelete($plugin, 'plugins.php?removed=1');
@@ -62,7 +73,7 @@ class behaviorsDcAdvancedCleaner
 
     public static function pluginsToolsTabs($core)
     {
-        self::modulesTabs($core, DC_PLUGINS_ROOT, $core->adminurl->get('admin.plugins', ['tab' => 'uninstaller']));
+        self::modulesTabs($core, DC_PLUGINS_ROOT, $core->adminurl->get('admin.plugins') . '#uninstaller');
     }
 
     public static function modulesTabs($core, $path, $redir, $title = '')
@@ -70,61 +81,15 @@ class behaviorsDcAdvancedCleaner
         if (!$core->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_behavior_active) {
             return null;
         }
-        $err = '';
         $title = empty($title) ? __('Advanced uninstall') : $title;
 
         $uninstaller = new dcUninstaller($core);
         $uninstaller->loadModules($path);
         $modules = $uninstaller->getModules();
-        $props = $uninstaller->getAllowedProperties();
-
-        // Execute
-        if (isset($_POST['action']) && $_POST['action'] == 'uninstall'
-            && (!empty($_POST['extras']) || !empty($_POST['actions']))
-        ) {
-            try {
-                // Extras
-                if (!empty($_POST['extras'])) {
-                    foreach($_POST['extras'] as $module_id => $extras) {
-                        foreach($extras as $k => $sentence) {
-                            $extra = @unserialize(@base64_decode($sentence));
-
-                            if (!$extra || !is_callable($extra)) {
-                                continue;
-                            }
-                            call_user_func($extra, $modul_id);
-                        }
-                    }
-                }
-                // Actions
-                if (!empty($_POST['actions'])) {
-                    foreach($_POST['actions'] as $module_id => $actions) {
-                        foreach($actions as $k => $sentence) {
-                            $action = @unserialize(@base64_decode($sentence));
-
-                            if (!$action 
-                                || !isset($action['type']) 
-                                || !isset($action['action']) 
-                                || !isset($action['ns'])
-                            ) {
-                                continue;
-                            }
-                            $uninstaller->execute($action['type'], $action['action'], $action['ns']);
-                        }
-                    }
-                }
-                dcPage::addSuccessNotice(__('Action successfuly excecuted'));
-                http::redirect($redir);
-            } catch(Exception $e) {
-                $err = $e->getMessage();
-            }
-        }
+        $props = $uninstaller->getAllowedActions();
 
         echo '<div class="multi-part" id="uninstaller" title="' . __($title) . '"><h3>' . __($title) . '</h3>';
 
-        if($err) {
-            echo '<p class="error">' . $err . '</p>';
-        }
         if(!count($modules)) {
             echo '<p>' . __('There is no module with uninstall features') . '</p></div>';
             return null;
@@ -204,6 +169,7 @@ class behaviorsDcAdvancedCleaner
         '</table>' .
         '<p>' .
         $core->formNonce() .
+        form::hidden(['path'], $path) .
         form::hidden(['redir'], $redir) .
         form::hidden(['action'], 'uninstall') .
         '<input type="submit" name="submit" value="' . __('Perform selected actions') . '" /> ' .
@@ -211,5 +177,60 @@ class behaviorsDcAdvancedCleaner
         '</form>';
 
         echo '</div>';
+    }
+
+    public static function adminModulesListDoActions($list, $modules, $type)
+    {
+        if (!$list->core->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_behavior_active) {
+            return null;
+        }
+
+        if (!isset($_POST['action']) || $_POST['action'] != 'uninstall'
+            || (empty($_POST['extras']) && empty($_POST['actions']))
+        ) {
+            return null;
+        }
+
+        $uninstaller = new dcUninstaller($list->core);
+        $uninstaller->loadModules($_POST['path']);
+        $modules = $uninstaller->getModules();
+        $props   = $uninstaller->getAllowedActions();
+
+        try {
+            // Extras
+            if (!empty($_POST['extras'])) {
+                foreach($_POST['extras'] as $module_id => $extras) {
+                    foreach($extras as $k => $sentence) {
+                        $extra = @unserialize(@base64_decode($sentence));
+
+                        if (!$extra || !is_callable($extra)) {
+                            continue;
+                        }
+                        call_user_func($extra, $modul_id);
+                    }
+                }
+            }
+            // Actions
+            if (!empty($_POST['actions'])) {
+                foreach($_POST['actions'] as $module_id => $actions) {
+                    foreach($actions as $k => $sentence) {
+                        $action = @unserialize(@base64_decode($sentence));
+
+                        if (!$action 
+                            || !isset($action['type']) 
+                            || !isset($action['action']) 
+                            || !isset($action['ns'])
+                        ) {
+                            continue;
+                        }
+                        $uninstaller->execute($action['type'], $action['action'], $action['ns']);
+                    }
+                }
+            }
+            dcPage::addSuccessNotice(__('Action successfuly excecuted'));
+            http::redirect($_POST['redir']);
+        } catch(Exception $e) {
+            $list->core->error->add($e->getMessage());
+        }
     }
 }

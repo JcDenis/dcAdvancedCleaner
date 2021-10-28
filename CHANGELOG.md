@@ -1,6 +1,8 @@
 0.8.1 - dev
 - [ ] orphan media cleaner
-- [ ] ajouter dossier /var dans la liste des caches
+- move actions to independent tools
+- add var folder
+- update admin page to a lighter interface
 
 0.8 - 2021.09.07
 - update DC official values (themes,settings,tables...)
