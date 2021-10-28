@@ -14,9 +14,11 @@
 if (!defined('DC_CONTEXT_MODULE')) {
     return null;
 }
-if (!dPage::checkSuper()) {
+
+if (!$core->auth->isSuperAdmin()) {
     return null;
 }
+
 if (!empty($_POST['save'])) {
     try {
         $core->blog->settings->dcAdvancedCleaner->dropEvery(
