@@ -1,5 +1,7 @@
-0.8.1 - dev
+dev
 - [ ] orphan media cleaner
+
+0.9 - 2021.11.06
 - fix permissions
 - move actions to independent tools
 - add var folder
