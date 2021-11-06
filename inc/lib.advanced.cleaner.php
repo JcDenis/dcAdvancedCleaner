@@ -1,16 +1,15 @@
 <?php
 /**
  * @brief dcAdvancedCleaner, a plugin for Dotclear 2
- * 
+ *
  * @package Dotclear
  * @subpackage Plugin
- * 
+ *
  * @author Jean-Christian Denis and Contributors
- * 
+ *
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
 class advancedCleanerSettings extends advancedCleaner
 {
     protected function init(): bool
@@ -53,7 +52,7 @@ class advancedCleanerSettings extends advancedCleaner
             'breadcrumb',
             'dcckeditor',
             'dclegacyeditor',
-            'maintenance', 
+            'maintenance',
             'pages',
             'pings',
             'system',
@@ -68,19 +67,19 @@ class advancedCleanerSettings extends advancedCleaner
             'SELECT setting_ns ' .
             'FROM ' . $this->core->prefix . 'setting ' .
             'WHERE blog_id IS NULL ' .
-            "OR blog_id IS NOT NULL " .
+            'OR blog_id IS NOT NULL ' .
             'GROUP BY setting_ns'
         );
 
         $rs = [];
-        $i = 0;
-        while($res->fetch()) {
-            $rs[$i]['key'] = $res->setting_ns;
+        $i  = 0;
+        while ($res->fetch()) {
+            $rs[$i]['key']   = $res->setting_ns;
             $rs[$i]['value'] = $this->core->con->select(
-                'SELECT count(*) FROM ' . $this->core->prefix .'setting ' .
-                "WHERE setting_ns = '" . $res->setting_ns  ."' " .
-                "AND (blog_id IS NULL OR blog_id IS NOT NULL) " .
-                "GROUP BY setting_ns "
+                'SELECT count(*) FROM ' . $this->core->prefix . 'setting ' .
+                "WHERE setting_ns = '" . $res->setting_ns . "' " .
+                'AND (blog_id IS NULL OR blog_id IS NOT NULL) ' .
+                'GROUP BY setting_ns '
             )->f(0);
             $i++;
         }
@@ -92,7 +91,7 @@ class advancedCleanerSettings extends advancedCleaner
     {
         if ($action == 'delete_global') {
             $this->core->con->execute(
-                'DELETE FROM '  .$this->core->prefix . 'setting ' .
+                'DELETE FROM ' . $this->core->prefix . 'setting ' .
                 'WHERE blog_id IS NULL ' .
                 "AND setting_ns = '" . $this->core->con->escape($ns) . "' "
             );
@@ -110,7 +109,7 @@ class advancedCleanerSettings extends advancedCleaner
         }
         if ($action == 'delete_all') {
             $this->core->con->execute(
-                'DELETE FROM '  .$this->core->prefix . 'setting ' .
+                'DELETE FROM ' . $this->core->prefix . 'setting ' .
                 "WHERE setting_ns = '" . $this->core->con->escape($ns) . "' " .
                 "AND (blog_id IS NULL OR blog_id != '') "
             );
@@ -148,6 +147,7 @@ class advancedCleanerTables extends advancedCleaner
         if ($action == 'delete') {
             return __('Failed to delete table');
         }
+
         return '';
     }
 
@@ -177,18 +177,18 @@ class advancedCleanerTables extends advancedCleaner
     public function get(): array
     {
         $object = dbSchema::init($this->core->con);
-        $res = $object->getTables();
+        $res    = $object->getTables();
 
         $rs = [];
-        $i = 0;
-        foreach($res as $k => $v) {
+        $i  = 0;
+        foreach ($res as $k => $v) {
             if ('' != $this->core->prefix) {
                 if (!preg_match('/^' . preg_quote($this->core->prefix) . '(.*?)$/', $v, $m)) {
                     continue;
                 }
                 $v = $m[1];
             }
-            $rs[$i]['key'] = $v;
+            $rs[$i]['key']   = $v;
             $rs[$i]['value'] = $this->core->con->select('SELECT count(*) FROM ' . $res[$k])->f(0);
             $i++;
         }
@@ -266,9 +266,9 @@ class advancedCleanerVersions extends advancedCleaner
         $res = $this->core->con->select('SELECT * FROM ' . $this->core->prefix . 'version');
 
         $rs = [];
-        $i = 0;
+        $i  = 0;
         while ($res->fetch()) {
-            $rs[$i]['key'] = $res->module;
+            $rs[$i]['key']   = $res->module;
             $rs[$i]['value'] = $res->version;
             $i++;
         }
@@ -280,7 +280,7 @@ class advancedCleanerVersions extends advancedCleaner
     {
         if ($action == 'delete') {
             $this->core->con->execute(
-                'DELETE FROM  '. $this->core->prefix . 'version ' .
+                'DELETE FROM  ' . $this->core->prefix . 'version ' .
                 "WHERE module = '" . $this->core->con->escape($ns) . "' "
             );
 
@@ -317,6 +317,7 @@ class advancedCleanerPlugins extends advancedCleaner
         if ($action == 'delete') {
             return __('Failed to delete plugin folder');
         }
+
         return '';
     }
 
@@ -378,6 +379,7 @@ class advancedCleanerThemes extends advancedCleaner
         if ($action == 'delete') {
             return __('Failed to delete themes folder');
         }
+
         return '';
     }
 
@@ -437,6 +439,7 @@ class advancedCleanerCaches extends advancedCleaner
         if ($action == 'delete') {
             return __('Failed to delete cache folder');
         }
+
         return '';
     }
 
@@ -489,6 +492,7 @@ class advancedCleanerVars extends advancedCleaner
         if ($action == 'delete') {
             return __('Failed to delete var folder');
         }
+
         return '';
     }
 

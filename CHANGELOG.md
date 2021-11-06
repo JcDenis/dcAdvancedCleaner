@@ -1,8 +1,11 @@
 0.8.1 - dev
 - [ ] orphan media cleaner
+- fix permissions
 - move actions to independent tools
 - add var folder
 - update admin page to a lighter interface
+- update translation (and remove .lang.php file)
+- update to PSR12
 
 0.8 - 2021.09.07
 - update DC official values (themes,settings,tables...)

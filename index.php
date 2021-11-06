@@ -1,16 +1,15 @@
 <?php
 /**
  * @brief dcAdvancedCleaner, a plugin for Dotclear 2
- * 
+ *
  * @package Dotclear
  * @subpackage Plugin
- * 
+ *
  * @author Jean-Christian Denis and Contributors
- * 
+ *
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
 if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
@@ -19,9 +18,9 @@ dcPage::checkSuper();
 
 $ac = new dcAdvancedCleaner($core);
 
-$cleaner = false;
+$cleaner     = false;
 $select_menu = [];
-foreach($ac->get() as $k) {
+foreach ($ac->get() as $k) {
     $select_menu[$k->name] = $k->id;
     if ($k->id == $_REQUEST['part']) {
         $cleaner = $k;
@@ -36,16 +35,15 @@ if (!$cleaner) {
 # Actions
 if (!empty($_POST['entries']) && !empty($_POST['action'])) {
     try {
-        foreach($_POST['entries'] as $ns) {
+        foreach ($_POST['entries'] as $ns) {
             $ac->set($cleaner->id, $_POST['action'], $ns);
         }
         dcPage::addSuccessNotice(__('Action successfuly excecuted'));
         $core->adminurl->redirect(
-            'admin.plugin.dcAdvancedCleaner', 
+            'admin.plugin.dcAdvancedCleaner',
             ['part' => $cleaner->id]
         );
-    }
-    catch(Exception $e) {
+    } catch (Exception $e) {
         $core->error->add($e->getMessage());
     }
 }
@@ -60,9 +58,9 @@ $core->callBehavior('dcAdvancedCleanerAdminHeader', $core);
 
 echo '</head><body>' .
 dcPage::breadcrumb([
-    __('Plugins') => '',
+    __('Plugins')          => '',
     __('Advanced cleaner') => ''
-]) . 
+]) .
 dcPage::notices() .
 
 '<form method="get" action="' . $core->adminurl->get('admin.plugin.dcAdvancedCleaner') . '" id="parts_menu">' .
@@ -86,17 +84,17 @@ if (empty($rs)) {
     '<th colspan="2">' . __('Name') . '</th><th>' . __('Objects') . '</th>' .
     '</tr></thead><tbody>';
 
-    foreach($rs as $k => $v) {
+    foreach ($rs as $k => $v) {
         $offline = in_array($v['key'], $cleaner->official());
 
         if ($offline && $core->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_dcproperty_hide) {
             continue;
         }
-        echo 
+        echo
         '<tr class="line' . ($offline ? ' offline' : '') . '">' .
         '<td class="nowrap">' .
             form::checkbox(
-                ['entries[' . $k . ']', 'entries_' . $k], 
+                ['entries[' . $k . ']', 'entries_' . $k],
                 html::escapeHTML($v['key'])
             ) . '</td> ' .
         '<td class="nowrap"><label for="entries_' . $k . '" class="classic">' . $v['key'] . '</label></td>' .
@@ -111,15 +109,15 @@ if (empty($rs)) {
     form::hidden(['p'], 'dcAdvancedCleaner') .
     form::hidden(['part'], $cleaner->id) .
     $core->formNonce() . '</p>' .
-    '<p class="info">' . 
-    __('Beware: All actions done here are irreversible and are directly applied') . 
+    '<p class="info">' .
+    __('Beware: All actions done here are irreversible and are directly applied') .
     '</p>' .
     '</form>';
 }
 
 if ($core->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_dcproperty_hide) {
-    echo '<p class="info">' . 
-    __('Default values of Dotclear are hidden. You can change this in settings') . 
+    echo '<p class="info">' .
+    __('Default values of Dotclear are hidden. You can change this in settings') .
     '</p>';
 }
 

@@ -1,16 +1,15 @@
 <?php
 /**
  * @brief dcAdvancedCleaner, a plugin for Dotclear 2
- * 
+ *
  * @package Dotclear
  * @subpackage Plugin
- * 
+ *
  * @author Jean-Christian Denis and Contributors
- * 
+ *
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
 if (!defined('DC_ADMIN_CONTEXT')) {
     return null;
 }
@@ -35,18 +34,18 @@ __('delete %s cache files');
  * @brief Modules uninstall features handler
  *
  * Provides an object to handle modules uninstall features
- * (themes or plugins). 
+ * (themes or plugins).
  * This class used dcAdvancedCleaner.
  */
 class dcUninstaller
 {
     protected $path;
 
-    protected $modules = [];
-    protected $actions = ['user' => [], 'callback' => []];
+    protected $modules   = [];
+    protected $actions   = ['user' => [], 'callback' => []];
     protected $callbacks = ['user' => [], 'callback' => []];
 
-    protected $id = null;
+    protected $id    = null;
     protected $mroot = null;
 
     public $core;
@@ -55,16 +54,16 @@ class dcUninstaller
 
     /**
      * Object constructor.
-     * 
+     *
      * @param   dcCore  $core   dcCore instance
      */
     public function __construct(dcCore $core)
     {
-        $this->core =& $core;
-        $this->ac = new dcAdvancedCleaner($core);
+        $this->core = & $core;
+        $this->ac   = new dcAdvancedCleaner($core);
 
         $res = [];
-        foreach($this->ac->get() as $cleaner) {
+        foreach ($this->ac->get() as $cleaner) {
             $res[$cleaner->id] = $cleaner->getActions();
         }
         $this->allowed_actions = $res;
@@ -77,16 +76,16 @@ class dcUninstaller
 
     /**
      * Loads modules.
-     * 
-     * Files _defines.php and _uninstall.php must be present on module 
+     *
+     * Files _defines.php and _uninstall.php must be present on module
      * to be recognized.
      * (path separator depends on your OS).
-     * 
+     *
      * @param   string  $path   Separated list of paths
      */
     public function loadModules($path)
     {
-        $this->path = explode(PATH_SEPARATOR,$path);
+        $this->path = explode(PATH_SEPARATOR, $path);
 
         foreach ($this->path as $root) {
             if (!is_dir($root) || !is_readable($root)) {
@@ -114,31 +113,30 @@ class dcUninstaller
 
     /**
      * Load one module.
-     * 
-     * Files _defines.php and _uninstall.php must be present on module 
+     *
+     * Files _defines.php and _uninstall.php must be present on module
      * to be recognized.
-     * 
+     *
      * @param   string  $root   path of module
      */
     public function loadModule($root)
     {
         if (file_exists($root . '/_define.php')
          && file_exists($root . '/_uninstall.php')) {
-
-            $this->id = basename($root);
+            $this->id    = basename($root);
             $this->mroot = $root;
 
             require $root . '/_define.php';
             require $root . '/_uninstall.php';
 
-            $this->id = null;
+            $this->id    = null;
             $this->mroot = null;
         }
     }
 
     /**
      * This method registers a module in modules list.
-     * 
+     *
      * @param   string  $name       Module name
      * @param   string  $desc       Module description
      * @param   string  $author     Module author name
@@ -148,11 +146,11 @@ class dcUninstaller
     {
         if ($this->id) {
             $this->modules[$this->id] = [
-                'root' => $this->mroot,
-                'name' => $name,
-                'desc' => $desc,
-                'author' => $author,
-                'version' => $version,
+                'root'          => $this->mroot,
+                'name'          => $name,
+                'desc'          => $desc,
+                'author'        => $author,
+                'version'       => $version,
                 'root_writable' => is_writable($this->mroot)
             ];
         }
@@ -161,9 +159,9 @@ class dcUninstaller
     /**
      * Returns all modules associative array or only one module if <var>$id</var>
      * is present.
-     * 
+     *
      * @param   string  $id     Optionnal module ID
-     * 
+     *
      * @return  array   Modules
      */
     public function getModules($id = null)
@@ -171,14 +169,15 @@ class dcUninstaller
         if ($id && isset($this->modules[$id])) {
             return $this->modules[$id];
         }
+
         return $this->modules;
     }
 
     /**
      * Returns true if the module with ID <var>$id</var> exists.
-     * 
+     *
      * @param   string  $idModule ID
-     * 
+     *
      * @return  boolean     Success
      */
     public function moduleExists($id)
@@ -188,9 +187,9 @@ class dcUninstaller
 
     /**
      * Add a predefined action to unsintall features.
-     * 
+     *
      * This action is set in _uninstall.php.
-     * 
+     *
      * @param   string  $type       Type of action (from $allowed_actions)
      * @param   string  $action     Action (from $allowed_actions)
      * @param   string  $ns         Name of setting related to module.
@@ -231,7 +230,7 @@ class dcUninstaller
 
     /**
      * Returns modules <var>$id</var> predefined actions associative array
-     * 
+     *
      * @param   string  $id     Optionnal module ID
      * @return  array   Modules id
      */
@@ -253,24 +252,25 @@ class dcUninstaller
             return [];
         }
         $res = [];
-        foreach($this->allowed_actions as $k => $v) {
+        foreach ($this->allowed_actions as $k => $v) {
             if (!isset($this->actions[$group][$id][$k])) {
                 continue;
             }
             $res[$k] = $this->actions[$group][$id][$k];
         }
+
         return $res;
     }
 
     /**
      * Add a callable function for unsintall features.
-     * 
+     *
      * This action is set in _uninstall.php.
-     * 
+     *
      * @param   string  $func   Callable function
      * @param   string  $desc   Description of action
      */
-    protected function addUserCallback($func, $desc= '')
+    protected function addUserCallback($func, $desc = '')
     {
         $this->addCallback('user', $func, $desc);
     }
@@ -303,7 +303,7 @@ class dcUninstaller
      * Returns modules <var>$id</var> callback actions associative array
 
      * @param   string  $id     Optionnal module ID
-     * 
+     *
      * @return  array   Modules id
      */
     public function getUserCallbacks($id)
@@ -323,14 +323,15 @@ class dcUninstaller
         if (!isset($this->callbacks[$group][$id])) {
             return [];
         }
+
         return $this->callbacks[$group][$id];
     }
 
     /**
-     * Execute a predifined action. 
-     * 
+     * Execute a predifined action.
+     *
      * This function call dcAdvancedCleaner to do actions.
-     * 
+     *
      * @param   string      $type       Type of action (from $allowed_actions)
      * @param   string      $action     Action (from $allowed_actions)
      * @param   string      $ns         Name of setting related to module.

@@ -1,16 +1,15 @@
 <?php
 /**
  * @brief dcAdvancedCleaner, a plugin for Dotclear 2
- * 
+ *
  * @package Dotclear
  * @subpackage Plugin
- * 
+ *
  * @author Jean-Christian Denis and Contributors
- * 
+ *
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
 abstract class advancedCleaner
 {
     protected $core;
@@ -32,7 +31,6 @@ abstract class advancedCleaner
         $this->core = $core;
 
         $this->init();
-
     }
 
     public static function create(arrayObject $o, dcCore $core)
@@ -54,11 +52,12 @@ abstract class advancedCleaner
     final protected function setProperties($property, $value = null): bool
     {
         $properties = is_array($property) ? $property : [$property => $value];
-        foreach($properties as $k => $v) {
+        foreach ($properties as $k => $v) {
             if (isset($this->properties[$k])) {
                 $this->properties[$k] = (string) $v;
             }
         }
+
         return true;
     }
 
@@ -70,7 +69,7 @@ abstract class advancedCleaner
     final protected function setActions($action, $name = null): bool
     {
         $actions = is_array($action) ? $action : [$action => $name];
-        foreach($actions as $k => $v) {
+        foreach ($actions as $k => $v) {
             $this->actions[$k] = (string) $v;
         }
 
@@ -95,33 +94,36 @@ abstract class advancedCleaner
             $roots = [$roots];
         }
         $rs = [];
-        $i = 0;
+        $i  = 0;
         foreach ($roots as $root) {
             $dirs = files::scanDir($root);
-            foreach($dirs as $k) {
-                if ('.' == $k || '..' == $k || !is_dir($root  .'/' . $k)) {
+            foreach ($dirs as $k) {
+                if ('.' == $k || '..' == $k || !is_dir($root . '/' . $k)) {
                     continue;
                 }
-                $rs[$i]['key'] = $k;
+                $rs[$i]['key']   = $k;
                 $rs[$i]['value'] = count(self::scanDir($root . '/' . $k));
                 $i++;
             }
         }
+
         return $rs;
     }
 
     protected static function delDir($roots, $folder, $delfolder = true)
     {
-        if (strpos($folder,'/')) {
+        if (strpos($folder, '/')) {
             return false;
         }
         if (!is_array($roots)) {
             $roots = [$roots];
         }
         foreach ($roots as $root) {
-            if (file_exists($root . '/' . $folder))
+            if (file_exists($root . '/' . $folder)) {
                 return self::delTree($root . '/' . $folder, $delfolder);
+            }
         }
+
         return false;
     }
 
@@ -135,17 +137,18 @@ abstract class advancedCleaner
         }
         $files = files::scandir($path);
 
-        foreach($files AS $file) {
+        foreach ($files as $file) {
             if (in_array($file, $exclude)) {
                 continue;
             }
             if (is_dir($path . '/' . $file)) {
                 $res[] = $file;
-                $res = self::scanDir($path . '/' . $file, $dir . '/' . $file, $res);
+                $res   = self::scanDir($path . '/' . $file, $dir . '/' . $file, $res);
             } else {
                 $res[] = empty($dir) ? $file : $dir . '/' . $file;
             }
         }
+
         return $res;
     }
 
@@ -154,7 +157,7 @@ abstract class advancedCleaner
         if (!is_dir($dir) || !is_readable($dir)) {
             return false;
         }
-        if (substr($dir,-1) != '/') {
+        if (substr($dir, -1) != '/') {
             $dir .= '/';
         }
         if (($d = @dir($dir)) === false) {
@@ -163,7 +166,8 @@ abstract class advancedCleaner
         while (($entryname = $d->read()) !== false) {
             if ($entryname != '.' && $entryname != '..') {
                 if (is_dir($dir . '/' . $entryname)) {
-                    if (!self::delTree($dir . '/' . $entryname)) {return false;
+                    if (!self::delTree($dir . '/' . $entryname)) {
+                        return false;
                     }
                 } else {
                     if (!@unlink($dir . '/' . $entryname)) {
@@ -176,8 +180,8 @@ abstract class advancedCleaner
 
         if ($delroot) {
             return @rmdir($dir);
-        } else {
-            return true;
         }
+
+        return true;
     }
 }

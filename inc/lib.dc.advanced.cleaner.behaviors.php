@@ -1,16 +1,15 @@
 <?php
 /**
  * @brief dcAdvancedCleaner, a plugin for Dotclear 2
- * 
+ *
  * @package Dotclear
  * @subpackage Plugin
- * 
+ *
  * @author Jean-Christian Denis and Contributors
- * 
+ *
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
 if (!defined('DC_ADMIN_CONTEXT')) {
     return null;
 }
@@ -51,17 +50,17 @@ class behaviorsDcAdvancedCleaner
         $uninstaller->loadModule($module['root']);
 
         $m_callbacks = $uninstaller->getDirectCallbacks($module['id']);
-        $m_actions = $uninstaller->getDirectActions($module['id']);
+        $m_actions   = $uninstaller->getDirectActions($module['id']);
 
-        foreach($m_callbacks as $k => $callback) {
+        foreach ($m_callbacks as $k => $callback) {
             if (!isset($callback['func']) || !is_callable($callback['func'])) {
                 continue;
             }
             call_user_func($callback['func'], $module);
             $done = true;
         }
-        foreach($m_actions as $type => $actions) {
-            foreach($actions as $v) {
+        foreach ($m_actions as $type => $actions) {
+            foreach ($actions as $v) {
                 $uninstaller->execute($type, $v['action'], $v['ns']);
                 $done = true;
             }
@@ -86,12 +85,13 @@ class behaviorsDcAdvancedCleaner
         $uninstaller = new dcUninstaller($core);
         $uninstaller->loadModules($path);
         $modules = $uninstaller->getModules();
-        $props = $uninstaller->getAllowedActions();
+        $props   = $uninstaller->getAllowedActions();
 
         echo '<div class="multi-part" id="uninstaller" title="' . __($title) . '"><h3>' . __($title) . '</h3>';
 
-        if(!count($modules)) {
+        if (!count($modules)) {
             echo '<p>' . __('There is no module with uninstall features') . '</p></div>';
+
             return null;
         }
 
@@ -101,14 +101,14 @@ class behaviorsDcAdvancedCleaner
         '<table class="clear"><tr>' .
         '<th colspan="2">' . __('module') . '</th>';
 
-        foreach($props as $pro_id => $prop) {
+        foreach ($props as $pro_id => $prop) {
             echo '<th>' . __($pro_id) . '</th>';
         }
 
         echo '<th>' . __('other') . '</th>' . '</tr>';
 
         $i = 0;
-        foreach($modules as $module_id => $module) {
+        foreach ($modules as $module_id => $module) {
             echo
             '<tr class="line">' .
             '<td class="nowrap">' . $module_id . '</td>' .
@@ -116,27 +116,27 @@ class behaviorsDcAdvancedCleaner
 
             $actions = $uninstaller->getUserActions($module_id);
 
-            foreach($props as $prop_id => $prop) {
+            foreach ($props as $prop_id => $prop) {
                 echo '<td class="nowrap">';
 
                 if (!isset($actions[$prop_id])) {
                     echo '--</td>';
+
                     continue;
                 }
 
                 $j = 0;
-                foreach($actions[$prop_id] as $action_id => $action) {
-
+                foreach ($actions[$prop_id] as $action_id => $action) {
                     if (!isset($props[$prop_id][$action['action']])) {
                         continue;
                     }
                     $ret = base64_encode(serialize([
-                        'type' => $prop_id,
-                        'action'=> $action['action'],
-                        'ns'=> $action['ns']
+                        'type'   => $prop_id,
+                        'action' => $action['action'],
+                        'ns'     => $action['ns']
                     ]));
 
-                    echo '<label class="classic">'.
+                    echo '<label class="classic">' .
                     form::checkbox(['actions[' . $module_id . '][' . $j . ']'], $ret) .
                     ' ' . $action['desc'] . '</label><br />';
 
@@ -154,18 +154,17 @@ class behaviorsDcAdvancedCleaner
             }
 
             $k = 0;
-            foreach($callbacks as $callback_id => $callback) {
-
+            foreach ($callbacks as $callback_id => $callback) {
                 $ret = base64_encode(serialize($callback['func']));
 
-                echo '<label class="classic">'.
+                echo '<label class="classic">' .
                 form::checkbox(['extras[' . $module_id . '][' . $k . ']'], $ret) .
                 ' ' . $callback['desc'] . '</label><br />';
             }
 
             echo '</td></tr>';
         }
-        echo 
+        echo
         '</table>' .
         '<p>' .
         $core->formNonce() .
@@ -199,8 +198,8 @@ class behaviorsDcAdvancedCleaner
         try {
             // Extras
             if (!empty($_POST['extras'])) {
-                foreach($_POST['extras'] as $module_id => $extras) {
-                    foreach($extras as $k => $sentence) {
+                foreach ($_POST['extras'] as $module_id => $extras) {
+                    foreach ($extras as $k => $sentence) {
                         $extra = @unserialize(@base64_decode($sentence));
 
                         if (!$extra || !is_callable($extra)) {
@@ -212,13 +211,13 @@ class behaviorsDcAdvancedCleaner
             }
             // Actions
             if (!empty($_POST['actions'])) {
-                foreach($_POST['actions'] as $module_id => $actions) {
-                    foreach($actions as $k => $sentence) {
+                foreach ($_POST['actions'] as $module_id => $actions) {
+                    foreach ($actions as $k => $sentence) {
                         $action = @unserialize(@base64_decode($sentence));
 
-                        if (!$action 
-                            || !isset($action['type']) 
-                            || !isset($action['action']) 
+                        if (!$action
+                            || !isset($action['type'])
+                            || !isset($action['action'])
                             || !isset($action['ns'])
                         ) {
                             continue;
@@ -229,7 +228,7 @@ class behaviorsDcAdvancedCleaner
             }
             dcPage::addSuccessNotice(__('Action successfuly excecuted'));
             http::redirect($_POST['redir']);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $list->core->error->add($e->getMessage());
         }
     }

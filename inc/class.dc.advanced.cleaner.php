@@ -1,16 +1,15 @@
 <?php
 /**
  * @brief dcAdvancedCleaner, a plugin for Dotclear 2
- * 
+ *
  * @package Dotclear
  * @subpackage Plugin
- * 
+ *
  * @author Jean-Christian Denis and Contributors
- * 
+ *
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
 if (!defined('DC_ADMIN_CONTEXT')) {
     return null;
 }
@@ -23,13 +22,13 @@ class dcAdvancedCleaner
     public function __construct($core)
     {
         $this->core = $core;
-        $cleaners = new arrayObject();
+        $cleaners   = new arrayObject();
 
         try {
             $this->core->callBehavior('advancedCleanerAdd', $cleaners, $this->core);
 
-            foreach($cleaners as $cleaner) {
-                if ($cleaner instanceOf advancedCleaner && !isset($this->cleaners[$cleaner->id])) {
+            foreach ($cleaners as $cleaner) {
+                if ($cleaner instanceof advancedCleaner && !isset($this->cleaners[$cleaner->id])) {
                     $this->cleaners[$cleaner->id] = $cleaner;
                 }
             }
@@ -49,6 +48,7 @@ class dcAdvancedCleaner
         if ($silent) {
             return false;
         }
+
         throw new exception(sprintf(__('unknow cleaner type %s'), $type));
     }
 
@@ -68,6 +68,7 @@ class dcAdvancedCleaner
 
         if ($ret === false) {
             $msg = $this->cleaners[$type]->error($action);
+
             throw new Exception($msg ?? __('Unknow error'));
         }
 
