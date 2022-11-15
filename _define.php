@@ -18,13 +18,13 @@ $this->registerModule(
     'Advanced cleaner',
     'Make a huge cleaning of dotclear',
     'Jean-Christian Denis and Contributors',
-    '0.9',
+    '0.10',
     [
-        'requires'    => [['core', '2.19']],
+        'requires'    => [['core', '2.24']],
         'permissions' => null,
         'type'        => 'plugin',
         'support'     => 'https://github.com/JcDenis/dcAdvancedCleaner',
         'details'     => 'https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner',
-        'repository'  => 'https://raw.githubusercontent.com/JcDenis/dcAdvancedCleaner/master/dcstore.xml'
+        'repository'  => 'https://raw.githubusercontent.com/JcDenis/dcAdvancedCleaner/master/dcstore.xml',
     ]
 );

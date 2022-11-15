@@ -14,15 +14,15 @@ if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
 
-$core->blog->settings->addNamespace('dcAdvancedCleaner');
+dcCore::app()->blog->settings->addNamespace('dcAdvancedCleaner');
 
-$_menu['Plugins']->addItem(
+dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
     __('Advanced cleaner'),
-    $core->adminurl->get('admin.plugin.dcAdvancedCleaner'),
+    dcCore::app()->adminurl->get('admin.plugin.dcAdvancedCleaner'),
     dcPage::getPF('dcAdvancedCleaner/icon.png'),
     preg_match(
-        '/' . preg_quote($core->adminurl->get('admin.plugin.dcAdvancedCleaner')) . '(&.*)?$/',
+        '/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.dcAdvancedCleaner')) . '(&.*)?$/',
         $_SERVER['REQUEST_URI']
     ),
-    $core->auth->isSuperAdmin()
+    dcCore::app()->auth->isSuperAdmin()
 );

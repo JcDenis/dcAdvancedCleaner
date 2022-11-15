@@ -17,13 +17,13 @@ class advancedCleanerSettings extends advancedCleaner
         $this->setProperties([
             'id'   => 'settings',
             'name' => __('Settings'),
-            'desc' => __('Namespaces registered in dcSettings')
+            'desc' => __('Namespaces registered in dcSettings'),
         ]);
 
         $this->setActions([
             'delete_global' => __('delete global settings'),
             'delete_local'  => __('delete blog settings'),
-            'delete_all'    => __('delete all settings')
+            'delete_all'    => __('delete all settings'),
         ]);
 
         return true;
@@ -57,15 +57,15 @@ class advancedCleanerSettings extends advancedCleaner
             'pings',
             'system',
             'themes',
-            'widgets'
+            'widgets',
         ];
     }
 
     public function get(): array
     {
-        $res = $this->core->con->select(
+        $res = dcCore::app()->con->select(
             'SELECT setting_ns ' .
-            'FROM ' . $this->core->prefix . 'setting ' .
+            'FROM ' . dcCore::app()->prefix . 'setting ' .
             'WHERE blog_id IS NULL ' .
             'OR blog_id IS NOT NULL ' .
             'GROUP BY setting_ns'
@@ -75,8 +75,8 @@ class advancedCleanerSettings extends advancedCleaner
         $i  = 0;
         while ($res->fetch()) {
             $rs[$i]['key']   = $res->setting_ns;
-            $rs[$i]['value'] = $this->core->con->select(
-                'SELECT count(*) FROM ' . $this->core->prefix . 'setting ' .
+            $rs[$i]['value'] = dcCore::app()->con->select(
+                'SELECT count(*) FROM ' . dcCore::app()->prefix . 'setting ' .
                 "WHERE setting_ns = '" . $res->setting_ns . "' " .
                 'AND (blog_id IS NULL OR blog_id IS NOT NULL) ' .
                 'GROUP BY setting_ns '
@@ -90,27 +90,27 @@ class advancedCleanerSettings extends advancedCleaner
     public function set($action, $ns): bool
     {
         if ($action == 'delete_global') {
-            $this->core->con->execute(
-                'DELETE FROM ' . $this->core->prefix . 'setting ' .
+            dcCore::app()->con->execute(
+                'DELETE FROM ' . dcCore::app()->prefix . 'setting ' .
                 'WHERE blog_id IS NULL ' .
-                "AND setting_ns = '" . $this->core->con->escape($ns) . "' "
+                "AND setting_ns = '" . dcCore::app()->con->escape($ns) . "' "
             );
 
             return true;
         }
         if ($action == 'delete_local') {
-            $this->core->con->execute(
-                'DELETE FROM ' . $this->core->prefix . 'setting ' .
-                "WHERE blog_id = '" . $this->core->con->escape($this->core->blog->id) . "' " .
-                "AND setting_ns = '" . $this->core->con->escape($ns) . "' "
+            dcCore::app()->con->execute(
+                'DELETE FROM ' . dcCore::app()->prefix . 'setting ' .
+                "WHERE blog_id = '" . dcCore::app()->con->escape(dcCore::app()->blog->id) . "' " .
+                "AND setting_ns = '" . dcCore::app()->con->escape($ns) . "' "
             );
 
             return true;
         }
         if ($action == 'delete_all') {
-            $this->core->con->execute(
-                'DELETE FROM ' . $this->core->prefix . 'setting ' .
-                "WHERE setting_ns = '" . $this->core->con->escape($ns) . "' " .
+            dcCore::app()->con->execute(
+                'DELETE FROM ' . dcCore::app()->prefix . 'setting ' .
+                "WHERE setting_ns = '" . dcCore::app()->con->escape($ns) . "' " .
                 "AND (blog_id IS NULL OR blog_id != '') "
             );
 
@@ -128,12 +128,12 @@ class advancedCleanerTables extends advancedCleaner
         $this->setProperties([
             'id'   => 'tables',
             'name' => __('Tables'),
-            'desc' => __('All database tables of Dotclear')
+            'desc' => __('All database tables of Dotclear'),
         ]);
 
         $this->setActions([
             'delete' => __('delete'),
-            'empty'  => __('empty')
+            'empty'  => __('empty'),
         ]);
 
         return true;
@@ -170,26 +170,26 @@ class advancedCleanerTables extends advancedCleaner
             'setting',
             'spamrule',
             'user',
-            'version'
+            'version',
         ];
     }
 
     public function get(): array
     {
-        $object = dbSchema::init($this->core->con);
+        $object = dbSchema::init(dcCore::app()->con);
         $res    = $object->getTables();
 
         $rs = [];
         $i  = 0;
         foreach ($res as $k => $v) {
-            if ('' != $this->core->prefix) {
-                if (!preg_match('/^' . preg_quote($this->core->prefix) . '(.*?)$/', $v, $m)) {
+            if ('' != dcCore::app()->prefix) {
+                if (!preg_match('/^' . preg_quote(dcCore::app()->prefix) . '(.*?)$/', $v, $m)) {
                     continue;
                 }
                 $v = $m[1];
             }
             $rs[$i]['key']   = $v;
-            $rs[$i]['value'] = $this->core->con->select('SELECT count(*) FROM ' . $res[$k])->f(0);
+            $rs[$i]['value'] = dcCore::app()->con->select('SELECT count(*) FROM ' . $res[$k])->f(0);
             $i++;
         }
 
@@ -199,16 +199,16 @@ class advancedCleanerTables extends advancedCleaner
     public function set($action, $ns): bool
     {
         if (in_array($action, ['empty', 'delete'])) {
-            $this->core->con->execute(
-                'DELETE FROM ' . $this->core->con->escapeSystem($this->core->prefix . $ns)
+            dcCore::app()->con->execute(
+                'DELETE FROM ' . dcCore::app()->con->escapeSystem(dcCore::app()->prefix . $ns)
             );
         }
         if ($action == 'empty') {
             return true;
         }
         if ($action == 'delete') {
-            $this->core->con->execute(
-                'DROP TABLE ' . $this->core->con->escapeSystem($this->core->prefix . $ns)
+            dcCore::app()->con->execute(
+                'DROP TABLE ' . dcCore::app()->con->escapeSystem(dcCore::app()->prefix . $ns)
             );
 
             return true;
@@ -225,11 +225,11 @@ class advancedCleanerVersions extends advancedCleaner
         $this->setProperties([
             'id'   => 'versions',
             'name' => __('Versions'),
-            'desc' => __('Versions registered in table "version" of Dotclear')
+            'desc' => __('Versions registered in table "version" of Dotclear'),
         ]);
 
         $this->setActions([
-            'delete' => __('delete')
+            'delete' => __('delete'),
         ]);
 
         return true;
@@ -257,13 +257,13 @@ class advancedCleanerVersions extends advancedCleaner
             'pings',
             'simpleMenu',
             'tags',
-            'widgets'
+            'widgets',
         ];
     }
 
     public function get(): array
     {
-        $res = $this->core->con->select('SELECT * FROM ' . $this->core->prefix . 'version');
+        $res = dcCore::app()->con->select('SELECT * FROM ' . dcCore::app()->prefix . 'version');
 
         $rs = [];
         $i  = 0;
@@ -279,9 +279,9 @@ class advancedCleanerVersions extends advancedCleaner
     public function set($action, $ns): bool
     {
         if ($action == 'delete') {
-            $this->core->con->execute(
-                'DELETE FROM  ' . $this->core->prefix . 'version ' .
-                "WHERE module = '" . $this->core->con->escape($ns) . "' "
+            dcCore::app()->con->execute(
+                'DELETE FROM  ' . dcCore::app()->prefix . 'version ' .
+                "WHERE module = '" . dcCore::app()->con->escape($ns) . "' "
             );
 
             return true;
@@ -298,12 +298,12 @@ class advancedCleanerPlugins extends advancedCleaner
         $this->setProperties([
             'id'   => 'plugins',
             'name' => __('Plugins'),
-            'desc' => __('Folders from plugins directories')
+            'desc' => __('Folders from plugins directories'),
         ]);
 
         $this->setActions([
             'delete' => __('delete'),
-            'empty'  => __('empty')
+            'empty'  => __('empty'),
         ]);
 
         return true;
@@ -360,12 +360,12 @@ class advancedCleanerThemes extends advancedCleaner
         $this->setProperties([
             'id'   => 'themes',
             'name' => __('Themes'),
-            'desc' => __('Folders from blog themes directory')
+            'desc' => __('Folders from blog themes directory'),
         ]);
 
         $this->setActions([
             'delete' => __('delete'),
-            'empty'  => __('empty')
+            'empty'  => __('empty'),
         ]);
 
         return true;
@@ -390,7 +390,7 @@ class advancedCleanerThemes extends advancedCleaner
 
     public function get(): array
     {
-        $res = self::getDirs($this->core->blog->themes_path);
+        $res = self::getDirs(dcCore::app()->blog->themes_path);
         sort($res);
 
         return $res;
@@ -399,12 +399,12 @@ class advancedCleanerThemes extends advancedCleaner
     public function set($action, $ns): bool
     {
         if ($action == 'empty') {
-            self::delDir($this->core->blog->themes_path, $ns, false);
+            self::delDir(dcCore::app()->blog->themes_path, $ns, false);
 
             return true;
         }
         if ($action == 'delete') {
-            self::delDir($this->core->blog->themes_path, $ns, true);
+            self::delDir(dcCore::app()->blog->themes_path, $ns, true);
 
             return true;
         }
@@ -420,12 +420,12 @@ class advancedCleanerCaches extends advancedCleaner
         $this->setProperties([
             'id'   => 'caches',
             'name' => __('Cache'),
-            'desc' => __('Folders from cache directory')
+            'desc' => __('Folders from cache directory'),
         ]);
 
         $this->setActions([
             'delete' => __('delete'),
-            'empty'  => __('empty')
+            'empty'  => __('empty'),
         ]);
 
         return true;
@@ -477,11 +477,11 @@ class advancedCleanerVars extends advancedCleaner
         $this->setProperties([
             'id'   => 'vars',
             'name' => __('Var'),
-            'desc' => __('Folders from Dotclear VAR directory')
+            'desc' => __('Folders from Dotclear VAR directory'),
         ]);
 
         $this->setActions([
-            'delete' => __('delete')
+            'delete' => __('delete'),
         ]);
 
         return true;

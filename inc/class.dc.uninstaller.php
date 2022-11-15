@@ -48,19 +48,15 @@ class dcUninstaller
     protected $id    = null;
     protected $mroot = null;
 
-    public $core;
     private $ac;
     private $allowed_actions = null;
 
     /**
      * Object constructor.
-     *
-     * @param   dcCore  $core   dcCore instance
      */
-    public function __construct(dcCore $core)
+    public function __construct()
     {
-        $this->core = & $core;
-        $this->ac   = new dcAdvancedCleaner($core);
+        $this->ac = new dcAdvancedCleaner();
 
         $res = [];
         foreach ($this->ac->get() as $cleaner) {
@@ -151,7 +147,7 @@ class dcUninstaller
                 'desc'          => $desc,
                 'author'        => $author,
                 'version'       => $version,
-                'root_writable' => is_writable($this->mroot)
+                'root_writable' => is_writable($this->mroot),
             ];
         }
     }
@@ -176,7 +172,7 @@ class dcUninstaller
     /**
      * Returns true if the module with ID <var>$id</var> exists.
      *
-     * @param   string  $idModule ID
+     * @param   string  $id     Module ID
      *
      * @return  boolean     Success
      */
@@ -224,7 +220,7 @@ class dcUninstaller
         $this->actions[$group][$this->id][$type][] = [
             'ns'     => $ns,
             'action' => $action,
-            'desc'   => $desc
+            'desc'   => $desc,
         ];
     }
 
@@ -295,7 +291,7 @@ class dcUninstaller
         }
         $this->callbacks[$group][$this->id][] = [
             'func' => $func,
-            'desc' => $desc
+            'desc' => $desc,
         ];
     }
 

@@ -16,16 +16,14 @@ if (!defined('DC_ADMIN_CONTEXT')) {
 
 class dcAdvancedCleaner
 {
-    protected $core;
     protected $cleaners = [];
 
-    public function __construct($core)
+    public function __construct()
     {
-        $this->core = $core;
-        $cleaners   = new arrayObject();
+        $cleaners = new arrayObject();
 
         try {
-            $this->core->callBehavior('advancedCleanerAdd', $cleaners, $this->core);
+            dcCore::app()->callBehavior('advancedCleanerAdd', $cleaners);
 
             foreach ($cleaners as $cleaner) {
                 if ($cleaner instanceof advancedCleaner && !isset($this->cleaners[$cleaner->id])) {
@@ -33,7 +31,7 @@ class dcAdvancedCleaner
                 }
             }
         } catch (Exception $e) {
-            $core->error->add($e->getMessage());
+            dcCore::app()->error->add($e->getMessage());
         }
     }
 
@@ -62,7 +60,7 @@ class dcAdvancedCleaner
         }
 
         # BEHAVIOR dcAdvancedCleanerBeforeAction
-        $this->core->callBehavior('dcAdvancedCleanerBeforeAction', $type, $action, $ns);
+        dcCore::app()->callBehavior('dcAdvancedCleanerBeforeAction', $type, $action, $ns);
 
         $ret = $this->cleaners[$type]->set($action, $ns);
 

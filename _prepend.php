@@ -17,39 +17,37 @@ if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
 
-$d = dirname(__FILE__) . '/inc/';
-
 # dcac class
-$__autoload['advancedCleaner']                          = $d . 'class.advanced.cleaner.php';
-$__autoload['dcAdvancedCleaner']                        = $d . 'class.dc.advanced.cleaner.php';
-$__autoload['behaviorsDcAdvancedCleaner']               = $d . 'lib.dc.advanced.cleaner.behaviors.php';
-$__autoload['dcUninstaller']                            = $d . 'class.dc.uninstaller.php';
-$__autoload['dcAdvancedCleanerActivityReportBehaviors'] = $d . 'lib.dc.advanced.cleaner.activityreport.php';
+Clearbricks::lib()->autoload(['advancedCleaner' => __DIR__ . '/inc/class.advanced.cleaner.php']);
+Clearbricks::lib()->autoload(['dcAdvancedCleaner' => __DIR__ . '/inc/class.dc.advanced.cleaner.php']);
+Clearbricks::lib()->autoload(['behaviorsDcAdvancedCleaner' => __DIR__ . '/inc/lib.dc.advanced.cleaner.behaviors.php']);
+Clearbricks::lib()->autoload(['dcUninstaller' => __DIR__ . '/inc/class.dc.uninstaller.php']);
+Clearbricks::lib()->autoload(['dcAdvancedCleanerActivityReportBehaviors' => __DIR__ . '/inc/lib.dc.advanced.cleaner.activityreport.php']);
 
 # cleaners class
-$__autoload['advancedCleanerVersions'] = $d . 'lib.advanced.cleaner.php';
-$__autoload['advancedCleanerSettings'] = $d . 'lib.advanced.cleaner.php';
-$__autoload['advancedCleanerTables']   = $d . 'lib.advanced.cleaner.php';
-$__autoload['advancedCleanerThemes']   = $d . 'lib.advanced.cleaner.php';
-$__autoload['advancedCleanerPlugins']  = $d . 'lib.advanced.cleaner.php';
-$__autoload['advancedCleanerCaches']   = $d . 'lib.advanced.cleaner.php';
-$__autoload['advancedCleanerVars']     = $d . 'lib.advanced.cleaner.php';
+Clearbricks::lib()->autoload(['advancedCleanerVersions' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
+Clearbricks::lib()->autoload(['advancedCleanerSettings' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
+Clearbricks::lib()->autoload(['advancedCleanerTables' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
+Clearbricks::lib()->autoload(['advancedCleanerThemes' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
+Clearbricks::lib()->autoload(['advancedCleanerPlugins' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
+Clearbricks::lib()->autoload(['advancedCleanerCaches' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
+Clearbricks::lib()->autoload(['advancedCleanerVars' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
 
-$core->addBehavior('advancedCleanerAdd', ['advancedCleanerVersions', 'create']);
-$core->addBehavior('advancedCleanerAdd', ['advancedCleanerSettings', 'create']);
-$core->addBehavior('advancedCleanerAdd', ['advancedCleanerTables', 'create']);
-$core->addBehavior('advancedCleanerAdd', ['advancedCleanerThemes', 'create']);
-$core->addBehavior('advancedCleanerAdd', ['advancedCleanerPlugins', 'create']);
-$core->addBehavior('advancedCleanerAdd', ['advancedCleanerCaches', 'create']);
-$core->addBehavior('advancedCleanerAdd', ['advancedCleanerVars', 'create']);
+dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerVersions', 'create']);
+dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerSettings', 'create']);
+dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerTables', 'create']);
+dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerThemes', 'create']);
+dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerPlugins', 'create']);
+dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerCaches', 'create']);
+dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerVars', 'create']);
 
 # dcac behaviors
-$core->addBehavior('adminDashboardFavorites', ['behaviorsDcAdvancedCleaner', 'adminDashboardFavorites']);
-$core->addBehavior('pluginsToolsTabs', ['behaviorsDcAdvancedCleaner', 'pluginsToolsTabs']);
-$core->addBehavior('adminModulesListDoActions', ['behaviorsDcAdvancedCleaner', 'adminModulesListDoActions']);
-$core->addBehavior('pluginsBeforeDelete', ['behaviorsDcAdvancedCleaner', 'pluginsBeforeDelete']);
-$core->addBehavior('themeBeforeDelete', ['behaviorsDcAdvancedCleaner', 'themeBeforeDelete']);
+dcCore::app()->addBehavior('adminDashboardFavoritesV2', ['behaviorsDcAdvancedCleaner', 'adminDashboardFavorites']);
+dcCore::app()->addBehavior('pluginsToolsTabsV2', ['behaviorsDcAdvancedCleaner', 'pluginsToolsTabs']);
+dcCore::app()->addBehavior('adminModulesListDoActions', ['behaviorsDcAdvancedCleaner', 'adminModulesListDoActions']);
+dcCore::app()->addBehavior('pluginsBeforeDelete', ['behaviorsDcAdvancedCleaner', 'pluginsBeforeDelete']);
+dcCore::app()->addBehavior('themeBeforeDelete', ['behaviorsDcAdvancedCleaner', 'themeBeforeDelete']);
 
 if (defined('ACTIVITY_REPORT')) {
-    dcAdvancedCleanerActivityReportBehaviors::add($core);
+    dcAdvancedCleanerActivityReportBehaviors::add();
 }

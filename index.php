@@ -16,7 +16,7 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 
 dcPage::checkSuper();
 
-$ac = new dcAdvancedCleaner($core);
+$ac = new dcAdvancedCleaner();
 
 $cleaner     = false;
 $select_menu = [];
@@ -38,13 +38,13 @@ if (!empty($_POST['entries']) && !empty($_POST['action'])) {
         foreach ($_POST['entries'] as $ns) {
             $ac->set($cleaner->id, $_POST['action'], $ns);
         }
-        dcPage::addSuccessNotice(__('Action successfuly excecuted'));
-        $core->adminurl->redirect(
+        dcAdminNotices::addSuccessNotice(__('Action successfuly excecuted'));
+        dcCore::app()->adminurl->redirect(
             'admin.plugin.dcAdvancedCleaner',
             ['part' => $cleaner->id]
         );
     } catch (Exception $e) {
-        $core->error->add($e->getMessage());
+        dcCore::app()->error->add($e->getMessage());
     }
 }
 
@@ -54,16 +54,16 @@ dcPage::cssLoad(dcPage::getPF('dcAdvancedCleaner/style.css')) .
 dcPage::jsLoad(dcPage::getPF('dcAdvancedCleaner/js/index.js'));
 
 # --BEHAVIOR-- dcAdvancedCleanerAdminHeader
-$core->callBehavior('dcAdvancedCleanerAdminHeader', $core);
+dcCore::app()->callBehavior('dcAdvancedCleanerAdminHeader');
 
 echo '</head><body>' .
 dcPage::breadcrumb([
     __('Plugins')          => '',
-    __('Advanced cleaner') => ''
+    __('Advanced cleaner') => '',
 ]) .
 dcPage::notices() .
 
-'<form method="get" action="' . $core->adminurl->get('admin.plugin.dcAdvancedCleaner') . '" id="parts_menu">' .
+'<form method="get" action="' . dcCore::app()->adminurl->get('admin.plugin.dcAdvancedCleaner') . '" id="parts_menu">' .
 '<p class="anchor-nav"><label for="part" class="classic">' . __('Goto:') . ' </label>' .
 form::combo('part', $select_menu, $cleaner->id) . ' ' .
 '<input type="submit" value="' . __('Ok') . '" />' .
@@ -78,7 +78,7 @@ if (empty($rs)) {
     echo '<p>' . __('There is nothing to display') . '</p>';
 } else {
     echo
-    '<form method="post" action="' . $core->adminurl->get('admin.plugin.dcAdvancedCleaner') . '" id="form-funcs">' .
+    '<form method="post" action="' . dcCore::app()->adminurl->get('admin.plugin.dcAdvancedCleaner') . '" id="form-funcs">' .
     '<div class="table-outer">' .
     '<table><caption>' . sprintf(__('There are %s %s'), count($rs), __($cleaner->id)) . '</caption><thead><tr>' .
     '<th colspan="2">' . __('Name') . '</th><th>' . __('Objects') . '</th>' .
@@ -87,7 +87,7 @@ if (empty($rs)) {
     foreach ($rs as $k => $v) {
         $offline = in_array($v['key'], $cleaner->official());
 
-        if ($offline && $core->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_dcproperty_hide) {
+        if ($offline && dcCore::app()->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_dcproperty_hide) {
             continue;
         }
         echo
@@ -108,14 +108,14 @@ if (empty($rs)) {
     '<input id="do-action" type="submit" value="' . __('ok') . '" />' .
     form::hidden(['p'], 'dcAdvancedCleaner') .
     form::hidden(['part'], $cleaner->id) .
-    $core->formNonce() . '</p>' .
+    dcCore::app()->formNonce() . '</p>' .
     '<p class="info">' .
     __('Beware: All actions done here are irreversible and are directly applied') .
     '</p>' .
     '</form>';
 }
 
-if ($core->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_dcproperty_hide) {
+if (dcCore::app()->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_dcproperty_hide) {
     echo '<p class="info">' .
     __('Default values of Dotclear are hidden. You can change this in settings') .
     '</p>';

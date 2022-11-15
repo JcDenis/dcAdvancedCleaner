@@ -12,31 +12,27 @@
  */
 abstract class advancedCleaner
 {
-    protected $core;
-
     private static $exclude = [
-        '.', '..', '__MACOSX', '.svn', 'CVS', '.DS_Store', 'Thumbs.db'
+        '.', '..', '__MACOSX', '.svn', 'CVS', '.DS_Store', 'Thumbs.db',
     ];
 
     private $properties = [
         'id'   => '',
         'name' => '',
-        'desc' => ''
+        'desc' => '',
     ];
 
     private $actions = [];
 
-    final public function __construct(dcCore $core)
+    final public function __construct()
     {
-        $this->core = $core;
-
         $this->init();
     }
 
-    public static function create(arrayObject $o, dcCore $core)
+    public static function create(arrayObject $o)
     {
         $c = get_called_class();
-        $o->append(new $c($core));
+        $o->append(new $c());
     }
 
     final public function __get(string $property)

@@ -16,14 +16,14 @@ if (!defined('DC_ADMIN_CONTEXT')) {
 
 class behaviorsDcAdvancedCleaner
 {
-    public static function adminDashboardFavorites(dcCore $core, $favs)
+    public static function adminDashboardFavorites($favs)
     {
         $favs->register('dcAdvancedCleaner', [
             'title'       => __('Advanced cleaner'),
-            'url'         => $core->adminurl->get('admin.plugin.dcAdvancedCleaner'),
+            'url'         => dcCore::app()->adminurl->get('admin.plugin.dcAdvancedCleaner'),
             'small-icon'  => dcPage::getPF('dcAdvancedCleaner/icon.png'),
             'large-icon'  => dcPage::getPF('dcAdvancedCleaner/icon-big.png'),
-            'permissions' => $core->auth->isSuperAdmin()
+            'permissions' => dcCore::app()->auth->isSuperAdmin(),
         ]);
     }
 
@@ -40,13 +40,12 @@ class behaviorsDcAdvancedCleaner
     // Generic module before delete
     public static function moduleBeforeDelete($module, $redir)
     {
-        global $core;
         $done = false;
 
-        if (!$core->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_behavior_active) {
+        if (!dcCore::app()->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_behavior_active) {
             return null;
         }
-        $uninstaller = new dcUninstaller($core);
+        $uninstaller = new dcUninstaller();
         $uninstaller->loadModule($module['root']);
 
         $m_callbacks = $uninstaller->getDirectCallbacks($module['id']);
@@ -70,19 +69,19 @@ class behaviorsDcAdvancedCleaner
         }
     }
 
-    public static function pluginsToolsTabs($core)
+    public static function pluginsToolsTabs()
     {
-        self::modulesTabs($core, DC_PLUGINS_ROOT, $core->adminurl->get('admin.plugins') . '#uninstaller');
+        self::modulesTabs(DC_PLUGINS_ROOT, dcCore::app()->adminurl->get('admin.plugins') . '#uninstaller');
     }
 
-    public static function modulesTabs($core, $path, $redir, $title = '')
+    public static function modulesTabs($path, $redir, $title = '')
     {
-        if (!$core->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_behavior_active) {
+        if (!dcCore::app()->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_behavior_active) {
             return null;
         }
         $title = empty($title) ? __('Advanced uninstall') : $title;
 
-        $uninstaller = new dcUninstaller($core);
+        $uninstaller = new dcUninstaller();
         $uninstaller->loadModules($path);
         $modules = $uninstaller->getModules();
         $props   = $uninstaller->getAllowedActions();
@@ -133,7 +132,7 @@ class behaviorsDcAdvancedCleaner
                     $ret = base64_encode(serialize([
                         'type'   => $prop_id,
                         'action' => $action['action'],
-                        'ns'     => $action['ns']
+                        'ns'     => $action['ns'],
                     ]));
 
                     echo '<label class="classic">' .
@@ -167,7 +166,7 @@ class behaviorsDcAdvancedCleaner
         echo
         '</table>' .
         '<p>' .
-        $core->formNonce() .
+        dcCore::app()->formNonce() .
         form::hidden(['path'], $path) .
         form::hidden(['redir'], $redir) .
         form::hidden(['action'], 'uninstall') .
@@ -180,17 +179,17 @@ class behaviorsDcAdvancedCleaner
 
     public static function adminModulesListDoActions($list, $modules, $type)
     {
-        if (!$list->core->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_behavior_active) {
+        if (!dcCore::app()->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_behavior_active) {
             return null;
         }
 
         if (!isset($_POST['action']) || $_POST['action'] != 'uninstall'
-            || (empty($_POST['extras']) && empty($_POST['actions']))
+                                     || (empty($_POST['extras']) && empty($_POST['actions']))
         ) {
             return null;
         }
 
-        $uninstaller = new dcUninstaller($list->core);
+        $uninstaller = new dcUninstaller();
         $uninstaller->loadModules($_POST['path']);
         $modules = $uninstaller->getModules();
         $props   = $uninstaller->getAllowedActions();
@@ -205,7 +204,7 @@ class behaviorsDcAdvancedCleaner
                         if (!$extra || !is_callable($extra)) {
                             continue;
                         }
-                        call_user_func($extra, $modul_id);
+                        call_user_func($extra, $module_id);
                     }
                 }
             }
@@ -226,10 +225,10 @@ class behaviorsDcAdvancedCleaner
                     }
                 }
             }
-            dcPage::addSuccessNotice(__('Action successfuly excecuted'));
+            dcAdminNotices::addSuccessNotice(__('Action successfuly excecuted'));
             http::redirect($_POST['redir']);
         } catch (Exception $e) {
-            $list->core->error->add($e->getMessage());
+            dcCore::app()->error->add($e->getMessage());
         }
     }
 }

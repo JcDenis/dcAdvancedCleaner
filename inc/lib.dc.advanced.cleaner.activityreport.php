@@ -18,20 +18,20 @@ class dcAdvancedCleanerActivityReportBehaviors
 {
     public static function maintenance($type, $action, $ns)
     {
-        $GLOBALS['core']->activityReport->addLog('dcadvancedcleaner', 'maintenance', [$type,$action, $ns]);
+        dcCore::app()->activityReport->addLog('dcadvancedcleaner', 'maintenance', [$type,$action, $ns]);
     }
 
-    public static function add($core)
+    public static function add()
     {
         // This file is used with plugin activityReport
-        $core->activityReport->addGroup(
+        dcCore::app()->activityReport->addGroup(
             'dcadvancedcleaner',
             __('Plugin dcAdvancedCleaner')
         );
 
         // from BEHAVIOR dcAdvancedCleanerBeforeAction
         // in dcAdvancedCleaner/inc/class.dc.advanced.cleaner.php
-        $core->activityReport->addAction(
+        dcCore::app()->activityReport->addAction(
             'dcadvancedcleaner',
             'maintenance',
             __('Maintenance'),

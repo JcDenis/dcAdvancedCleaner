@@ -14,17 +14,17 @@ if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
 
-$new_version = $core->plugins->moduleInfo('dcAdvancedCleaner', 'version');
-$old_version = $core->getVersion('dcAdvancedCleaner');
+$new_version = dcCore::app()->plugins->moduleInfo('dcAdvancedCleaner', 'version');
+$old_version = dcCore::app()->getVersion('dcAdvancedCleaner');
 
 if (version_compare($old_version, $new_version, '>=')) {
     return null;
 }
 
 try {
-    $core->blog->settings->addNamespace('dcAdvancedCleaner');
+    dcCore::app()->blog->settings->addNamespace('dcAdvancedCleaner');
 
-    $core->blog->settings->dcAdvancedCleaner->put(
+    dcCore::app()->blog->settings->dcAdvancedCleaner->put(
         'dcAdvancedCleaner_behavior_active',
         true,
         'boolean',
@@ -32,7 +32,7 @@ try {
         false,
         true
     );
-    $core->blog->settings->dcAdvancedCleaner->put(
+    dcCore::app()->blog->settings->dcAdvancedCleaner->put(
         'dcAdvancedCleaner_dcproperty_hide',
         true,
         'boolean',
@@ -41,11 +41,11 @@ try {
         true
     );
 
-    $core->setVersion('dcAdvancedCleaner', $new_version);
+    dcCore::app()->setVersion('dcAdvancedCleaner', $new_version);
 
     return true;
 } catch (Exception $e) {
-    $core->error->add($e->getMessage());
+    dcCore::app()->error->add($e->getMessage());
 
     return false;
 }
