@@ -48,6 +48,6 @@ dcCore::app()->addBehavior('adminModulesListDoActions', ['behaviorsDcAdvancedCle
 dcCore::app()->addBehavior('pluginsBeforeDelete', ['behaviorsDcAdvancedCleaner', 'pluginsBeforeDelete']);
 dcCore::app()->addBehavior('themeBeforeDelete', ['behaviorsDcAdvancedCleaner', 'themeBeforeDelete']);
 
-if (defined('ACTIVITY_REPORT')) {
+if (defined('ACTIVITY_REPORT_V2')) {
     dcAdvancedCleanerActivityReportBehaviors::add();
 }
