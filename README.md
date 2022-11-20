@@ -3,7 +3,7 @@
 [![Release](https://img.shields.io/github/v/release/JcDenis/dcAdvancedCleaner)](https://github.com/JcDenis/dcAdvancedCleaner/releases)
 [![Date](https://img.shields.io/github/release-date/JcDenis/dcAdvancedCleaner)](https://github.com/JcDenis/dcAdvancedCleaner/releases)
 [![Issues](https://img.shields.io/github/issues/JcDenis/dcAdvancedCleaner)](https://github.com/JcDenis/dcAdvancedCleaner/issues)
-[![Dotclear](https://img.shields.io/badge/dotclear-v2.19-blue.svg)](https://fr.dotclear.org/download)
+[![Dotclear](https://img.shields.io/badge/dotclear-v2.24-blue.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-green.svg)](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner)
 [![License](https://img.shields.io/github/license/JcDenis/dcAdvancedCleaner)](https://github.com/JcDenis/dcAdvancedCleaner/blob/master/LICENSE)
 
@@ -20,7 +20,7 @@ settings, tables, cache, etc...
  _dcAdvancedCleaner_ requires: 
 
   * Permissions superadmin
-  * Dotclear 2.19 
+  * Dotclear 2.24 
 
 ## USAGE
 

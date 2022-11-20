@@ -1,6 +1,9 @@
 dev
 - [ ] orphan media cleaner
 
+0.10 - 2022.11.20
+- fix compatibility with Dotclear 2.24 (required)
+
 0.9 - 2021.11.06
 - fix permissions
 - move actions to independent tools
