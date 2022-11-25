@@ -19,7 +19,7 @@ dcCore::app()->blog->settings->addNamespace('dcAdvancedCleaner');
 dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
     __('Advanced cleaner'),
     dcCore::app()->adminurl->get('admin.plugin.dcAdvancedCleaner'),
-    dcPage::getPF('dcAdvancedCleaner/icon.png'),
+    dcPage::getPF('dcAdvancedCleaner/icon.svg'),
     preg_match(
         '/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.dcAdvancedCleaner')) . '(&.*)?$/',
         $_SERVER['REQUEST_URI']
