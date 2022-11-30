@@ -18,20 +18,24 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 }
 
 # dcac class
-Clearbricks::lib()->autoload(['advancedCleaner' => __DIR__ . '/inc/class.advanced.cleaner.php']);
-Clearbricks::lib()->autoload(['dcAdvancedCleaner' => __DIR__ . '/inc/class.dc.advanced.cleaner.php']);
-Clearbricks::lib()->autoload(['behaviorsDcAdvancedCleaner' => __DIR__ . '/inc/lib.dc.advanced.cleaner.behaviors.php']);
-Clearbricks::lib()->autoload(['dcUninstaller' => __DIR__ . '/inc/class.dc.uninstaller.php']);
-Clearbricks::lib()->autoload(['dcAdvancedCleanerActivityReportBehaviors' => __DIR__ . '/inc/lib.dc.advanced.cleaner.activityreport.php']);
+Clearbricks::lib()->autoload([
+    'advancedCleaner'                          => __DIR__ . '/inc/class.advanced.cleaner.php',
+    'dcAdvancedCleaner'                        => __DIR__ . '/inc/class.dc.advanced.cleaner.php',
+    'behaviorsDcAdvancedCleaner'               => __DIR__ . '/inc/lib.dc.advanced.cleaner.behaviors.php',
+    'dcUninstaller'                            => __DIR__ . '/inc/class.dc.uninstaller.php',
+    'dcAdvancedCleanerActivityReportBehaviors' => __DIR__ . '/inc/lib.dc.advanced.cleaner.activityreport.php',
+]);
 
 # cleaners class
-Clearbricks::lib()->autoload(['advancedCleanerVersions' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
-Clearbricks::lib()->autoload(['advancedCleanerSettings' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
-Clearbricks::lib()->autoload(['advancedCleanerTables' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
-Clearbricks::lib()->autoload(['advancedCleanerThemes' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
-Clearbricks::lib()->autoload(['advancedCleanerPlugins' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
-Clearbricks::lib()->autoload(['advancedCleanerCaches' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
-Clearbricks::lib()->autoload(['advancedCleanerVars' => __DIR__ . '/inc/lib.advanced.cleaner.php']);
+Clearbricks::lib()->autoload([
+    'advancedCleanerVersions' => __DIR__ . '/inc/lib.advanced.cleaner.php',
+    'advancedCleanerSettings' => __DIR__ . '/inc/lib.advanced.cleaner.php',
+    'advancedCleanerTables'   => __DIR__ . '/inc/lib.advanced.cleaner.php',
+    'advancedCleanerThemes'   => __DIR__ . '/inc/lib.advanced.cleaner.php',
+    'advancedCleanerPlugins'  => __DIR__ . '/inc/lib.advanced.cleaner.php',
+    'advancedCleanerCaches'   => __DIR__ . '/inc/lib.advanced.cleaner.php',
+    'advancedCleanerVars'     => __DIR__ . '/inc/lib.advanced.cleaner.php',
+]);
 
 dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerVersions', 'create']);
 dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerSettings', 'create']);
