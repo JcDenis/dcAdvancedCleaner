@@ -23,7 +23,7 @@ class behaviorsDcAdvancedCleaner
             'url'         => dcCore::app()->adminurl->get('admin.plugin.dcAdvancedCleaner'),
             'small-icon'  => dcPage::getPF('dcAdvancedCleaner/icon.png'),
             'large-icon'  => dcPage::getPF('dcAdvancedCleaner/icon-big.png'),
-            'permissions' => dcCore::app()->auth->isSuperAdmin(),
+            //'permissions' => dcCore::app()->auth->isSuperAdmin(),
         ]);
     }
 
