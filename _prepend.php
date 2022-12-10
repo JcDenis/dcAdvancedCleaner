@@ -10,9 +10,6 @@
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_RC_PATH')) {
-    return null;
-}
 if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
@@ -44,13 +41,6 @@ dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerThemes', 'crea
 dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerPlugins', 'create']);
 dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerCaches', 'create']);
 dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerVars', 'create']);
-
-# dcac behaviors
-dcCore::app()->addBehavior('adminDashboardFavoritesV2', ['behaviorsDcAdvancedCleaner', 'adminDashboardFavorites']);
-dcCore::app()->addBehavior('pluginsToolsTabsV2', ['behaviorsDcAdvancedCleaner', 'pluginsToolsTabs']);
-dcCore::app()->addBehavior('adminModulesListDoActions', ['behaviorsDcAdvancedCleaner', 'adminModulesListDoActions']);
-dcCore::app()->addBehavior('pluginsBeforeDelete', ['behaviorsDcAdvancedCleaner', 'pluginsBeforeDelete']);
-dcCore::app()->addBehavior('themeBeforeDelete', ['behaviorsDcAdvancedCleaner', 'themeBeforeDelete']);
 
 if (defined('ACTIVITY_REPORT_V2')) {
     dcAdvancedCleanerActivityReportBehaviors::add();
