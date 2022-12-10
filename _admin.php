@@ -29,30 +29,29 @@ dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
 
 dcCore::app()->addBehavior('adminDashboardFavoritesV2', function ($favs) {
     $favs->register(basename(__DIR__), [
-        'title'       => __('Advanced cleaner'),
-        'url'         => dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
-        'small-icon'  => dcPage::getPF(basename(__DIR__) . '/icon.png'),
-        'large-icon'  => dcPage::getPF(basename(__DIR__) . '/icon-big.png'),
+        'title'      => __('Advanced cleaner'),
+        'url'        => dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
+        'small-icon' => dcPage::getPF(basename(__DIR__) . '/icon.png'),
+        'large-icon' => dcPage::getPF(basename(__DIR__) . '/icon-big.png'),
         //'permissions' => dcCore::app()->auth->isSuperAdmin(),
     ]);
 });
 
 dcCore::app()->addBehavior('pluginsToolsTabsV2', function () {
-    $path = DC_PLUGINS_ROOT;
-    $redir = dcCore::app()->adminurl->get('admin.plugins', [], '#uninstaller');
-    $title = '';
-
     if (!dcCore::app()->blog->settings->__get(basename(__DIR__))->dcAdvancedCleaner_behavior_active) {
         return null;
     }
-    $title = empty($title) ? __('Advanced uninstall') : $title;
+
+    $path  = DC_PLUGINS_ROOT;
+    $redir = dcCore::app()->adminurl->get('admin.plugins', [], '#uninstaller');
+    $title = '';
 
     $uninstaller = new dcUninstaller();
     $uninstaller->loadModules($path);
     $modules = $uninstaller->getModules();
     $props   = $uninstaller->getAllowedActions();
 
-    echo '<div class="multi-part" id="uninstaller" title="' . __($title) . '"><h3>' . __($title) . '</h3>';
+    echo '<div class="multi-part" id="uninstaller" title="' . __('Advanced uninstall') . '"><h3>' . __('Advanced uninstall') . '</h3>';
 
     if (!count($modules)) {
         echo '<p>' . __('There is no module with uninstall features') . '</p></div>';
@@ -207,11 +206,12 @@ dcCore::app()->addBehavior('themeBeforeDelete', function ($theme) {
 
 function dcAdvancedCleanerModuleBeforeDelete($module)
 {
-    $done = false;
-
     if (!dcCore::app()->blog->settings->__get(basename(__DIR__))->dcAdvancedCleaner_behavior_active) {
         return null;
     }
+
+    $done = false;
+
     $uninstaller = new dcUninstaller();
     $uninstaller->loadModule($module['root']);
 
