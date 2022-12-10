@@ -14,25 +14,25 @@ if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
 
-dcCore::app()->blog->settings->addNamespace('dcAdvancedCleaner');
+dcCore::app()->blog->settings->addNamespace(basename(__DIR__));
 
 dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
     __('Advanced cleaner'),
-    dcCore::app()->adminurl->get('admin.plugin.dcAdvancedCleaner'),
-    dcPage::getPF('dcAdvancedCleaner/icon.svg'),
+    dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
+    dcPage::getPF(basename(__DIR__) . '/icon.svg'),
     preg_match(
-        '/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.dcAdvancedCleaner')) . '(&.*)?$/',
+        '/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__))) . '(&.*)?$/',
         $_SERVER['REQUEST_URI']
     ),
     dcCore::app()->auth->isSuperAdmin()
 );
 
 dcCore::app()->addBehavior('adminDashboardFavoritesV2', function ($favs) {
-    $favs->register('dcAdvancedCleaner', [
+    $favs->register(basename(__DIR__), [
         'title'       => __('Advanced cleaner'),
-        'url'         => dcCore::app()->adminurl->get('admin.plugin.dcAdvancedCleaner'),
-        'small-icon'  => dcPage::getPF('dcAdvancedCleaner/icon.png'),
-        'large-icon'  => dcPage::getPF('dcAdvancedCleaner/icon-big.png'),
+        'url'         => dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
+        'small-icon'  => dcPage::getPF(basename(__DIR__) . '/icon.png'),
+        'large-icon'  => dcPage::getPF(basename(__DIR__) . '/icon-big.png'),
         //'permissions' => dcCore::app()->auth->isSuperAdmin(),
     ]);
 });
@@ -42,7 +42,7 @@ dcCore::app()->addBehavior('pluginsToolsTabsV2', function () {
     $redir = dcCore::app()->adminurl->get('admin.plugins', [], '#uninstaller');
     $title = '';
 
-    if (!dcCore::app()->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_behavior_active) {
+    if (!dcCore::app()->blog->settings->__get(basename(__DIR__))->dcAdvancedCleaner_behavior_active) {
         return null;
     }
     $title = empty($title) ? __('Advanced uninstall') : $title;
@@ -144,7 +144,7 @@ dcCore::app()->addBehavior('pluginsToolsTabsV2', function () {
 });
 
 dcCore::app()->addBehavior('adminModulesListDoActions', function ($list, $modules, $type) {
-    if (!dcCore::app()->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_behavior_active) {
+    if (!dcCore::app()->blog->settings->__get(basename(__DIR__))->dcAdvancedCleaner_behavior_active) {
         return null;
     }
 
@@ -209,7 +209,7 @@ function dcAdvancedCleanerModuleBeforeDelete($module)
 {
     $done = false;
 
-    if (!dcCore::app()->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_behavior_active) {
+    if (!dcCore::app()->blog->settings->__get(basename(__DIR__))->dcAdvancedCleaner_behavior_active) {
         return null;
     }
     $uninstaller = new dcUninstaller();

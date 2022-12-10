@@ -55,7 +55,7 @@ class dcAdvancedCleaner
         if (!isset($this->cleaners[$type])) {
             throw new exception(sprintf(__('unknow cleaner type %s'), $type));
         }
-        if (strtolower($ns) == 'dcadvancedcleaner') {
+        if ($ns == basename(dirname('../' . __DIR__))) {
             throw new exception(__("dcAdvancedCleaner can't remove itself"));
         }
 

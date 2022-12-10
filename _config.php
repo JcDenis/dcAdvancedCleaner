@@ -20,10 +20,10 @@ if (!dcCore::app()->auth->isSuperAdmin()) {
 
 if (!empty($_POST['save'])) {
     try {
-        dcCore::app()->blog->settings->dcAdvancedCleaner->dropEvery(
+        dcCore::app()->blog->settings->__get(basename(__DIR__))->dropEvery(
             'dcAdvancedCleaner_behavior_active'
         );
-        dcCore::app()->blog->settings->dcAdvancedCleaner->put(
+        dcCore::app()->blog->settings->__get(basename(__DIR__))->put(
             'dcAdvancedCleaner_behavior_active',
             !empty($_POST['behavior_active']),
             'boolean',
@@ -31,10 +31,10 @@ if (!empty($_POST['save'])) {
             true,
             true
         );
-        dcCore::app()->blog->settings->dcAdvancedCleaner->dropEvery(
+        dcCore::app()->blog->settings->__get(basename(__DIR__))->dropEvery(
             'dcAdvancedCleaner_dcproperty_hide'
         );
-        dcCore::app()->blog->settings->dcAdvancedCleaner->put(
+        dcCore::app()->blog->settings->__get(basename(__DIR__))->put(
             'dcAdvancedCleaner_dcproperty_hide',
             !empty($_POST['dcproperty_hide']),
             'boolean',
@@ -48,7 +48,7 @@ if (!empty($_POST['save'])) {
         dcCore::app()->adminurl->redirect(
             'admin.plugins',
             [
-                'module' => 'dcAdvancedCleaner',
+                'module' => basename(__DIR__),
                 'conf'   => 1,
                 'redir'  => empty($_REQUEST['redir']) ? dcCore::app()->admin->list->getURL() . '#plugins' : $_REQUEST['redir'],
             ]
@@ -62,14 +62,14 @@ echo '
 form::checkbox(
     'behavior_active',
     1,
-    dcCore::app()->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_behavior_active
+    dcCore::app()->blog->settings->__get(basename(__DIR__))->dcAdvancedCleaner_behavior_active
 ) . ' ' . __('Activate behaviors') . '</label></p>
 <p class="form-note">' . __('Enable actions set in _uninstall.php files.') . '</p>
 <p><label class="classic" for="dcproperty_hide">' .
 form::checkbox(
     'dcproperty_hide',
     1,
-    dcCore::app()->blog->settings->dcAdvancedCleaner->dcAdvancedCleaner_dcproperty_hide
+    dcCore::app()->blog->settings->__get(basename(__DIR__))->dcAdvancedCleaner_dcproperty_hide
 ) . ' ' . __('Hide Dotclear default properties in actions tabs') . '</label></p>
 <p class="form-note">' .
 __('Prevent from deleting Dotclear important properties.') . '</p>';
