@@ -191,12 +191,12 @@ class dcUninstaller
      * @param   string  $ns         Name of setting related to module.
      * @param   string  $desc       Description of action
      */
-    protected function addUserAction($type, $action, $ns, $desc = '')
+    public function addUserAction($type, $action, $ns, $desc = '')
     {
         $this->addAction('user', $type, $action, $ns, $desc);
     }
 
-    protected function addDirectAction($type, $action, $ns, $desc = '')
+    public function addDirectAction($type, $action, $ns, $desc = '')
     {
         $this->addAction('direct', $type, $action, $ns, $desc);
     }
