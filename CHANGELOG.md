@@ -1,6 +1,15 @@
 dev
 - [ ] orphan media cleaner
 
+0.11 - 2022.12.20
+- use SVG icon
+- use anonymous functions
+- use abstract plugin name
+- set addXxxAction as public method
+- fix autoload
+- fix permissions
+- fix install
+
 0.10 - 2022.11.20
 - fix compatibility with Dotclear 2.24 (required)
 
