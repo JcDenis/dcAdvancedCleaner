@@ -14,8 +14,6 @@ if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
 
-dcCore::app()->blog->settings->addNamespace(basename(__DIR__));
-
 dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
     __('Advanced cleaner'),
     dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
@@ -27,182 +25,184 @@ dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
     dcCore::app()->auth->isSuperAdmin()
 );
 
-dcCore::app()->addBehavior('adminDashboardFavoritesV2', function ($favs) {
-    $favs->register(basename(__DIR__), [
-        'title'      => __('Advanced cleaner'),
-        'url'        => dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
-        'small-icon' => dcPage::getPF(basename(__DIR__) . '/icon.png'),
-        'large-icon' => dcPage::getPF(basename(__DIR__) . '/icon-big.png'),
-        //'permissions' => dcCore::app()->auth->isSuperAdmin(),
-    ]);
-});
+dcCore::app()->addBehaviors([
+    'adminDashboardFavoritesV2' => function ($favs) {
+        $favs->register(basename(__DIR__), [
+            'title'      => __('Advanced cleaner'),
+            'url'        => dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
+            'small-icon' => dcPage::getPF(basename(__DIR__) . '/icon.svg'),
+            'large-icon' => dcPage::getPF(basename(__DIR__) . '/icon-big.svg'),
+            //'permissions' => dcCore::app()->auth->isSuperAdmin(),
+        ]);
+    },
 
-dcCore::app()->addBehavior('pluginsToolsTabsV2', function () {
-    if (!dcCore::app()->blog->settings->__get(basename(__DIR__))->dcAdvancedCleaner_behavior_active) {
-        return null;
-    }
+    'pluginsToolsTabsV2' => function () {
+        if (!dcCore::app()->blog->settings->__get(basename(__DIR__))->dcAdvancedCleaner_behavior_active) {
+            return null;
+        }
 
-    $path  = DC_PLUGINS_ROOT;
-    $redir = dcCore::app()->adminurl->get('admin.plugins', [], '#uninstaller');
-    $title = '';
+        $path  = DC_PLUGINS_ROOT;
+        $redir = dcCore::app()->adminurl->get('admin.plugins', [], '#uninstaller');
+        $title = '';
 
-    $uninstaller = new dcUninstaller();
-    $uninstaller->loadModules($path);
-    $modules = $uninstaller->getModules();
-    $props   = $uninstaller->getAllowedActions();
+        $uninstaller = new dcUninstaller();
+        $uninstaller->loadModules($path);
+        $modules = $uninstaller->getModules();
+        $props   = $uninstaller->getAllowedActions();
 
-    echo '<div class="multi-part" id="uninstaller" title="' . __('Advanced uninstall') . '"><h3>' . __('Advanced uninstall') . '</h3>';
+        echo '<div class="multi-part" id="uninstaller" title="' . __('Advanced uninstall') . '"><h3>' . __('Advanced uninstall') . '</h3>';
 
-    if (!count($modules)) {
-        echo '<p>' . __('There is no module with uninstall features') . '</p></div>';
+        if (!count($modules)) {
+            echo '<p>' . __('There is no module with uninstall features') . '</p></div>';
 
-        return null;
-    }
+            return null;
+        }
 
-    echo
-    '<p>' . __('List of modules with advanced uninstall features') . '</p>' .
-    '<form method="post" action="' . $redir . '">' .
-    '<table class="clear"><tr>' .
-    '<th colspan="2">' . __('module') . '</th>';
-
-    foreach ($props as $pro_id => $prop) {
-        echo '<th>' . __($pro_id) . '</th>';
-    }
-
-    echo '<th>' . __('other') . '</th>' . '</tr>';
-
-    $i = 0;
-    foreach ($modules as $module_id => $module) {
         echo
-        '<tr class="line">' .
-        '<td class="nowrap">' . $module_id . '</td>' .
-        '<td class="nowrap">' . $module['version'] . '</td>';
+        '<p>' . __('List of modules with advanced uninstall features') . '</p>' .
+        '<form method="post" action="' . $redir . '">' .
+        '<table class="clear"><tr>' .
+        '<th colspan="2">' . __('module') . '</th>';
 
-        $actions = $uninstaller->getUserActions($module_id);
+        foreach ($props as $pro_id => $prop) {
+            echo '<th>' . __($pro_id) . '</th>';
+        }
 
-        foreach ($props as $prop_id => $prop) {
-            echo '<td class="nowrap">';
+        echo '<th>' . __('other') . '</th>' . '</tr>';
 
-            if (!isset($actions[$prop_id])) {
-                echo '--</td>';
+        $i = 0;
+        foreach ($modules as $module_id => $module) {
+            echo
+            '<tr class="line">' .
+            '<td class="nowrap">' . $module_id . '</td>' .
+            '<td class="nowrap">' . $module['version'] . '</td>';
 
-                continue;
-            }
+            $actions = $uninstaller->getUserActions($module_id);
 
-            $j = 0;
-            foreach ($actions[$prop_id] as $action_id => $action) {
-                if (!isset($props[$prop_id][$action['action']])) {
+            foreach ($props as $prop_id => $prop) {
+                echo '<td class="nowrap">';
+
+                if (!isset($actions[$prop_id])) {
+                    echo '--</td>';
+
                     continue;
                 }
-                $ret = base64_encode(serialize([
-                    'type'   => $prop_id,
-                    'action' => $action['action'],
-                    'ns'     => $action['ns'],
-                ]));
+
+                $j = 0;
+                foreach ($actions[$prop_id] as $action_id => $action) {
+                    if (!isset($props[$prop_id][$action['action']])) {
+                        continue;
+                    }
+                    $ret = base64_encode(serialize([
+                        'type'   => $prop_id,
+                        'action' => $action['action'],
+                        'ns'     => $action['ns'],
+                    ]));
+
+                    echo '<label class="classic">' .
+                    form::checkbox(['actions[' . $module_id . '][' . $j . ']'], $ret) .
+                    ' ' . $action['desc'] . '</label><br />';
+
+                    $j++;
+                }
+                echo '</td>';
+            }
+
+            echo '<td class="nowrap">';
+
+            $callbacks = $uninstaller->getUserCallbacks($module_id);
+
+            if (empty($callbacks)) {
+                echo '--';
+            }
+
+            $k = 0;
+            foreach ($callbacks as $callback_id => $callback) {
+                $ret = base64_encode(serialize($callback['func']));
 
                 echo '<label class="classic">' .
-                form::checkbox(['actions[' . $module_id . '][' . $j . ']'], $ret) .
-                ' ' . $action['desc'] . '</label><br />';
-
-                $j++;
+                form::checkbox(['extras[' . $module_id . '][' . $k . ']'], $ret) .
+                ' ' . $callback['desc'] . '</label><br />';
             }
-            echo '</td>';
+
+            echo '</td></tr>';
+        }
+        echo
+        '</table>' .
+        '<p>' .
+        dcCore::app()->formNonce() .
+        form::hidden(['path'], $path) .
+        form::hidden(['redir'], $redir) .
+        form::hidden(['action'], 'uninstall') .
+        '<input type="submit" name="submit" value="' . __('Perform selected actions') . '" /> ' .
+        '</p>' .
+        '</form>';
+
+        echo '</div>';
+    },
+
+    'adminModulesListDoActions' => function ($list, $modules, $type) {
+        if (!dcCore::app()->blog->settings->__get(basename(__DIR__))->dcAdvancedCleaner_behavior_active) {
+            return null;
         }
 
-        echo '<td class="nowrap">';
-
-        $callbacks = $uninstaller->getUserCallbacks($module_id);
-
-        if (empty($callbacks)) {
-            echo '--';
+        if (!isset($_POST['action']) || $_POST['action'] != 'uninstall'
+                                     || (empty($_POST['extras']) && empty($_POST['actions']))
+        ) {
+            return null;
         }
 
-        $k = 0;
-        foreach ($callbacks as $callback_id => $callback) {
-            $ret = base64_encode(serialize($callback['func']));
+        $uninstaller = new dcUninstaller();
+        $uninstaller->loadModules($_POST['path']);
+        $modules = $uninstaller->getModules();
+        $props   = $uninstaller->getAllowedActions();
 
-            echo '<label class="classic">' .
-            form::checkbox(['extras[' . $module_id . '][' . $k . ']'], $ret) .
-            ' ' . $callback['desc'] . '</label><br />';
-        }
+        try {
+            // Extras
+            if (!empty($_POST['extras'])) {
+                foreach ($_POST['extras'] as $module_id => $extras) {
+                    foreach ($extras as $k => $sentence) {
+                        $extra = @unserialize(@base64_decode($sentence));
 
-        echo '</td></tr>';
-    }
-    echo
-    '</table>' .
-    '<p>' .
-    dcCore::app()->formNonce() .
-    form::hidden(['path'], $path) .
-    form::hidden(['redir'], $redir) .
-    form::hidden(['action'], 'uninstall') .
-    '<input type="submit" name="submit" value="' . __('Perform selected actions') . '" /> ' .
-    '</p>' .
-    '</form>';
-
-    echo '</div>';
-});
-
-dcCore::app()->addBehavior('adminModulesListDoActions', function ($list, $modules, $type) {
-    if (!dcCore::app()->blog->settings->__get(basename(__DIR__))->dcAdvancedCleaner_behavior_active) {
-        return null;
-    }
-
-    if (!isset($_POST['action']) || $_POST['action'] != 'uninstall'
-                                 || (empty($_POST['extras']) && empty($_POST['actions']))
-    ) {
-        return null;
-    }
-
-    $uninstaller = new dcUninstaller();
-    $uninstaller->loadModules($_POST['path']);
-    $modules = $uninstaller->getModules();
-    $props   = $uninstaller->getAllowedActions();
-
-    try {
-        // Extras
-        if (!empty($_POST['extras'])) {
-            foreach ($_POST['extras'] as $module_id => $extras) {
-                foreach ($extras as $k => $sentence) {
-                    $extra = @unserialize(@base64_decode($sentence));
-
-                    if (!$extra || !is_callable($extra)) {
-                        continue;
+                        if (!$extra || !is_callable($extra)) {
+                            continue;
+                        }
+                        call_user_func($extra, $module_id);
                     }
-                    call_user_func($extra, $module_id);
                 }
             }
-        }
-        // Actions
-        if (!empty($_POST['actions'])) {
-            foreach ($_POST['actions'] as $module_id => $actions) {
-                foreach ($actions as $k => $sentence) {
-                    $action = @unserialize(@base64_decode($sentence));
+            // Actions
+            if (!empty($_POST['actions'])) {
+                foreach ($_POST['actions'] as $module_id => $actions) {
+                    foreach ($actions as $k => $sentence) {
+                        $action = @unserialize(@base64_decode($sentence));
 
-                    if (!$action
-                        || !isset($action['type'])
-                        || !isset($action['action'])
-                        || !isset($action['ns'])
-                    ) {
-                        continue;
+                        if (!$action
+                            || !isset($action['type'])
+                            || !isset($action['action'])
+                            || !isset($action['ns'])
+                        ) {
+                            continue;
+                        }
+                        $uninstaller->execute($action['type'], $action['action'], $action['ns']);
                     }
-                    $uninstaller->execute($action['type'], $action['action'], $action['ns']);
                 }
             }
+            dcAdminNotices::addSuccessNotice(__('Action successfuly excecuted'));
+            http::redirect($_POST['redir']);
+        } catch (Exception $e) {
+            dcCore::app()->error->add($e->getMessage());
         }
-        dcAdminNotices::addSuccessNotice(__('Action successfuly excecuted'));
-        http::redirect($_POST['redir']);
-    } catch (Exception $e) {
-        dcCore::app()->error->add($e->getMessage());
-    }
-});
+    },
 
-dcCore::app()->addBehavior('pluginsBeforeDelete', function ($plugin) {
-    dcAdvancedCleanerModuleBeforeDelete($plugin);
-});
+    'pluginsBeforeDelete' => function ($plugin) {
+        dcAdvancedCleanerModuleBeforeDelete($plugin);
+    },
 
-dcCore::app()->addBehavior('themeBeforeDelete', function ($theme) {
-    dcAdvancedCleanerModuleBeforeDelete($theme);
-});
+    'themeBeforeDelete' => function ($theme) {
+        dcAdvancedCleanerModuleBeforeDelete($theme);
+    },
+]);
 
 function dcAdvancedCleanerModuleBeforeDelete($module)
 {
