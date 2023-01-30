@@ -22,9 +22,7 @@ try {
         return null;
     }
 
-    dcCore::app()->blog->settings->addNamespace(basename(__DIR__));
-
-    dcCore::app()->blog->settings->__get(basename(__DIR__))->put(
+    dcCore::app()->blog->settings->get(basename(__DIR__))->put(
         'dcAdvancedCleaner_behavior_active',
         true,
         'boolean',
@@ -32,7 +30,7 @@ try {
         false,
         true
     );
-    dcCore::app()->blog->settings->__get(basename(__DIR__))->put(
+    dcCore::app()->blog->settings->get(basename(__DIR__))->put(
         'dcAdvancedCleaner_dcproperty_hide',
         true,
         'boolean',
