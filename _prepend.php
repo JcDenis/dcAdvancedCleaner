@@ -34,13 +34,15 @@ Clearbricks::lib()->autoload([
     'advancedCleanerVars'     => __DIR__ . '/inc/lib.advanced.cleaner.php',
 ]);
 
-dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerVersions', 'create']);
-dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerSettings', 'create']);
-dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerTables', 'create']);
-dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerThemes', 'create']);
-dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerPlugins', 'create']);
-dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerCaches', 'create']);
-dcCore::app()->addBehavior('advancedCleanerAdd', ['advancedCleanerVars', 'create']);
+dcCore::app()->addBehaviors([
+    'advancedCleanerAdd' => ['advancedCleanerVersions', 'create'],
+    'advancedCleanerAdd' => ['advancedCleanerSettings', 'create'],
+    'advancedCleanerAdd' => ['advancedCleanerTables', 'create'],
+    'advancedCleanerAdd' => ['advancedCleanerThemes', 'create'],
+    'advancedCleanerAdd' => ['advancedCleanerPlugins', 'create'],
+    'advancedCleanerAdd' => ['advancedCleanerCaches', 'create'],
+    'advancedCleanerAdd' => ['advancedCleanerVars', 'create'],
+]);
 
 if (defined('ACTIVITY_REPORT_V2')) {
     dcAdvancedCleanerActivityReportBehaviors::add();
