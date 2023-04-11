@@ -93,7 +93,7 @@ class advancedCleanerSettings extends advancedCleaner
             dcCore::app()->con->execute(
                 'DELETE FROM ' . dcCore::app()->prefix . 'setting ' .
                 'WHERE blog_id IS NULL ' .
-                "AND setting_ns = '" . dcCore::app()->con->escape($ns) . "' "
+                "AND setting_ns = '" . dcCore::app()->con->escapeStr((string) $ns) . "' "
             );
 
             return true;
@@ -101,8 +101,8 @@ class advancedCleanerSettings extends advancedCleaner
         if ($action == 'delete_local') {
             dcCore::app()->con->execute(
                 'DELETE FROM ' . dcCore::app()->prefix . 'setting ' .
-                "WHERE blog_id = '" . dcCore::app()->con->escape(dcCore::app()->blog->id) . "' " .
-                "AND setting_ns = '" . dcCore::app()->con->escape($ns) . "' "
+                "WHERE blog_id = '" . dcCore::app()->con->escapeStr((string) dcCore::app()->blog->id) . "' " .
+                "AND setting_ns = '" . dcCore::app()->con->escapeStr((string) $ns) . "' "
             );
 
             return true;
@@ -110,7 +110,7 @@ class advancedCleanerSettings extends advancedCleaner
         if ($action == 'delete_all') {
             dcCore::app()->con->execute(
                 'DELETE FROM ' . dcCore::app()->prefix . 'setting ' .
-                "WHERE setting_ns = '" . dcCore::app()->con->escape($ns) . "' " .
+                "WHERE setting_ns = '" . dcCore::app()->con->escapeStr((string) $ns) . "' " .
                 "AND (blog_id IS NULL OR blog_id != '') "
             );
 
@@ -281,7 +281,7 @@ class advancedCleanerVersions extends advancedCleaner
         if ($action == 'delete') {
             dcCore::app()->con->execute(
                 'DELETE FROM  ' . dcCore::app()->prefix . 'version ' .
-                "WHERE module = '" . dcCore::app()->con->escape($ns) . "' "
+                "WHERE module = '" . dcCore::app()->con->escapeStr((string) $ns) . "' "
             );
 
             return true;
