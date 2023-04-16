@@ -1,5 +1,14 @@
 dev
 - [ ] orphan media cleaner
+- [ ] move to plugin maintenance
+
+0.2 - 2023.04.16
+- require dotclear 2.26
+- require php >= 8.1
+- require plugin Uninstaller
+- remove features that moved to plugin Uninstaller
+- use namespace
+- remove config page (remains one option on main page)
 
 0.11 - 2022.12.20
 - use SVG icon

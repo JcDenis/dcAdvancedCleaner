@@ -3,7 +3,7 @@
 [![Release](https://img.shields.io/github/v/release/JcDenis/dcAdvancedCleaner)](https://github.com/JcDenis/dcAdvancedCleaner/releases)
 [![Date](https://img.shields.io/github/release-date/JcDenis/dcAdvancedCleaner)](https://github.com/JcDenis/dcAdvancedCleaner/releases)
 [![Issues](https://img.shields.io/github/issues/JcDenis/dcAdvancedCleaner)](https://github.com/JcDenis/dcAdvancedCleaner/issues)
-[![Dotclear](https://img.shields.io/badge/dotclear-v2.24-blue.svg)](https://fr.dotclear.org/download)
+[![Dotclear](https://img.shields.io/badge/dotclear-v2.26-blue.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-green.svg)](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner)
 [![License](https://img.shields.io/github/license/JcDenis/dcAdvancedCleaner)](https://github.com/JcDenis/dcAdvancedCleaner/blob/master/LICENSE)
 
@@ -20,17 +20,16 @@ settings, tables, cache, etc...
  _dcAdvancedCleaner_ requires: 
 
   * Permissions superadmin
-  * Dotclear 2.24 
+  * Dotclear 2.26
+  * PHP >= 8.1
+  * Plugin Uninstaller
 
 ## USAGE
 
 First install _dcAdvancedCleaner_, manualy from a zip package or from 
 Dotaddict repository. (See Dotclear's documentation to know how do this)
 
-Go to ''plugins manager'', expand _dcAdvancedCleaner_ information then 
-go to ''configure plugin'', fill in form.
-
-Once it's done you can manage your reports from menu 
+Once it's done you can manage cleaners from menu 
 ''Advanced cleaner'' on sidebar or you can add dashboard icon.
 
 ## LINKS

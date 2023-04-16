@@ -1,146 +1,71 @@
+# Language: Français
+# Module: dcAdvancedCleaner - 0.11
+# Date: 2023-04-16 00:08:42
+# Author: , contact@jcdenis.fr
+# Translated with translater 2023.03.19
+
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: dcAdvancedCleaner 0.8.1\n"
+"Project-Id-Version: dcAdvancedCleaner 0.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-28T20:36:42+00:00\n"
+"PO-Revision-Date: 2023-04-16T00:08:42+00:00\n"
 "Last-Translator: Jean-Christian Denis\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-msgid "Advanced cleaner"
-msgstr "Nettoyeur avancé"
-
-msgid "Activate behaviors"
-msgstr "Activer les behaviors"
-
-msgid "Enable actions set in _uninstall.php files."
-msgstr "Lit les actions demandées dans les fichiers _uninstall.php."
-
-msgid "Hide Dotclear default properties in actions tabs"
-msgstr "Cacher les propriétés par défaut dans les onglets d'action"
-
-msgid "Prevent from deleting Dotclear important properties."
-msgstr "Évite de supprimer des propriétés importantes de Dotclear."
-
-msgid "delete table"
-msgstr "effacer la table"
-
-msgid "delete cache files"
-msgstr "effacer les fichiers de cache"
-
-msgid "delete plugin files"
-msgstr "effacer les fichiers du plugin"
-
-msgid "delete theme files"
-msgstr "effacer les fichiers du thème"
-
-msgid "delete the version number"
-msgstr "effacer le n° de version"
-
-msgid "Uninstall extensions"
-msgstr "Désinstaller des plugins"
-
-msgid "delete %s blog settings"
-msgstr "effacer les paramètres de %s pour ce blog"
-
-msgid "delete %s global settings"
-msgstr "effacer les paramètres globaux de %s"
-
-msgid "delete all %s settings"
-msgstr "effacer tous les paramètres de %s"
-
-msgid "delete %s table"
-msgstr "effacer la table %s"
-
-msgid "delete %s version number"
-msgstr "effacer la version de %s"
-
-msgid "delete %s plugin files"
-msgstr "effacer les fichiers du plugin %s"
-
-msgid "delete %s theme file"
-msgstr "effacer les fichiers de thème de %s"
-
-msgid "delete %s cache files"
-msgstr "effacer le cache de %s"
-
-msgid "extra action"
-msgstr "Action additionnelle"
-
-msgid "Namespaces registered in dcSettings"
-msgstr "Espaces de nom (namespaces) enregistrés dans dcSettings"
-
-msgid "delete global settings"
-msgstr "effacer les paramètres globaux"
-
-msgid "delete blog settings"
-msgstr "effacer les paramètres du blog"
-
-msgid "delete all settings"
-msgstr "effacer tous les paramètres"
-
-msgid "All database tables of Dotclear"
-msgstr "Toutes les tables Dotclear de la base de données"
-
-msgid "empty"
-msgstr "vider"
-
-msgid "Versions registered in table \"version\" of Dotclear"
-msgstr "Versions enregistrées dans la table \"version\" de Dotclear"
-
-msgid "Folders from plugins directories"
-msgstr "Dossiers des répertoires des plugins"
-
-msgid "Themes"
-msgstr "Thèmes"
-
-msgid "Folders from blog themes directory"
-msgstr "Dossiers du répertoire des thèmes du blog"
-
-msgid "Folders from cache directory"
-msgstr "Dossiers du répertoire de cache"
-
-msgid "Plugin dcAdvancedCleaner"
-msgstr "Plugin dcAdvancedCleaner"
-
-msgid "New action from dcAdvancedCleaner has been made with type=\"%s\", action=\"%s\", ns=\"%s\"."
-msgstr "Une nouvelle action depuis dcAdvancedCleaner a été effectuée avec :  type=\"%s\", action=\"%s\", ns=\"%s\""
-
-msgid "Advanced uninstall"
-msgstr "Désinstallation avancée"
-
-msgid "There is no module with uninstall features"
-msgstr "Il n'y a pas de module avec des fonctions de désinstallation avancée"
-
-msgid "List of modules with advanced uninstall features"
-msgstr "Liste des modules avec des fonctions de désinstallation avancée"
-
-msgid "Perform selected actions"
-msgstr "Effectuer les actions sélectionnées"
-
+#: src/Manage.php:77
 msgid "Action successfuly excecuted"
 msgstr "Action exécutée avec succès"
 
+#: src/Manage.php:128
 msgid "There is nothing to display"
 msgstr "Il n'y a rien à afficher"
 
-msgid "There are %s %s"
-msgstr "Il y a %s %s"
+#: src/Manage.php:142
+msgid "There are %s entries"
+msgstr "Il y a %s entrées"
 
+#: src/Manage.php:143
 msgid "Objects"
 msgstr "Objets"
 
+#: src/Manage.php:163
+msgid "Values from official distribution"
+msgstr "Valeurs de la distribution officielle"
+
+#: src/Manage.php:172
 msgid "Action on selected rows:"
 msgstr "Action sur les lignes sélectionnées :"
 
+#: src/Manage.php:180
 msgid "Beware: All actions done here are irreversible and are directly applied"
 msgstr "Attention : toutes les actions menées ici sont irréversibles et sont directement appliquées"
 
-msgid "Default values of Dotclear are hidden. You can change this in settings"
-msgstr "Les valeurs par défaut de Dotclear sont cachées. Vous pouvez modifier ceci dans la configuration du plugin."
+#: src/Manage.php:188
+msgid "Show Dotclear default properties"
+msgstr "Afficher les propriétés de Dotclear"
+
+#: src/Manage.php:188
+msgid "Hide Dotclear default properties"
+msgstr "Cacher les propriétés de Dotclear"
+
+#: src/ManageVars.php:54
+msgid "Failed to load cleaner"
+msgstr "Impossible de charger le nettoyeur"
+
+#: src/Prepend.php:40
+msgid "Plugin dcAdvancedCleaner"
+msgstr "Plugin dcAdvancedCleaner"
+
+#: src/Prepend.php:47
+msgid "New action from dcAdvancedCleaner has been made with type=\"%s\", action=\"%s\", ns=\"%s\"."
+msgstr "Une nouvelle action depuis dcAdvancedCleaner a été effectuée avec :  type=\"%s\", action=\"%s\", ns=\"%s\""
+
+msgid "Advanced cleaner"
+msgstr "Nettoyeur avancé"
 
 msgid "Make a huge cleaning of dotclear"
 msgstr "Faites un énorme nettoyage de dotclear"
