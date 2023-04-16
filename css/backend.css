@@ -1,0 +1,8 @@
+.offline label{
+	font-weight:bold;
+	color:#c44d58;
+}
+.module-distrib img {
+	with: 16px;
+	height: 16px;
+}

@@ -10,40 +10,48 @@
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_CONTEXT_ADMIN')) {
-    return null;
-}
+declare(strict_types=1);
 
-# dcac class
-Clearbricks::lib()->autoload([
-    'advancedCleaner'                          => __DIR__ . '/inc/class.advanced.cleaner.php',
-    'dcAdvancedCleaner'                        => __DIR__ . '/inc/class.dc.advanced.cleaner.php',
-    'behaviorsDcAdvancedCleaner'               => __DIR__ . '/inc/lib.dc.advanced.cleaner.behaviors.php',
-    'dcUninstaller'                            => __DIR__ . '/inc/class.dc.uninstaller.php',
-    'dcAdvancedCleanerActivityReportBehaviors' => __DIR__ . '/inc/lib.dc.advanced.cleaner.activityreport.php',
-]);
+namespace Dotclear\Plugin\dcAdvancedCleaner;
 
-# cleaners class
-Clearbricks::lib()->autoload([
-    'advancedCleanerVersions' => __DIR__ . '/inc/lib.advanced.cleaner.php',
-    'advancedCleanerSettings' => __DIR__ . '/inc/lib.advanced.cleaner.php',
-    'advancedCleanerTables'   => __DIR__ . '/inc/lib.advanced.cleaner.php',
-    'advancedCleanerThemes'   => __DIR__ . '/inc/lib.advanced.cleaner.php',
-    'advancedCleanerPlugins'  => __DIR__ . '/inc/lib.advanced.cleaner.php',
-    'advancedCleanerCaches'   => __DIR__ . '/inc/lib.advanced.cleaner.php',
-    'advancedCleanerVars'     => __DIR__ . '/inc/lib.advanced.cleaner.php',
-]);
+use dcCore;
+use dcNsProcess;
 
-dcCore::app()->addBehaviors([
-    'advancedCleanerAdd' => ['advancedCleanerVersions', 'create'],
-    'advancedCleanerAdd' => ['advancedCleanerSettings', 'create'],
-    'advancedCleanerAdd' => ['advancedCleanerTables', 'create'],
-    'advancedCleanerAdd' => ['advancedCleanerThemes', 'create'],
-    'advancedCleanerAdd' => ['advancedCleanerPlugins', 'create'],
-    'advancedCleanerAdd' => ['advancedCleanerCaches', 'create'],
-    'advancedCleanerAdd' => ['advancedCleanerVars', 'create'],
-]);
+class Prepend extends dcNsProcess
+{
+    public static function init(): bool
+    {
+        static::$init = defined('DC_CONTEXT_ADMIN')
+            && My::phpCompliant()
+            && dcCore::app()->auth?->isSuperAdmin();
 
-if (defined('ACTIVITY_REPORT_V2')) {
-    dcAdvancedCleanerActivityReportBehaviors::add();
+        return static::$init;
+    }
+
+    public static function process(): bool
+    {
+        if (!static::$init) {
+            return false;
+        }
+
+        if (defined('ACTIVITY_REPORT_V2')) {
+            dcCore::app()->activityReport->addGroup(
+                My::id(),
+                __('Plugin dcAdvancedCleaner')
+            );
+
+            dcCore::app()->activityReport->addAction(
+                My::id(),
+                'maintenance',
+                __('Maintenance'),
+                __('New action from dcAdvancedCleaner has been made with type="%s", action="%s", ns="%s".'),
+                'dcAdvancedCleanerBeforeAction',
+                function ($type, $action, $ns) {
+                    dcCore::app()->activityReport->addLog(My::id(), 'maintenance', [$type,$action, $ns]);
+                }
+            );
+        }
+
+        return true;
+    }
 }
