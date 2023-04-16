@@ -41,7 +41,7 @@ class Backend extends dcNsProcess
             dcCore::app()->adminurl?->get('admin.plugin.' . My::id()),
             dcPage::getPF(My::id() . '/icon.svg'),
             preg_match(
-                '/' . preg_quote(dcCore::app()->adminurl?->get('admin.plugin.' . My::id())) . '(&.*)?$/',
+                '/' . preg_quote((string) dcCore::app()->adminurl?->get('admin.plugin.' . My::id())) . '(&.*)?$/',
                 $_SERVER['REQUEST_URI']
             ),
             dcCore::app()->auth?->isSuperAdmin()

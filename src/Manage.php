@@ -26,7 +26,8 @@ use Dotclear\Helper\Html\Form\{
     Note,
     Para,
     Select,
-    Submit
+    Submit,
+    Text
 };
 use Dotclear\Helper\Html\Html;
 use Exception;
@@ -50,6 +51,10 @@ class Manage extends dcNsProcess
 
         $vars = ManageVars::init();
 
+        if (null === $vars->cleaner) {
+            return true;
+        }
+
         if (!empty($_POST['option-action'])) {
             dcCore::app()->blog?->settings->get(My::id())->dropEvery(
                 'dcproperty_hide'
@@ -65,19 +70,19 @@ class Manage extends dcNsProcess
             dcPage::addSuccessNotice(__('Configuration successfuly updated'));
             dcCore::app()->adminurl?->redirect(
                 'admin.plugin.' . My::id(),
-                ['part' => $vars->cleaner?->id]
+                ['part' => $vars->cleaner->id]
             );
         }
 
         if (!empty($vars->entries) && !empty($vars->action)) {
             try {
                 foreach ($vars->entries as $ns) {
-                    $vars->cleaners->execute($vars->cleaner?->id, $vars->action, $ns);
+                    $vars->cleaners->execute($vars->cleaner->id, $vars->action, $ns);
                 }
                 dcPage::addSuccessNotice(__('Action successfuly excecuted'));
                 dcCore::app()->adminurl?->redirect(
                     'admin.plugin.' . My::id(),
-                    ['part' => $vars->cleaner?->id]
+                    ['part' => $vars->cleaner->id]
                 );
             } catch (Exception $e) {
                 dcCore::app()->error->add($e->getMessage());
@@ -111,7 +116,8 @@ class Manage extends dcNsProcess
         ]) .
         dcPage::notices();
 
-        if ($vars->cleaner === null) {
+        if (null === $vars->cleaner) {
+            echo (new Text('p', __('There is nothing to display')))->class('error')->render();
             dcPage::closeModule();
 
             return;
@@ -132,7 +138,7 @@ class Manage extends dcNsProcess
         $rs = $vars->cleaner->values();
 
         if (empty($rs)) {
-            echo '<p>' . __('There is nothing to display') . '</p>';
+            echo (new Text('p', __('There is nothing to display')))->class('error')->render();
         } else {
             $combo_actions = [];
             foreach ($vars->cleaner->actions as $descriptor) {
