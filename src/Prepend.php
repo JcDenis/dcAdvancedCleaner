@@ -16,6 +16,12 @@ namespace Dotclear\Plugin\dcAdvancedCleaner;
 
 use dcCore;
 use dcNsProcess;
+use Dotclear\Plugin\activityReport\{
+    Action,
+    ActivityReport,
+    Group
+};
+use Dotclear\Plugin\Uninstaller\Uninstaller;
 
 class Prepend extends dcNsProcess
 {
@@ -34,22 +40,22 @@ class Prepend extends dcNsProcess
             return false;
         }
 
-        if (defined('ACTIVITY_REPORT_V2')) {
-            dcCore::app()->activityReport->addGroup(
-                My::id(),
-                __('Plugin dcAdvancedCleaner')
-            );
-
-            dcCore::app()->activityReport->addAction(
-                My::id(),
-                'maintenance',
-                __('Maintenance'),
-                __('New action from dcAdvancedCleaner has been made with type="%s", action="%s", ns="%s".'),
-                'dcAdvancedCleanerBeforeAction',
-                function ($type, $action, $ns) {
-                    dcCore::app()->activityReport->addLog(My::id(), 'maintenance', [$type,$action, $ns]);
+        // log plugin Uninstaller actions
+        if (defined('ACTIVITY_REPORT') && ACTIVITY_REPORT == 3) {
+            $group = new Group(My::id(), My::name());
+            $group->add(new Action(
+                'uninstaller',
+                __('Uninstalling module'),
+                '%s',
+                'UninstallerBeforeAction',
+                function (string $id, string $action, string $ns): void {
+                    $success = Uninstaller::instance()->cleaners->get($id)?->get($action)?->success;
+                    if (!is_null($success)) {
+                        ActivityReport::instance()->addLog(My::id(), 'uninstaller', [sprintf($success, $ns)]);
+                    }
                 }
-            );
+            ));
+            ActivityReport::instance()->groups->add($group);
         }
 
         return true;

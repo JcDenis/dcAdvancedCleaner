@@ -67,7 +67,7 @@ class Manage extends dcNsProcess
                 true,
                 true
             );
-            dcPage::addSuccessNotice(__('Configuration successfuly updated'));
+            dcPage::addSuccessNotice(__('Configuration successfully updated.'));
             dcCore::app()->adminurl?->redirect(
                 'admin.plugin.' . My::id(),
                 ['part' => $vars->cleaner->id]

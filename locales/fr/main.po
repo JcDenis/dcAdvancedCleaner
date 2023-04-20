@@ -1,54 +1,54 @@
 # Language: Français
-# Module: dcAdvancedCleaner - 0.11
-# Date: 2023-04-16 00:08:42
+# Module: dcAdvancedCleaner - 0.2
+# Date: 2023-04-20 14:01:57
 # Author: , contact@jcdenis.fr
 # Translated with translater 2023.03.19
 
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: dcAdvancedCleaner 0.11\n"
+"Project-Id-Version: dcAdvancedCleaner 0.2\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-04-16T00:08:42+00:00\n"
+"PO-Revision-Date: 2023-04-20T14:01:57+00:00\n"
 "Last-Translator: Jean-Christian Denis\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/Manage.php:77
+#: src/Manage.php:82
 msgid "Action successfuly excecuted"
 msgstr "Action exécutée avec succès"
 
-#: src/Manage.php:128
+#: src/Manage.php:120
 msgid "There is nothing to display"
 msgstr "Il n'y a rien à afficher"
 
-#: src/Manage.php:142
+#: src/Manage.php:155
 msgid "There are %s entries"
 msgstr "Il y a %s entrées"
 
-#: src/Manage.php:143
+#: src/Manage.php:156
 msgid "Objects"
 msgstr "Objets"
 
-#: src/Manage.php:163
+#: src/Manage.php:176
 msgid "Values from official distribution"
 msgstr "Valeurs de la distribution officielle"
 
-#: src/Manage.php:172
+#: src/Manage.php:185
 msgid "Action on selected rows:"
 msgstr "Action sur les lignes sélectionnées :"
 
-#: src/Manage.php:180
+#: src/Manage.php:193
 msgid "Beware: All actions done here are irreversible and are directly applied"
 msgstr "Attention : toutes les actions menées ici sont irréversibles et sont directement appliquées"
 
-#: src/Manage.php:188
+#: src/Manage.php:201
 msgid "Show Dotclear default properties"
 msgstr "Afficher les propriétés de Dotclear"
 
-#: src/Manage.php:188
+#: src/Manage.php:201
 msgid "Hide Dotclear default properties"
 msgstr "Cacher les propriétés de Dotclear"
 
@@ -56,13 +56,9 @@ msgstr "Cacher les propriétés de Dotclear"
 msgid "Failed to load cleaner"
 msgstr "Impossible de charger le nettoyeur"
 
-#: src/Prepend.php:40
-msgid "Plugin dcAdvancedCleaner"
-msgstr "Plugin dcAdvancedCleaner"
-
-#: src/Prepend.php:47
-msgid "New action from dcAdvancedCleaner has been made with type=\"%s\", action=\"%s\", ns=\"%s\"."
-msgstr "Une nouvelle action depuis dcAdvancedCleaner a été effectuée avec :  type=\"%s\", action=\"%s\", ns=\"%s\""
+#: src/Prepend.php:48
+msgid "Uninstalling module"
+msgstr "Désinstallation de module"
 
 msgid "Advanced cleaner"
 msgstr "Nettoyeur avancé"
