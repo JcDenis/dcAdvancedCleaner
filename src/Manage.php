@@ -76,9 +76,20 @@ class Manage extends dcNsProcess
 
         if (!empty($vars->entries) && !empty($vars->action)) {
             try {
-                foreach ($vars->entries as $ns) {
+                // special related
+                if (!empty($vars->related) && $vars->action == 'delete_related') {
+                    $ns = '';
+                    foreach ($vars->entries as $id) {
+                        $ns .= $vars->related . ':' . $id . ';';
+                    }
                     $vars->cleaners->execute($vars->cleaner->id, $vars->action, $ns);
+                // other actions
+                } elseif ($vars->action != 'delete_related') {
+                    foreach ($vars->entries as $ns) {
+                        $vars->cleaners->execute($vars->cleaner->id, $vars->action, $ns);
+                    }
                 }
+
                 dcPage::addSuccessNotice(__('Action successfuly excecuted'));
                 dcCore::app()->adminurl?->redirect(
                     'admin.plugin.' . My::id(),
@@ -110,102 +121,169 @@ class Manage extends dcNsProcess
         # --BEHAVIOR-- dcAdvancedCleanerAdminHeader
         dcCore::app()->callBehavior('dcAdvancedCleanerAdminHeader');
 
-        echo
-        dcPage::breadcrumb([
+        $breadcrumb = [
             __('Plugins') => '',
             My::name()    => '',
-        ]) .
-        dcPage::notices();
+        ];
 
+        // something went wrong !
         if (null === $vars->cleaner) {
+            echo
+            dcPage::breadcrumb($breadcrumb) .
+            dcPage::notices();
             echo (new Text('p', __('There is nothing to display')))->class('error')->render();
             dcPage::closeModule();
 
             return;
         }
 
-        echo
-        (new Form('parts_menu'))->method('get')->action(dcCore::app()->adminurl?->get('admin.plugin.' . My::id()))->fields([
-            (new Para())->class('anchor-nav')->items([
-                (new Label(__('Goto:'), Label::OUTSIDE_LABEL_BEFORE))->for('part')->class('classic'),
-                (new Select(['part', 'select_part']))->default($vars->cleaner->id)->items($vars->combo),
-                (new Submit('go'))->value(__('Ok')),
-                (new Hidden(['p'], My::id())),
-            ]),
-        ])->render() .
+        $breadcrumb[My::name()]           = dcCore::app()->adminurl?->get('admin.plugin.' . My::id());
+        $breadcrumb[$vars->cleaner->name] = '';
 
-        '<h3>' . $vars->cleaner->name . '</h3><p>' . $vars->cleaner->desc . '</p>';
-
-        $rs = $vars->cleaner->values();
-
-        if (empty($rs)) {
-            echo (new Text('p', __('There is nothing to display')))->class('error')->render();
-        } else {
-            $combo_actions = [];
-            foreach ($vars->cleaner->actions as $descriptor) {
-                // exception
-                if ($descriptor->id == 'delete_related') {
-                    continue;
-                }
-                $combo_actions[$descriptor->select] = $descriptor->id;
-            }
-
-            echo
-            '<form method="post" action="' . dcCore::app()->adminurl?->get('admin.plugin.' . My::id()) . '" id="form-funcs">' .
-            '<div class="table-outer">' .
-            '<table><caption>' . sprintf(__('There are %s entries'), count($rs)) . '</caption><thead><tr>' .
-            '<th colspan="2">' . __('Name') . '</th><th colspan="2">' . __('Objects') . '</th>' .
-            '</tr></thead><tbody>';
-
-            foreach ($rs as $k => $v) {
-                $distrib = in_array($v['key'], $vars->cleaner->distributed());
-
-                if ($distrib && dcCore::app()->blog?->settings->get(My::id())->get('dcproperty_hide')) {
-                    continue;
-                }
-                echo
-                '<tr class="line' . ($distrib ? ' offline' : '') . '">' .
-                '<td class="nowrap">' .
-                    (new Checkbox(['entries[' . $k . ']', 'entries_' . $k]))->value(Html::escapeHTML($v['key']))->render() .
-                '</td> ' .
-                '<td class="nowrap">' .
-                    (new Label($v['key'], Label::OUTSIDE_LABEL_AFTER))->for('entries_' . $k)->class('classic')->render() .
-                '</td>' .
-                '<td class="nowrap">' . $v['value'] . '</td>' .
-                '<td class="module-distrib maximal">' . ($distrib ?
-                    '<img src="images/dotclear-leaf.svg" alt="' .
-                    __('Values from official distribution') . '" title="' .
-                    __('Values from official distribution') . '" />'
-                : '') . '</td>' .
-                '</tr>';
-            }
-
-            echo
-            '</tbody></table></div>' .
-            (new Para())->items([
-                (new Label(__('Action on selected rows:'), Label::OUTSIDE_LABEL_BEFORE))->for('select_action'),
-                (new Select(['action', 'select_action']))->items($combo_actions),
-                (new Submit('do-action'))->class('delete')->value(__('I understand and I am want to delete this')),
-                (new Hidden(['p'], My::id())),
-                (new Hidden(['part'], $vars->cleaner->id)),
-                dcCore::app()->formNonce(false),
-            ])->render() .
-            '<p class="warning">' .
-            __('Beware: All actions done here are irreversible and are directly applied') .
-            '</p>' .
-            '</form>';
+        if (!empty($vars->related)) {
+            $breadcrumb[$vars->cleaner->name] = dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), ['part' => $vars->cleaner->id]);
+            $breadcrumb[$vars->related]       = '';
         }
 
         echo
-        (new Form('option'))->method('post')->action(dcCore::app()->adminurl?->get('admin.plugin.' . My::id()))->fields([
-            (new Para())->items([
-                (new Submit('option-action'))->value(dcCore::app()->blog?->settings->get(My::id())->get('dcproperty_hide') ? __('Show Dotclear default properties') : __('Hide Dotclear default properties')),
-                (new Hidden('dcproperty_hide', (string) (int) !dcCore::app()->blog->settings->get(My::id())->get('dcproperty_hide'))),
-                (new Hidden(['p'], My::id())),
-                (new Hidden(['part'], $vars->cleaner->id)),
-                dcCore::app()->formNonce(false),
-            ]),
-        ])->render();
+        dcPage::breadcrumb($breadcrumb) .
+        dcPage::notices();
+
+        if (empty($vars->related)) {
+            echo
+            (new Form('parts_menu'))->method('get')->action(dcCore::app()->adminurl?->get('admin.plugin.' . My::id()))->fields([
+                (new Para())->class('anchor-nav')->items([
+                    (new Label(__('Goto:'), Label::OUTSIDE_LABEL_BEFORE))->for('part')->class('classic'),
+                    (new Select(['part', 'select_part']))->default($vars->cleaner->id)->items($vars->combo),
+                    (new Submit('go'))->value(__('Ok')),
+                    (new Hidden(['p'], My::id())),
+                ]),
+            ])->render() .
+
+            '<h3>' . $vars->cleaner->name . '</h3><p>' . $vars->cleaner->desc . '</p>';
+
+            $rs = $vars->cleaner->values();
+            if (empty($rs)) {
+                echo (new Text('p', __('There is nothing to display')))->class('error')->render();
+            } else {
+                $combo_actions = [];
+                $has_related   = false;
+                foreach ($vars->cleaner->actions as $descriptor) {
+                    // exception
+                    if ($descriptor->id == 'delete_related') {
+                        $has_related = true;
+
+                        continue;
+                    }
+                    $combo_actions[$descriptor->select] = $descriptor->id;
+                }
+
+                echo
+                '<form method="post" action="' . dcCore::app()->adminurl?->get('admin.plugin.' . My::id()) . '" id="form-funcs">' .
+                '<div class="table-outer">' .
+                '<table><caption>' . sprintf(__('There are %s entries'), count($rs)) . '</caption><thead><tr>' .
+                '<th colspan="2">' . __('Name') . '</th><th colspan="2">' . __('Objects') . '</th>' .
+                '<th></th>' .
+                '</tr></thead><tbody>';
+
+                foreach ($rs as $key => $value) {
+                    $distrib = in_array($value->ns, $vars->cleaner->distributed());
+
+                    if ($distrib && dcCore::app()->blog?->settings->get(My::id())->get('dcproperty_hide')) {
+                        continue;
+                    }
+                    echo
+                    '<tr class="line' . ($distrib ? ' offline' : '') . '">' .
+                    '<td class="nowrap">' .
+                        (new Checkbox(['entries[' . $key . ']', 'entries_' . $key]))->value(Html::escapeHTML($value->ns))->render() .
+                    '</td> ' .
+                    '<td class="nowrap">' .
+                        (new Label($value->ns, Label::OUTSIDE_LABEL_AFTER))->for('entries_' . $key)->class('classic')->render() .
+                    '</td>' .
+                    '<td class="nowrap">' . ($value->id != '' ? $value->id : $value->count) . '</td>' .
+                    '<td class="module-distrib">' . ($distrib ?
+                        '<img src="images/dotclear-leaf.svg" alt="' .
+                        __('Values from official distribution') . '" title="' .
+                        __('Values from official distribution') . '" />'
+                    : '') . '</td>' .
+                    '<td class="maximal">' . ($has_related ? ' <a href="' .
+                        dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), ['part' => $vars->cleaner->id, 'related' => $value->ns]) .
+                    '">' . __('Details') . '<a>' : '') . '</td>' .
+                    '</tr>';
+                }
+
+                echo
+                '</tbody></table></div>' .
+                (new Para())->items([
+                    (new Label(__('Action on selected rows:'), Label::OUTSIDE_LABEL_BEFORE))->for('select_action'),
+                    (new Select(['action', 'select_action']))->items($combo_actions),
+                    (new Submit('do-action'))->class('delete')->value(__('I understand and I am want to delete this')),
+                    (new Hidden(['p'], My::id())),
+                    (new Hidden(['part'], $vars->cleaner->id)),
+                    dcCore::app()->formNonce(false),
+                ])->render() .
+                '<p class="warning">' .
+                __('Beware: All actions done here are irreversible and are directly applied') .
+                '</p>' .
+                '</form>';
+            }
+
+            echo
+            (new Form('option'))->method('post')->action(dcCore::app()->adminurl?->get('admin.plugin.' . My::id()))->fields([
+                (new Para())->items([
+                    (new Submit('option-action'))->value(dcCore::app()->blog?->settings->get(My::id())->get('dcproperty_hide') ? __('Show Dotclear default properties') : __('Hide Dotclear default properties')),
+                    (new Hidden('dcproperty_hide', (string) (int) !dcCore::app()->blog->settings->get(My::id())->get('dcproperty_hide'))),
+                    (new Hidden(['p'], My::id())),
+                    (new Hidden(['part'], $vars->cleaner->id)),
+                    dcCore::app()->formNonce(false),
+                ]),
+            ])->render();
+        } else {
+            echo
+            '<p><a class="back" href="' . dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), ['part' => $vars->cleaner->id]) . '">' . __('Back') . '</a></p>' .
+            '<h3>' . $vars->cleaner->name . ' : ' . $vars->related . '</h3><p>' . $vars->cleaner->desc . '</p>';
+
+            $distrib = in_array($vars->related, $vars->cleaner->distributed());
+            $rs      = $vars->cleaner->related($vars->related);
+            if (empty($rs)) {
+                echo (new Text('p', __('There is nothing to display')))->class('error')->render();
+            } else {
+                echo
+                '<form method="post" action="' . dcCore::app()->adminurl?->get('admin.plugin.' . My::id()) . '" id="form-funcs">' .
+                '<div class="table-outer">' .
+                '<table><caption>' . sprintf(__('There are %s related entries for the group "%s"'), count($rs), $vars->related) . '</caption><thead><tr>' .
+                '<th colspan="2">' . __('Name') . '</th><th>' . __('Objects') . '</th>' .
+                '</tr></thead><tbody>';
+
+                foreach ($rs as $key => $value) {
+                    echo
+                    '<tr class="line">' .
+                    '<td class="nowrap">' .
+                        (new Checkbox(['entries[' . $key . ']', 'entries_' . $key]))->value(Html::escapeHTML($value->id))->render() .
+                    '</td> ' .
+                    '<td class="nowrap">' .
+                        (new Label($value->id, Label::OUTSIDE_LABEL_AFTER))->for('entries_' . $key)->class('classic')->render() .
+                    '</td>' .
+                    '<td class="nowrap maximal">' . $value->count . '</td>' .
+                    '</tr>';
+                }
+
+                echo
+                '</tbody></table></div>' .
+                (new Para())->items([
+                    (new Submit('do-action'))->class('delete')->value(__('I understand and I am want to delete this')),
+                    (new Hidden(['p'], My::id())),
+                    (new Hidden(['related'], $vars->related)),
+                    (new Hidden(['part'], $vars->cleaner->id)),
+                    (new Hidden(['action'], 'delete_related')),
+                    dcCore::app()->formNonce(false),
+                ])->render() .
+                '<p class="warning">' .
+                __('Beware: All actions done here are irreversible and are directly applied') .
+                '</p>' .
+                '</form>';
+            }
+        }
 
         dcPage::closeModule();
     }

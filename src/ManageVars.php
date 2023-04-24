@@ -30,6 +30,7 @@ class ManageVars
 
     public readonly Cleaners $cleaners;
     public readonly ?AbstractCleaner $cleaner;
+    public readonly string $related;
     public readonly array $entries;
     public readonly string $action;
     public readonly array $combo;
@@ -38,6 +39,7 @@ class ManageVars
     {
         $this->cleaners = Uninstaller::instance()->cleaners;
 
+        $related = $_REQUEST['related'] ?? '';
         $entries = $_REQUEST['entries'] ?? [];
         $action  = $_POST['action']     ?? '';
 
@@ -50,12 +52,14 @@ class ManageVars
             }
         }
         if ($cleaner === null) {
+            $related = '';
             if (!($cleaner = $this->cleaners->get('caches'))) {
                 throw new Exception(__('Failed to load cleaner'));
             }
         }
 
         $this->cleaner = $cleaner;
+        $this->related = $related;
         $this->entries = is_array($entries) ? $entries : [];
         $this->action  = is_string($action) ? $action : '';
         $this->combo   = $combo;
