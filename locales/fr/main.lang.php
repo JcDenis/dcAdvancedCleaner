@@ -21,6 +21,7 @@ L10n::$locales['I understand and I am want to delete this']                     
 L10n::$locales['Beware: All actions done here are irreversible and are directly applied'] = 'Attention : toutes les actions menées ici sont irréversibles et sont directement appliquées';
 L10n::$locales['Show Dotclear default properties']                                        = 'Afficher les propriétés de Dotclear';
 L10n::$locales['Hide Dotclear default properties']                                        = 'Cacher les propriétés de Dotclear';
+L10n::$locales['There are %s related entries for the group "%s"']                         = 'Il y a %s entrées relatives au group "%s"';
 L10n::$locales['Failed to load cleaner']                                                  = 'Impossible de charger le nettoyeur';
 L10n::$locales['Uninstalling module']                                                     = 'Désinstallation de module';
 L10n::$locales['Advanced cleaner']                                                        = 'Nettoyeur avancé';
