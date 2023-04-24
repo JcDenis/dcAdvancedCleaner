@@ -17,6 +17,7 @@ L10n::$locales['There are %s entries']                                          
 L10n::$locales['Objects']                                                                 = 'Objets';
 L10n::$locales['Values from official distribution']                                       = 'Valeurs de la distribution officielle';
 L10n::$locales['Action on selected rows:']                                                = 'Action sur les lignes sélectionnées :';
+L10n::$locales['I understand and I am want to delete this']                               = 'J\'ai compris et je veux effacer ceci';
 L10n::$locales['Beware: All actions done here are irreversible and are directly applied'] = 'Attention : toutes les actions menées ici sont irréversibles et sont directement appliquées';
 L10n::$locales['Show Dotclear default properties']                                        = 'Afficher les propriétés de Dotclear';
 L10n::$locales['Hide Dotclear default properties']                                        = 'Cacher les propriétés de Dotclear';

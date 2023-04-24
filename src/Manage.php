@@ -102,6 +102,7 @@ class Manage extends dcNsProcess
 
         dcPage::openModule(
             My::name(),
+            dcPage::jsJson('dcAdvancedCleaner', ['confirm_delete' => __('Are you sure you perform these ations?')]) .
             dcPage::cssModuleLoad(My::id() . '/css/backend.css') .
             dcPage::jsModuleLoad(My::id() . '/js/backend.js')
         );
@@ -184,7 +185,7 @@ class Manage extends dcNsProcess
             (new Para())->items([
                 (new Label(__('Action on selected rows:'), Label::OUTSIDE_LABEL_BEFORE))->for('select_action'),
                 (new Select(['action', 'select_action']))->items($combo_actions),
-                (new Submit('do-action'))->value(__('ok')),
+                (new Submit('do-action'))->class('delete')->value(__('I understand and I am want to delete this')),
                 (new Hidden(['p'], My::id())),
                 (new Hidden(['part'], $vars->cleaner->id)),
                 dcCore::app()->formNonce(false),
