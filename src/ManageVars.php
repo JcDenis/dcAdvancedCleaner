@@ -47,7 +47,7 @@ class ManageVars
         $combo   = [];
         foreach ($this->cleaners->dump() as $k) {
             $combo[$k->name] = $k->id;
-            if ($k->id == $_REQUEST['part']) {
+            if ($k->id == ($_REQUEST['part'] ?? '/')) {
                 $cleaner = $k;
             }
         }
