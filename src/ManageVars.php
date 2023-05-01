@@ -23,16 +23,25 @@ use Exception;
 
 class ManageVars
 {
-    /**
-     * @var ManageVars self instance
-     */
+    /** @var    ManageVars  self instance */
     private static $container;
 
+    /** @var    CleanersStack   The cleaners stack */
     public readonly CleanersStack $cleaners;
+
+    /** @var    null|CleanerParent  The post form cleaner */
     public readonly ?CleanerParent $cleaner;
+
+    /** @var string     $related    The post form related action id */
     public readonly string $related;
+
+    /** @var    array<int,string>   The post form selected ns */
     public readonly array $entries;
+
+    /** @var    string  The post form action id */
     public readonly string $action;
+
+    /** @var    array<string,string>    The form actions combo */
     public readonly array $combo;
 
     protected function __construct()

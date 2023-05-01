@@ -18,6 +18,7 @@ use dcAdmin;
 use dcCore;
 use dcFavorites;
 use dcNsProcess;
+use dcMenu;
 use dcPage;
 
 class Backend extends dcNsProcess
@@ -36,16 +37,21 @@ class Backend extends dcNsProcess
             return false;
         }
 
-        dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
-            My::name(),
-            dcCore::app()->adminurl?->get('admin.plugin.' . My::id()),
-            dcPage::getPF(My::id() . '/icon.svg'),
-            preg_match(
-                '/' . preg_quote((string) dcCore::app()->adminurl?->get('admin.plugin.' . My::id())) . '(&.*)?$/',
-                $_SERVER['REQUEST_URI']
-            ),
-            dcCore::app()->auth?->isSuperAdmin()
-        );
+        if (!is_null(dcCore::app()->auth)
+            && !is_null(dcCore::app()->adminurl)
+            && (dcCore::app()->menu[dcAdmin::MENU_PLUGINS] instanceof dcMenu)
+        ) {
+            dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
+                My::name(),
+                dcCore::app()->adminurl->get('admin.plugin.' . My::id()),
+                dcPage::getPF(My::id() . '/icon.svg'),
+                preg_match(
+                    '/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.' . My::id())) . '(&.*)?$/',
+                    $_SERVER['REQUEST_URI']
+                ),
+                dcCore::app()->auth->isSuperAdmin()
+            );
+        }
 
         dcCore::app()->addBehaviors([
             'adminDashboardFavoritesV2' => function (dcFavorites $favs): void {
