@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\dcAdvancedCleaner;
 
 use Dotclear\Plugin\Uninstaller\{
-    AbstractCleaner,
-    Cleaners,
+    CleanerParent,
+    CleanersStack,
     Uninstaller
 };
 use Exception;
@@ -28,8 +28,8 @@ class ManageVars
      */
     private static $container;
 
-    public readonly Cleaners $cleaners;
-    public readonly ?AbstractCleaner $cleaner;
+    public readonly CleanersStack $cleaners;
+    public readonly ?CleanerParent $cleaner;
     public readonly string $related;
     public readonly array $entries;
     public readonly string $action;
@@ -45,7 +45,7 @@ class ManageVars
 
         $cleaner = null;
         $combo   = [];
-        foreach ($this->cleaners->dump() as $k) {
+        foreach ($this->cleaners as $k) {
             $combo[$k->name] = $k->id;
             if ($k->id == ($_REQUEST['part'] ?? '/')) {
                 $cleaner = $k;
