@@ -2,6 +2,11 @@ dev
 - [ ] orphan media cleaner
 - [ ] move to plugin maintenance
 
+1.0.1 - 2023.05.01
+- require dotclear 2.26
+- require php 8.1+
+- require plugin Uninstaller 0.8
+
 1.0 - 2023.04.24
 - require dotclear 2.26
 - require php 8.1+
