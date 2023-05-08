@@ -17,23 +17,24 @@ namespace Dotclear\Plugin\dcAdvancedCleaner;
 use dcCore;
 
 /**
- * Plugin definitions
+ * This module definitions.
  */
 class My
 {
-    /** @var string Required php version */
+    /** @var    string  Required php version */
     public const PHP_MIN = '8.1';
 
     /**
-     * This module id
+     * This module id.
      */
     public static function id(): string
     {
         return basename(dirname(__DIR__));
     }
 
+
     /**
-     * This module name
+     * This module name.
      */
     public static function name(): string
     {
@@ -43,15 +44,15 @@ class My
     }
 
     /**
-     * This plugin root
+     * This module path.
      */
-    public static function root(): string
+    public static function path(): string
     {
         return dirname(__DIR__);
     }
 
     /**
-     * Check php version
+     * Check this module PHP version compliant.
      */
     public static function phpCompliant(): bool
     {
