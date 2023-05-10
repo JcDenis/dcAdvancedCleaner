@@ -21,6 +21,7 @@ $this->registerModule(
     '1.0.1',
     [
         'requires' => [
+            ['php', '8.1'],
             ['core', '2.26'],
             ['Uninstaller', '0.8'],
         ],

@@ -21,9 +21,6 @@ use dcCore;
  */
 class My
 {
-    /** @var    string  Required php version */
-    public const PHP_MIN = '8.1';
-
     /**
      * This module id.
      */
@@ -49,13 +46,5 @@ class My
     public static function path(): string
     {
         return dirname(__DIR__);
-    }
-
-    /**
-     * Check this module PHP version compliant.
-     */
-    public static function phpCompliant(): bool
-    {
-        return version_compare(phpversion(), self::PHP_MIN, '>=');
     }
 }
