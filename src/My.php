@@ -29,7 +29,6 @@ class My
         return basename(dirname(__DIR__));
     }
 
-
     /**
      * This module name.
      */

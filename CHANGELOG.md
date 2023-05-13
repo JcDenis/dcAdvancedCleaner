@@ -2,6 +2,11 @@ dev
 - [ ] orphan media cleaner
 - [ ] move to plugin maintenance
 
+1.1 - 2023.05.13
+- require dotclear 2.26
+- require php 8.1+
+- use define php_min
+
 1.0.1 - 2023.05.01
 - require dotclear 2.26
 - require php 8.1+

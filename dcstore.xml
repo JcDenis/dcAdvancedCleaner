@@ -2,10 +2,10 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="dcAdvancedCleaner">
     <name>Advanced cleaner</name>
-    <version>1.0.1</version>
+    <version>1.1</version>
     <author>Jean-Christian Denis and Contributors</author>
     <desc>Make a huge cleaning of dotclear</desc>
-    <file>https://github.com/JcDenis/dcAdvancedCleaner/releases/download/v1.0.1/plugin-dcAdvancedCleaner.zip</file>
+    <file>https://github.com/JcDenis/dcAdvancedCleaner/releases/download/v1.1/plugin-dcAdvancedCleaner.zip</file>
     <da:dcmin>2.26</da:dcmin>
     <da:details>https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner</da:details>
     <da:support>https://github.com/JcDenis/dcAdvancedCleaner</da:support>
