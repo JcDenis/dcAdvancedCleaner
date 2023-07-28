@@ -14,8 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dcAdvancedCleaner;
 
-use dcCore;
-use dcNsProcess;
+use Dotclear\Core\Process;
 use Dotclear\Plugin\activityReport\{
     Action,
     ActivityReport,
@@ -23,19 +22,16 @@ use Dotclear\Plugin\activityReport\{
 };
 use Dotclear\Plugin\Uninstaller\Uninstaller;
 
-class Prepend extends dcNsProcess
+class Prepend extends Process
 {
     public static function init(): bool
     {
-        static::$init = defined('DC_CONTEXT_ADMIN')
-            && dcCore::app()->auth?->isSuperAdmin();
-
-        return static::$init;
+        return self::status(My::checkContext(My::PREPEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 

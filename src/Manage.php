@@ -15,8 +15,11 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\dcAdvancedCleaner;
 
 use dcCore;
-use dcNsProcess;
-use dcPage;
+use Dotclear\Core\Process;
+use Dotclear\Core\Backend\{
+    Notices,
+    Page
+};
 use Dotclear\Helper\Html\Form\{
     Checkbox,
     Div,
@@ -32,19 +35,16 @@ use Dotclear\Helper\Html\Form\{
 use Dotclear\Helper\Html\Html;
 use Exception;
 
-class Manage extends dcNsProcess
+class Manage extends Process
 {
     public static function init(): bool
     {
-        static::$init = defined('DC_CONTEXT_ADMIN')
-            && dcCore::app()->auth?->isSuperAdmin();
-
-        return static::$init;
+        return self::status(My::checkContext(My::MANAGE));
     }
 
     public static function process(): bool
     {
-        if (!static::$init || !dcCore::app()->plugins->moduleExists('Uninstaller')) {
+        if (!self::status() || !dcCore::app()->plugins->moduleExists('Uninstaller')) {
             return false;
         }
 
@@ -55,10 +55,10 @@ class Manage extends dcNsProcess
         }
 
         if (!empty($_POST['option-action'])) {
-            dcCore::app()->blog?->settings->get(My::id())->dropEvery(
+            My::settings()->dropEvery(
                 'dcproperty_hide'
             );
-            dcCore::app()->blog?->settings->get(My::id())->put(
+            My::settings()->put(
                 'dcproperty_hide',
                 !empty($_POST['dcproperty_hide']),
                 'boolean',
@@ -66,11 +66,8 @@ class Manage extends dcNsProcess
                 true,
                 true
             );
-            dcPage::addSuccessNotice(__('Configuration successfully updated.'));
-            dcCore::app()->adminurl?->redirect(
-                'admin.plugin.' . My::id(),
-                ['part' => $vars->cleaner->id]
-            );
+            Notices::addSuccessNotice(__('Configuration successfully updated.'));
+            My::redirect(['part' => $vars->cleaner->id]);
         }
 
         if (!empty($vars->entries) && !empty($vars->action)) {
@@ -89,11 +86,8 @@ class Manage extends dcNsProcess
                     }
                 }
 
-                dcPage::addSuccessNotice(__('Action successfuly excecuted'));
-                dcCore::app()->adminurl?->redirect(
-                    'admin.plugin.' . My::id(),
-                    ['part' => $vars->cleaner->id]
-                );
+                Notices::addSuccessNotice(__('Action successfuly excecuted'));
+                My::redirect(['part' => $vars->cleaner->id]);
             } catch (Exception $e) {
                 dcCore::app()->error->add($e->getMessage());
             }
@@ -104,17 +98,17 @@ class Manage extends dcNsProcess
 
     public static function render(): void
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return;
         }
 
         $vars = ManageVars::init();
 
-        dcPage::openModule(
+        Page::openModule(
             My::name(),
-            dcPage::jsJson('dcAdvancedCleaner', ['confirm_delete' => __('Are you sure you perform these ations?')]) .
-            dcPage::cssModuleLoad(My::id() . '/css/backend.css') .
-            dcPage::jsModuleLoad(My::id() . '/js/backend.js')
+            Page::jsJson('dcAdvancedCleaner', ['confirm_delete' => __('Are you sure you perform these ations?')]) .
+            My::cssLoad('backend') .
+            My::jsLoad('backend')
         );
 
         # --BEHAVIOR-- dcAdvancedCleanerAdminHeader
@@ -128,34 +122,34 @@ class Manage extends dcNsProcess
         // something went wrong !
         if (null === $vars->cleaner) {
             echo
-            dcPage::breadcrumb($breadcrumb) .
-            dcPage::notices();
+            Page::breadcrumb($breadcrumb) .
+            Notices::getNotices();
             echo (new Text('p', __('There is nothing to display')))->class('error')->render();
-            dcPage::closeModule();
+            Page::closeModule();
 
             return;
         }
 
-        $breadcrumb[My::name()]           = dcCore::app()->adminurl?->get('admin.plugin.' . My::id());
+        $breadcrumb[My::name()]           = My::manageUrl();
         $breadcrumb[$vars->cleaner->name] = '';
 
         if (!empty($vars->related)) {
-            $breadcrumb[$vars->cleaner->name] = dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), ['part' => $vars->cleaner->id]);
+            $breadcrumb[$vars->cleaner->name] = My::manageUrl(['part' => $vars->cleaner->id]);
             $breadcrumb[$vars->related]       = '';
         }
 
         echo
-        dcPage::breadcrumb($breadcrumb) .
-        dcPage::notices();
+        Page::breadcrumb($breadcrumb) .
+        Notices::getNotices();
 
         if (empty($vars->related)) {
             echo
-            (new Form('parts_menu'))->method('get')->action(dcCore::app()->adminurl?->get('admin.plugin.' . My::id()))->fields([
+            (new Form('parts_menu'))->method('get')->action(dcCore::app()->admin->getPageURL())->fields([
                 (new Para())->class('anchor-nav')->items([
                     (new Label(__('Goto:'), Label::OUTSIDE_LABEL_BEFORE))->for('part')->class('classic'),
                     (new Select(['part', 'select_part']))->default($vars->cleaner->id)->items($vars->combo),
                     (new Submit('go'))->value(__('Ok')),
-                    (new Hidden(['p'], My::id())),
+                    ... My::hiddenFields(),
                 ]),
             ])->render() .
 
@@ -178,7 +172,7 @@ class Manage extends dcNsProcess
                 }
 
                 echo
-                '<form method="post" action="' . dcCore::app()->adminurl?->get('admin.plugin.' . My::id()) . '" id="form-funcs">' .
+                '<form method="post" action="' . dcCore::app()->admin->getPageURL() . '" id="form-funcs">' .
                 '<div class="table-outer">' .
                 '<table><caption>' . sprintf(__('There are %s entries'), count($rs)) . '</caption><thead><tr>' .
                 '<th colspan="2">' . __('Name') . '</th><th colspan="2">' . __('Objects') . '</th>' .
@@ -188,7 +182,7 @@ class Manage extends dcNsProcess
                 foreach ($rs as $key => $value) {
                     $distrib = in_array($value->ns, $vars->cleaner->distributed());
 
-                    if ($distrib && dcCore::app()->blog?->settings->get(My::id())->get('dcproperty_hide')) {
+                    if ($distrib && My::settings()->get('dcproperty_hide')) {
                         continue;
                     }
                     echo
@@ -206,7 +200,7 @@ class Manage extends dcNsProcess
                         __('Values from official distribution') . '" />'
                     : '') . '</td>' .
                     '<td class="maximal">' . ($has_related ? ' <a href="' .
-                        dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), ['part' => $vars->cleaner->id, 'related' => $value->ns]) .
+                        My::manageUrl(['part' => $vars->cleaner->id, 'related' => $value->ns]) .
                     '">' . __('Details') . '<a>' : '') . '</td>' .
                     '</tr>';
                 }
@@ -217,9 +211,8 @@ class Manage extends dcNsProcess
                     (new Label(__('Action on selected rows:'), Label::OUTSIDE_LABEL_BEFORE))->for('select_action'),
                     (new Select(['action', 'select_action']))->items($combo_actions),
                     (new Submit('do-action'))->class('delete')->value(__('I understand and I am want to delete this')),
-                    (new Hidden(['p'], My::id())),
                     (new Hidden(['part'], $vars->cleaner->id)),
-                    dcCore::app()->formNonce(false),
+                    ... My::hiddenFields(),
                 ])->render() .
                 '<p class="warning">' .
                 __('Beware: All actions done here are irreversible and are directly applied') .
@@ -228,18 +221,17 @@ class Manage extends dcNsProcess
             }
 
             echo
-            (new Form('option'))->method('post')->action(dcCore::app()->adminurl?->get('admin.plugin.' . My::id()))->fields([
+            (new Form('option'))->method('post')->action(dcCore::app()->admin->getPageURL())->fields([
                 (new Para())->items([
-                    (new Submit('option-action'))->value(dcCore::app()->blog?->settings->get(My::id())->get('dcproperty_hide') ? __('Show Dotclear default properties') : __('Hide Dotclear default properties')),
-                    (new Hidden('dcproperty_hide', (string) (int) !dcCore::app()->blog->settings->get(My::id())->get('dcproperty_hide'))),
-                    (new Hidden(['p'], My::id())),
+                    (new Submit('option-action'))->value(My::settings()->get('dcproperty_hide') ? __('Show Dotclear default properties') : __('Hide Dotclear default properties')),
+                    (new Hidden('dcproperty_hide', (string) (int) My::settings()->get('dcproperty_hide'))),
                     (new Hidden(['part'], $vars->cleaner->id)),
-                    dcCore::app()->formNonce(false),
+                    ... My::hiddenFields(),
                 ]),
             ])->render();
         } else {
             echo
-            '<p><a class="back" href="' . dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), ['part' => $vars->cleaner->id]) . '">' . __('Back') . '</a></p>' .
+            '<p><a class="back" href="' . My::manageUrl(['part' => $vars->cleaner->id]) . '">' . __('Back') . '</a></p>' .
             '<h3>' . $vars->cleaner->name . ' : ' . $vars->related . '</h3><p>' . $vars->cleaner->desc . '</p>';
 
             $distrib = in_array($vars->related, $vars->cleaner->distributed());
@@ -248,7 +240,7 @@ class Manage extends dcNsProcess
                 echo (new Text('p', __('There is nothing to display')))->class('error')->render();
             } else {
                 echo
-                '<form method="post" action="' . dcCore::app()->adminurl?->get('admin.plugin.' . My::id()) . '" id="form-funcs">' .
+                '<form method="post" action="' . dcCore::app()->admin->getPageURL() . '" id="form-funcs">' .
                 '<div class="table-outer">' .
                 '<table><caption>' . sprintf(__('There are %s related entries for the group "%s"'), count($rs), $vars->related) . '</caption><thead><tr>' .
                 '<th colspan="2">' . __('Name') . '</th><th>' . __('Objects') . '</th>' .
@@ -271,11 +263,10 @@ class Manage extends dcNsProcess
                 '</tbody></table></div>' .
                 (new Para())->items([
                     (new Submit('do-action'))->class('delete')->value(__('I understand and I am want to delete this')),
-                    (new Hidden(['p'], My::id())),
                     (new Hidden(['related'], $vars->related)),
                     (new Hidden(['part'], $vars->cleaner->id)),
                     (new Hidden(['action'], 'delete_related')),
-                    dcCore::app()->formNonce(false),
+                    ... My::hiddenFields(),
                 ])->render() .
                 '<p class="warning">' .
                 __('Beware: All actions done here are irreversible and are directly applied') .
@@ -284,6 +275,6 @@ class Manage extends dcNsProcess
             }
         }
 
-        dcPage::closeModule();
+        Page::closeModule();
     }
 }

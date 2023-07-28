@@ -14,51 +14,32 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dcAdvancedCleaner;
 
-use dcAdmin;
 use dcCore;
-use dcFavorites;
-use dcNsProcess;
-use dcMenu;
-use dcPage;
+use Dotclear\Core\Process;
+use Dotclear\Core\Backend\Favorites;
 
-class Backend extends dcNsProcess
+class Backend extends Process
 {
     public static function init(): bool
     {
-        static::$init = defined('DC_CONTEXT_ADMIN');
-
-        return static::$init;
+        return self::status(My::checkContext(My::BACKEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init || !dcCore::app()->plugins->moduleExists('Uninstaller')) {
+        if (!self::status() || !dcCore::app()->plugins->moduleExists('Uninstaller')) {
             return false;
         }
 
-        if (!is_null(dcCore::app()->auth)
-            && !is_null(dcCore::app()->adminurl)
-            && (dcCore::app()->menu[dcAdmin::MENU_PLUGINS] instanceof dcMenu)
-        ) {
-            dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
-                My::name(),
-                dcCore::app()->adminurl->get('admin.plugin.' . My::id()),
-                dcPage::getPF(My::id() . '/icon.svg'),
-                preg_match(
-                    '/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.' . My::id())) . '(&.*)?$/',
-                    $_SERVER['REQUEST_URI']
-                ),
-                dcCore::app()->auth->isSuperAdmin()
-            );
-        }
+        My::addBackendMenuItem();
 
         dcCore::app()->addBehaviors([
-            'adminDashboardFavoritesV2' => function (dcFavorites $favs): void {
+            'adminDashboardFavoritesV2' => function (Favorites $favs): void {
                 $favs->register(My::id(), [
                     'title'      => My::name(),
-                    'url'        => dcCore::app()->adminurl?->get('admin.plugin.' . My::id()),
-                    'small-icon' => dcPage::getPF(My::id() . '/icon.svg'),
-                    'large-icon' => dcPage::getPF(My::id() . '/icon-big.svg'),
+                    'url'        => My::manageURL(),
+                    'small-icon' => My::icons(),
+                    'large-icon' => My::icons(),
                     //'permissions' => dcCore::app()->auth?->isSuperAdmin(),
                 ]);
             },
