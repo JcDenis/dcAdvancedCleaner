@@ -22,7 +22,7 @@ settings, tables, cache, etc...
   * Permissions superadmin
   * Dotclear 2.27
   * PHP >= 8.1
-  * Plugin Uninstaller
+  * Plugin Uninstaller (temporary at https://github.com/JcDenis/Uninstaller )
 
 ## USAGE
 
