@@ -182,7 +182,7 @@ class Manage extends Process
                 foreach ($rs as $key => $value) {
                     $distrib = in_array($value->ns, $vars->cleaner->distributed());
 
-                    if ($distrib && My::settings()->get('dcproperty_hide')) {
+                    if ($distrib && My::settings()->getGlobal('dcproperty_hide')) {
                         continue;
                     }
                     echo
@@ -224,7 +224,7 @@ class Manage extends Process
             (new Form('option'))->method('post')->action(dcCore::app()->admin->getPageURL())->fields([
                 (new Para())->items([
                     (new Submit('option-action'))->value(My::settings()->get('dcproperty_hide') ? __('Show Dotclear default properties') : __('Hide Dotclear default properties')),
-                    (new Hidden('dcproperty_hide', (string) (int) My::settings()->get('dcproperty_hide'))),
+                    (new Hidden('dcproperty_hide', My::settings()->get('dcproperty_hide') ? '0' : '1')),
                     (new Hidden(['part'], $vars->cleaner->id)),
                     ... My::hiddenFields(),
                 ]),
