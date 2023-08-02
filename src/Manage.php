@@ -223,8 +223,8 @@ class Manage extends Process
             echo
             (new Form('option'))->method('post')->action(dcCore::app()->admin->getPageURL())->fields([
                 (new Para())->items([
-                    (new Submit('option-action'))->value(My::settings()->get('dcproperty_hide') ? __('Show Dotclear default properties') : __('Hide Dotclear default properties')),
-                    (new Hidden('dcproperty_hide', My::settings()->get('dcproperty_hide') ? '0' : '1')),
+                    (new Submit('option-action'))->value(My::settings()->getGlobal('dcproperty_hide') ? __('Show Dotclear default properties') : __('Hide Dotclear default properties')),
+                    (new Hidden('dcproperty_hide', My::settings()->getGlobal('dcproperty_hide') ? '0' : '1')),
                     (new Hidden(['part'], $vars->cleaner->id)),
                     ... My::hiddenFields(),
                 ]),
