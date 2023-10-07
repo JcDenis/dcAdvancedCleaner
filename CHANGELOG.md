@@ -1,3 +1,9 @@
+dcAdvancedCleaner 1.4 - 2023.10.07
+===========================================================
+* Require Dotclear 2.28
+* Require PHP 8.1
+* Upgrade to Dotclear 2.28
+
 dcAdvancedCleaner 1.3 - 2023.08.14
 ===========================================================
 * Require Dotclear 2.27

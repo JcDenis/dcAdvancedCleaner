@@ -1,27 +1,23 @@
 # README
 
-[![Release](https://img.shields.io/badge/release-1.3-a2cbe9.svg)](https://git.dotclear.watch/JcDenis/dcAdvancedCleaner/releases)
-[![Date](https://img.shields.io/badge/date-2023.08.14-c44d58.svg)](https://git.dotclear.watch/JcDenis/dcAdvancedCleaner/releases)
-[![Dotclear](https://img.shields.io/badge/dotclear-v2.27-137bbb.svg)](https://fr.dotclear.org/download)
+[![Release](https://img.shields.io/badge/release-1.4-a2cbe9.svg)](https://git.dotclear.watch/JcDenis/dcAdvancedCleaner/releases)
+![Date](https://img.shields.io/badge/date-2023.10.07-c44d58.svg)
+[![Dotclear](https://img.shields.io/badge/dotclear-v2.28-137bbb.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner)
-[![License](https://img.shields.io/github/license/JcDenis/dcAdvancedCleaner)](https://git.dotclear.watch/JcDenis/dcAdvancedCleaner/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-GPL--2.0-ececec.svg)](https://git.dotclear.watch/JcDenis/dcAdvancedCleaner/src/branch/master/LICENSE)
 
-## WHAT IS DCADVANCEDCLEANER ?
+## ABOUT
 
-_dcAdvancedCleaner_ is a plugin for the open-source 
-web publishing software called Dotclear.
+_dcAdvancedCleaner_ is a plugin for the open-source web publishing software called [Dotclear](https://www.dotclear.org).
 
-It help clean up Dotclear install, plugins, themes, 
-settings, tables, cache, etc...
+> It help clean up Dotclear install, plugins, themes, settings, tables, cache, etc...
 
 ## REQUIREMENTS
 
-_dcAdvancedCleaner_ requires: 
-
 * Permissions superadmin
-* Dotclear 2.27
+* Dotclear 2.28
 * PHP >= 8.1
-* Plugin Uninstaller (temporary at https://github.com/JcDenis/Uninstaller )
+* Plugin Uninstaller
 
 ## USAGE
 

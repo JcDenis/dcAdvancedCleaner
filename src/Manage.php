@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dcAdvancedCleaner;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 use Dotclear\Core\Backend\{
     Notices,
@@ -44,7 +44,7 @@ class Manage extends Process
 
     public static function process(): bool
     {
-        if (!self::status() || !dcCore::app()->plugins->moduleExists('Uninstaller')) {
+        if (!self::status() || !App::plugins()->moduleExists('Uninstaller')) {
             return false;
         }
 
@@ -79,7 +79,7 @@ class Manage extends Process
                         $ns .= $vars->related . ':' . $id . ';';
                     }
                     $vars->cleaners->execute($vars->cleaner->id, $vars->action, $ns);
-                // other actions
+                    // other actions
                 } elseif ($vars->action != 'delete_related') {
                     foreach ($vars->entries as $ns) {
                         $vars->cleaners->execute($vars->cleaner->id, $vars->action, $ns);
@@ -89,7 +89,7 @@ class Manage extends Process
                 Notices::addSuccessNotice(__('Action successfuly excecuted'));
                 My::redirect(['part' => $vars->cleaner->id]);
             } catch (Exception $e) {
-                dcCore::app()->error->add($e->getMessage());
+                App::error()->add($e->getMessage());
             }
         }
 
@@ -112,7 +112,7 @@ class Manage extends Process
         );
 
         # --BEHAVIOR-- dcAdvancedCleanerAdminHeader
-        dcCore::app()->callBehavior('dcAdvancedCleanerAdminHeader');
+        App::behavior()->callBehavior('dcAdvancedCleanerAdminHeader');
 
         $breadcrumb = [
             __('Plugins') => '',
@@ -144,7 +144,7 @@ class Manage extends Process
 
         if (empty($vars->related)) {
             echo
-            (new Form('parts_menu'))->method('get')->action(dcCore::app()->admin->getPageURL())->fields([
+            (new Form('parts_menu'))->method('get')->action(App::backend()->getPageURL())->fields([
                 (new Para())->class('anchor-nav')->items([
                     (new Label(__('Goto:'), Label::OUTSIDE_LABEL_BEFORE))->for('part')->class('classic'),
                     (new Select(['part', 'select_part']))->default($vars->cleaner->id)->items($vars->combo),
@@ -172,7 +172,7 @@ class Manage extends Process
                 }
 
                 echo
-                '<form method="post" action="' . dcCore::app()->admin->getPageURL() . '" id="form-funcs">' .
+                '<form method="post" action="' . App::backend()->getPageURL() . '" id="form-funcs">' .
                 '<div class="table-outer">' .
                 '<table><caption>' . sprintf(__('There are %s entries'), count($rs)) . '</caption><thead><tr>' .
                 '<th colspan="2">' . __('Name') . '</th><th colspan="2">' . __('Objects') . '</th>' .
@@ -221,7 +221,7 @@ class Manage extends Process
             }
 
             echo
-            (new Form('option'))->method('post')->action(dcCore::app()->admin->getPageURL())->fields([
+            (new Form('option'))->method('post')->action(App::backend()->getPageURL())->fields([
                 (new Para())->items([
                     (new Submit('option-action'))->value(My::settings()->getGlobal('dcproperty_hide') ? __('Show Dotclear default properties') : __('Hide Dotclear default properties')),
                     (new Hidden('dcproperty_hide', My::settings()->getGlobal('dcproperty_hide') ? '0' : '1')),
@@ -240,7 +240,7 @@ class Manage extends Process
                 echo (new Text('p', __('There is nothing to display')))->class('error')->render();
             } else {
                 echo
-                '<form method="post" action="' . dcCore::app()->admin->getPageURL() . '" id="form-funcs">' .
+                '<form method="post" action="' . App::backend()->getPageURL() . '" id="form-funcs">' .
                 '<div class="table-outer">' .
                 '<table><caption>' . sprintf(__('There are %s related entries for the group "%s"'), count($rs), $vars->related) . '</caption><thead><tr>' .
                 '<th colspan="2">' . __('Name') . '</th><th>' . __('Objects') . '</th>' .
@@ -263,10 +263,11 @@ class Manage extends Process
                 '</tbody></table></div>' .
                 (new Para())->items([
                     (new Submit('do-action'))->class('delete')->value(__('I understand and I am want to delete this')),
-                    (new Hidden(['related'], $vars->related)),
-                    (new Hidden(['part'], $vars->cleaner->id)),
-                    (new Hidden(['action'], 'delete_related')),
-                    ... My::hiddenFields(),
+                    ... My::hiddenFields([
+                        'related' => $vars->related,
+                        'part'    => $vars->cleaner->id,
+                        'action'  => 'delete_related',
+                    ]),
                 ])->render() .
                 '<p class="warning">' .
                 __('Beware: All actions done here are irreversible and are directly applied') .

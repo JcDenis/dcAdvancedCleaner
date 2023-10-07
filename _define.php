@@ -18,12 +18,12 @@ $this->registerModule(
     'Advanced cleaner',
     'Make a huge cleaning of dotclear',
     'Jean-Christian Denis and Contributors',
-    '1.3',
+    '1.4',
     [
         'requires' => [
             ['php', '8.1'],
-            ['core', '2.27'],
-            ['Uninstaller', '0.8'],
+            ['core', '2.28'],
+            ['Uninstaller', '1.0'],
         ],
         'permissions' => null,
         'type'        => 'plugin',

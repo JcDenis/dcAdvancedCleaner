@@ -14,13 +14,13 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dcAdvancedCleaner;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Module\MyPlugin;
 
 class My extends MyPlugin
 {
     public static function checkCustomContext(int $context): ?bool
     {
-        return $context === self::PREPEND ? dcCore::app()->auth->isSuperAdmin() : null;
+        return $context === self::PREPEND ? App::auth()->isSuperAdmin() : null;
     }
 }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dcAdvancedCleaner;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 use Dotclear\Core\Backend\Favorites;
 
@@ -27,20 +27,19 @@ class Backend extends Process
 
     public static function process(): bool
     {
-        if (!self::status() || !dcCore::app()->plugins->moduleExists('Uninstaller')) {
+        if (!self::status() || !App::plugins()->moduleExists('Uninstaller')) {
             return false;
         }
 
         My::addBackendMenuItem();
 
-        dcCore::app()->addBehaviors([
+        App::behavior()->addBehaviors([
             'adminDashboardFavoritesV2' => function (Favorites $favs): void {
                 $favs->register(My::id(), [
                     'title'      => My::name(),
                     'url'        => My::manageURL(),
                     'small-icon' => My::icons(),
                     'large-icon' => My::icons(),
-                    //'permissions' => dcCore::app()->auth?->isSuperAdmin(),
                 ]);
             },
         ]);
