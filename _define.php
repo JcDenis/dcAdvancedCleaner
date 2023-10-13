@@ -1,31 +1,30 @@
 <?php
+
 /**
- * @brief dcAdvancedCleaner, a plugin for Dotclear 2
+ * @file
+ * @brief       The plugin dcAdvancedCleaner definition
+ * @ingroup     dcAdvancedCleaner
  *
- * @package Dotclear
- * @subpackage Plugin
+ * @defgroup    dcAdvancedCleaner Plugin dcAdvancedCleaner.
  *
- * @author Jean-Christian Denis and Contributors
+ * Make a huge cleaning of dotclear.
  *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ * @author      Jean-Christian Denis (author)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_RC_PATH')) {
-    return null;
-}
+declare(strict_types=1);
 
 $this->registerModule(
     'Advanced cleaner',
     'Make a huge cleaning of dotclear',
     'Jean-Christian Denis and Contributors',
-    '1.4',
+    '1.5',
     [
         'requires' => [
-            ['php', '8.1'],
             ['core', '2.28'],
             ['Uninstaller', '1.0'],
         ],
-        'permissions' => null,
+        'permissions' => 'My',
         'type'        => 'plugin',
         'support'     => 'https://git.dotclear.watch/JcDenis/' . basename(__DIR__) . '/issues',
         'details'     => 'https://git.dotclear.watch/JcDenis/' . basename(__DIR__) . '/src/branch/master/README.md',

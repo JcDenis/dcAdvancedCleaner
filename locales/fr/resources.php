@@ -1,16 +1,12 @@
 <?php
+
 /**
- * @brief dcAdvancedCleaner, a plugin for Dotclear 2
+ * @file
+ * @brief   dcAdvancedCleaner resources helper.
+ * @ingroup dcAdvancedCleaner
  *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis and Contributors
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ * @author      Jean-Christian Denis (author)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_RC_PATH')) {
-    return;
-}
-dcCore::app()->resources['help']['dcAdvancedCleaner'] = __DIR__ . '/help/dcAdvancedCleaner.html';
+
+\Dotclear\App::backend()->resources()->set('help', 'dcAdvancedCleaner', __DIR__ . '/help/dcAdvancedCleaner.html');

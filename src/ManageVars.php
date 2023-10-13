@@ -1,15 +1,5 @@
 <?php
-/**
- * @brief dcAdvancedCleaner, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis and Contributors
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\dcAdvancedCleaner;
@@ -21,27 +11,62 @@ use Dotclear\Plugin\Uninstaller\{
 };
 use Exception;
 
+/**
+ * @brief   dcAdvancedCleaner vars definition class.
+ * @ingroup dcAdvancedCleaner
+ *
+ * @author      Jean-Christian Denis (author)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class ManageVars
 {
-    /** @var    ManageVars  self instance */
+    /**
+     * self instance.
+     *
+     * @var     ManageVars  $container
+     */
     private static $container;
 
-    /** @var    CleanersStack   The cleaners stack */
+    /**
+     * The cleaners stack.
+     *
+     * @var     CleanersStack   $cleaners
+     */
     public readonly CleanersStack $cleaners;
 
-    /** @var    null|CleanerParent  The post form cleaner */
+    /**
+     * The post form cleaner.
+     *
+     * @var     null|CleanerParent  $cleaner
+     */
     public readonly ?CleanerParent $cleaner;
 
-    /** @var string     $related    The post form related action id */
+    /**
+     * The post form related action id.
+     *
+     * @var     string  $related
+     */
     public readonly string $related;
 
-    /** @var    array<int,string>   The post form selected ns */
+    /**
+     * The post form selected ns.
+     *
+     * @var     array<int,string>   $entries
+     */
     public readonly array $entries;
 
-    /** @var    string  The post form action id */
+    /**
+     * The post form action id.
+     *
+     * @var     string  $action
+     */
     public readonly string $action;
 
-    /** @var    array<string,string>    The form actions combo */
+    /**
+     * The form actions combo.
+     *
+     * @var     array<string,string>    $combo
+     */
     public readonly array $combo;
 
     protected function __construct()
