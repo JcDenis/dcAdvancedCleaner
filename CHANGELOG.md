@@ -1,3 +1,9 @@
+dcAdvancedCleaner 1.6 - 2023.10.18
+===========================================================
+* Require Dotclear 2.28
+* Require PHP 8.1
+* Upgrade plugin acitivtyReport
+
 dcAdvancedCleaner 1.5 - 2023.10.13
 ===========================================================
 * Require Dotclear 2.28
