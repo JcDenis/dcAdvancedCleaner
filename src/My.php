@@ -18,7 +18,10 @@ class My extends MyPlugin
 {
     public static function checkCustomContext(int $context): ?bool
     {
-        // Limit to backend and super admin
-        return App::task()->checkContext('BACKEND') && App::auth()->isSuperAdmin();
+        return match ($context) {
+            // Limit to super admin
+            self::MODULE => App::auth()->isSuperAdmin(),
+            default      => null,
+        };
     }
 }
