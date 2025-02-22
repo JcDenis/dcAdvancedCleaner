@@ -11,16 +11,25 @@ use Dotclear\Core\Backend\{
     Page
 };
 use Dotclear\Helper\Html\Form\{
+    Caption,
     Checkbox,
     Div,
     Form,
     Hidden,
+    Img,
     Label,
+    Link,
     Note,
     Para,
     Select,
     Submit,
-    Text
+    Table,
+    Tbody,
+    Td,
+    Th,
+    Thead,
+    Text,
+    Tr
 };
 use Dotclear\Helper\Html\Html;
 use Exception;
@@ -140,17 +149,20 @@ class Manage extends Process
         Notices::getNotices();
 
         if (empty($vars->related)) {
-            echo
-            (new Form('parts_menu'))->method('get')->action(App::backend()->getPageURL())->fields([
-                (new Para())->class('anchor-nav')->items([
-                    (new Label(__('Goto:'), Label::OUTSIDE_LABEL_BEFORE))->for('part')->class('classic'),
-                    (new Select(['part', 'select_part']))->default($vars->cleaner->id)->items($vars->combo),
-                    (new Submit('go'))->value(__('Ok')),
-                    ... My::hiddenFields(),
-                ]),
-            ])->render() .
-
-            '<h3>' . $vars->cleaner->name . '</h3><p>' . $vars->cleaner->desc . '</p>';
+            echo (new Div())
+                ->items([
+                    (new Form('parts_menu'))->method('get')->action(App::backend()->getPageURL())->fields([
+                        (new Para())->class('anchor-nav')->items([
+                            (new Label(__('Goto:'), Label::OUTSIDE_LABEL_BEFORE))->for('part')->class('classic'),
+                            (new Select(['part', 'select_part']))->default($vars->cleaner->id)->items($vars->combo),
+                            (new Submit('go'))->value(__('Ok')),
+                            ... My::hiddenFields(),
+                        ]),
+                    ]),
+                    (new Text('h3', $vars->cleaner->name)),
+                    (new Text('p', $vars->cleaner->desc)),
+                ])
+                ->render();
 
             $rs = $vars->cleaner->values();
             if (empty($rs)) {
@@ -168,53 +180,84 @@ class Manage extends Process
                     $combo_actions[$descriptor->select] = $descriptor->id;
                 }
 
-                echo
-                '<form method="post" action="' . App::backend()->getPageURL() . '" id="form-funcs">' .
-                '<div class="table-outer">' .
-                '<table><caption>' . sprintf(__('There are %s entries'), count($rs)) . '</caption><thead><tr>' .
-                '<th colspan="2">' . __('Name') . '</th><th colspan="2">' . __('Objects') . '</th>' .
-                '<th></th>' .
-                '</tr></thead><tbody>';
-
+                $lines = [];
                 foreach ($rs as $key => $value) {
                     $distrib = in_array($value->ns, $vars->cleaner->distributed());
 
                     if ($distrib && My::settings()->getGlobal('dcproperty_hide')) {
                         continue;
                     }
-                    echo
-                    '<tr class="line' . ($distrib ? ' offline' : '') . '">' .
-                    '<td class="nowrap">' .
-                        (new Checkbox(['entries[' . $key . ']', 'entries_' . $key]))->value(Html::escapeHTML($value->ns))->render() .
-                    '</td> ' .
-                    '<td class="nowrap">' .
-                        (new Label($value->ns, Label::OUTSIDE_LABEL_AFTER))->for('entries_' . $key)->class('classic')->render() .
-                    '</td>' .
-                    '<td class="nowrap">' . ($value->id != '' ? $value->id : $value->count) . '</td>' .
-                    '<td class="module-distrib">' . ($distrib ?
-                        '<img src="images/dotclear-leaf.svg" alt="' .
-                        __('Values from official distribution') . '" title="' .
-                        __('Values from official distribution') . '" />'
-                    : '') . '</td>' .
-                    '<td class="maximal">' . ($has_related ? ' <a href="' .
-                        My::manageUrl(['part' => $vars->cleaner->id, 'related' => $value->ns]) .
-                    '">' . __('Details') . '<a>' : '') . '</td>' .
-                    '</tr>';
+                    $lines[] = (new Tr())
+                        ->class('line')
+                        ->cols([
+                            (new Td())
+                                ->class('nowrap')
+                                ->items([
+                                    (new Checkbox(['entries[' . $key . ']', 'entries_' . $key]))->value(Html::escapeHTML($value->ns)),
+                                ]),
+                            (new Td())
+                                ->class('nowrap')
+                                ->items([
+                                    (new Label($value->ns, Label::OUTSIDE_LABEL_AFTER))->for('entries_' . $key)->class('classic'),
+                                ]),
+                            (new Td())
+                                ->class('nowrap')
+                                ->text((string) ($value->id != '' ? $value->id : $value->count)),
+                            (new Td())
+                                ->class('module-distrib')
+                                ->items($distrib ? [
+                                    (new Img('images/dotclear-leaf.svg'))
+                                        ->alt(__('Values from official distribution')),
+                                ] : []),
+                            (new Td())
+                                ->class('maximal')
+                                ->items($has_related ? [
+                                    (new Link())
+                                        ->href(My::manageUrl(['part' => $vars->cleaner->id, 'related' => $value->ns]))
+                                        ->text(__('Details')),
+                                ] : []),
+                        ]);
                 }
 
-                echo
-                '</tbody></table></div>' .
-                (new Para())->items([
-                    (new Label(__('Action on selected rows:'), Label::OUTSIDE_LABEL_BEFORE))->for('select_action'),
-                    (new Select(['action', 'select_action']))->items($combo_actions),
-                    (new Submit('do-action'))->class('delete')->value(__('I understand and I am want to delete this')),
-                    (new Hidden(['part'], $vars->cleaner->id)),
-                    ... My::hiddenFields(),
-                ])->render() .
-                '<p class="warning">' .
-                __('Beware: All actions done here are irreversible and are directly applied') .
-                '</p>' .
-                '</form>';
+                echo (new Form('form-funcs'))
+                    ->method('post')
+                    ->action(App::backend()->getPageURL())
+                    ->fields([
+                        (new Div())
+                            ->class('table-outer')
+                            ->items([
+                                (new Table())
+                                    ->caption(new Caption(sprintf(__('There are %s entries'), count($rs))))
+                                    ->thead(
+                                        (new Thead())
+                                            ->rows([
+                                                (new Tr())
+                                                    ->cols([
+                                                        (new Th())
+                                                            ->colspan(2)
+                                                            ->text(__('Name')),
+                                                        (new Th())
+                                                            ->colspan(3)
+                                                            ->text(__('Objects')),
+                                                    ]),
+                                            ])
+                                    )
+                                    ->tbody(
+                                        (new Tbody())
+                                            ->rows($lines)
+                                    ),
+                            ]),
+                        (new Para())->items([
+                            (new Label(__('Action on selected rows:'), Label::OUTSIDE_LABEL_BEFORE))->for('select_action'),
+                            (new Select(['action', 'select_action']))->items($combo_actions),
+                            (new Submit('do-action'))->class('delete')->value(__('I understand and I am want to delete this')),
+                            (new Hidden(['part'], $vars->cleaner->id)),
+                            ... My::hiddenFields(),
+                        ]),
+                        (new Text('p', __('Beware: All actions done here are irreversible and are directly applied')))
+                            ->class('warning'),
+                    ])
+                    ->render();
             }
 
             echo
@@ -227,49 +270,85 @@ class Manage extends Process
                 ]),
             ])->render();
         } else {
-            echo
-            '<p><a class="back" href="' . My::manageUrl(['part' => $vars->cleaner->id]) . '">' . __('Back') . '</a></p>' .
-            '<h3>' . $vars->cleaner->name . ' : ' . $vars->related . '</h3><p>' . $vars->cleaner->desc . '</p>';
+            echo (new Div())
+                ->items([
+                    (new Para())
+                        ->items([
+                            (new Link())
+                                ->class('back')
+                                ->href(My::manageUrl(['part' => $vars->cleaner->id]))
+                                ->text(__('Back'))
+                        ]),
+                    (new Text('h3', $vars->cleaner->name . ' : ' . $vars->related)),
+                    (new Text('p', $vars->cleaner->desc)),
+                ])
+                ->render();
 
             $distrib = in_array($vars->related, $vars->cleaner->distributed());
             $rs      = $vars->cleaner->related($vars->related);
             if (empty($rs)) {
                 echo (new Text('p', __('There is nothing to display')))->class('error')->render();
             } else {
-                echo
-                '<form method="post" action="' . App::backend()->getPageURL() . '" id="form-funcs">' .
-                '<div class="table-outer">' .
-                '<table><caption>' . sprintf(__('There are %s related entries for the group "%s"'), count($rs), $vars->related) . '</caption><thead><tr>' .
-                '<th colspan="2">' . __('Name') . '</th><th>' . __('Objects') . '</th>' .
-                '</tr></thead><tbody>';
-
+                $lines = [];
                 foreach ($rs as $key => $value) {
-                    echo
-                    '<tr class="line">' .
-                    '<td class="nowrap">' .
-                        (new Checkbox(['entries[' . $key . ']', 'entries_' . $key]))->value(Html::escapeHTML($value->id))->render() .
-                    '</td> ' .
-                    '<td class="nowrap">' .
-                        (new Label($value->id, Label::OUTSIDE_LABEL_AFTER))->for('entries_' . $key)->class('classic')->render() .
-                    '</td>' .
-                    '<td class="nowrap maximal">' . $value->count . '</td>' .
-                    '</tr>';
+                    $lines[] = (new Tr())
+                        ->class('line')
+                        ->cols([
+                            (new Td())
+                                ->class('nowrap')
+                                ->items([
+                                    (new Checkbox(['entries[' . $key . ']', 'entries_' . $key]))->value(Html::escapeHTML($value->id))
+                                ]),
+                            (new Td())
+                                ->class('nowrap')
+                                ->items([
+                                    (new Label($value->id, Label::OUTSIDE_LABEL_AFTER))->for('entries_' . $key)->class('classic')
+                                ]),
+                            (new Td())
+                                ->class(['nowrap', 'maximal'])
+                                ->text((string) $value->count),
+                        ]);
                 }
 
-                echo
-                '</tbody></table></div>' .
-                (new Para())->items([
-                    (new Submit('do-action'))->class('delete')->value(__('I understand and I am want to delete this')),
-                    ... My::hiddenFields([
-                        'related' => $vars->related,
-                        'part'    => $vars->cleaner->id,
-                        'action'  => 'delete_related',
-                    ]),
-                ])->render() .
-                '<p class="warning">' .
-                __('Beware: All actions done here are irreversible and are directly applied') .
-                '</p>' .
-                '</form>';
+                echo (new Form('form-funcs'))
+                    ->method('post')
+                    ->action(App::backend()->getPageURL())
+                    ->fields([
+                        (new Div())
+                            ->class('table-outer')
+                            ->items([
+                                (new Table())
+                                    ->caption(new Caption(sprintf(__('There are %s related entries for the group "%s"'), count($rs), $vars->related)))
+                                    ->thead(
+                                        (new Thead())
+                                            ->rows([
+                                                (new Tr())
+                                                    ->cols([
+                                                        (new Th())
+                                                            ->colspan(2)
+                                                            ->text(__('Name')),
+                                                        (new Th())
+                                                            ->text(__('Objects')),
+                                                    ]),
+                                            ])
+                                    )
+                                    ->tbody(
+                                        (new Tbody())
+                                            ->rows($lines)
+                                    ),
+                            ]),
+                        (new Para())->items([
+                            (new Submit('do-action'))->class('delete')->value(__('I understand and I am want to delete this')),
+                            ... My::hiddenFields([
+                                'related' => $vars->related,
+                                'part'    => $vars->cleaner->id,
+                                'action'  => 'delete_related',
+                            ]),
+                        ]),
+                        (new Text('p', __('Beware: All actions done here are irreversible and are directly applied')))
+                            ->class('warning'),
+                    ])
+                    ->render();
             }
         }
 
