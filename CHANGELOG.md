@@ -1,3 +1,9 @@
+dcAdvancedCleaner 1.7 - 2025.02.22
+===========================================================
+* Require Dotclear 2.33
+* Require PHP 8.1
+* Use Helper Form
+
 dcAdvancedCleaner 1.6.1 - 2023.11.04
 ===========================================================
 * Require Dotclear 2.28

@@ -14,7 +14,7 @@ _dcAdvancedCleaner_ is a plugin for the open-source web publishing software call
 
 ## REQUIREMENTS
 
-* Dotclear 2.28
+* Dotclear 2.33
 * PHP 8.1+
 * Plugin Uninstaller (from distribution)
 * Dotclaer superadmin permission
@@ -28,10 +28,6 @@ Once it's done you can manage cleaners from menu
 ''Advanced cleaner'' on sidebar or you can add dashboard icon.
 
 ## LINKS
-
-* License : [GNU GPL v2](https://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)
-* Source & contribution : [Gitea Page](https://github.com/JcDenis/dcAdvancedCleaner) or [GitHub Page](https://github.com/JcDenis/dcAdvancedCleaner)
-* Packages & details: [Gitea Page](https://github.com/JcDenis/dcAdvancedCleaner/releases) or [Dotaddict Page](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner)
 
 * [License](https://github.com/JcDenis/dcAdvancedCleaner/src/branch/master/LICENSE)
 * [Packages & details](https://github.com/JcDenis/dcAdvancedCleaner/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner))
