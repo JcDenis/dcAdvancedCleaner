@@ -29,6 +29,6 @@ $this->registerModule(
         'support'     => 'https://github.com/JcDenis/' . basename(__DIR__) . '/issues',
         'details'     => 'https://github.com/JcDenis/' . basename(__DIR__) . '/src/branch/master/README.md',
         'repository'  => 'https://github.com/JcDenis/' . basename(__DIR__) . '/raw/branch/master/dcstore.xml',
-        'date'        => '2025-02-22T10:10:10+00:00',
+        'date'        => '2025-02-22T13:55:03+00:00',
     ]
 );
