@@ -1,10 +1,10 @@
 # README
 
-[![Release](https://img.shields.io/badge/release-1.6.1-a2cbe9.svg)](https://git.dotclear.watch/JcDenis/dcAdvancedCleaner/releases)
-![Date](https://img.shields.io/badge/date-2023.11.04-c44d58.svg)
-[![Dotclear](https://img.shields.io/badge/dotclear-v2.28-137bbb.svg)](https://fr.dotclear.org/download)
+[![Release](https://img.shields.io/github/v/release/jcdenis/dcAdvancedCleaner?color=lightblue)](https://github.com/JcDenis/dcAdvancedCleaner/releases)
+![Date](https://img.shields.io/github/release-date/jcdenis/dcAdvancedCleaner?color=red)
+[![Dotclear](https://img.shields.io/badge/dotclear-v2.33-137bbb.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner)
-[![License](https://img.shields.io/badge/license-GPL--2.0-ececec.svg)](https://git.dotclear.watch/JcDenis/dcAdvancedCleaner/src/branch/master/LICENSE)
+[![License](https://img.shields.io/github/license/jcdenis/dcAdvancedCleaner?color=white)](https://github.com/JcDenis/dcAdvancedCleaner/src/branch/master/LICENSE)
 
 ## ABOUT
 
@@ -30,13 +30,13 @@ Once it's done you can manage cleaners from menu
 ## LINKS
 
 * License : [GNU GPL v2](https://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)
-* Source & contribution : [Gitea Page](https://git.dotclear.watch/JcDenis/dcAdvancedCleaner) or [GitHub Page](https://github.com/JcDenis/dcAdvancedCleaner)
-* Packages & details: [Gitea Page](https://git.dotclear.watch/JcDenis/dcAdvancedCleaner/releases) or [Dotaddict Page](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner)
+* Source & contribution : [Gitea Page](https://github.com/JcDenis/dcAdvancedCleaner) or [GitHub Page](https://github.com/JcDenis/dcAdvancedCleaner)
+* Packages & details: [Gitea Page](https://github.com/JcDenis/dcAdvancedCleaner/releases) or [Dotaddict Page](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner)
 
-* [License](https://git.dotclear.watch/JcDenis/dcAdvancedCleaner/src/branch/master/LICENSE)
-* [Packages & details](https://git.dotclear.watch/JcDenis/dcAdvancedCleaner/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner))
-* [Sources & contributions](https://git.dotclear.watch/JcDenis/dcAdvancedCleaner) (or on [GitHub](https://github.com/JcDenis/dcAdvancedCleaner))
-* [Issues & security](https://git.dotclear.watch/JcDenis/dcAdvancedCleaner/issues) (or on [GitHub](https://github.com/JcDenis/dcAdvancedCleaner/issues))
+* [License](https://github.com/JcDenis/dcAdvancedCleaner/src/branch/master/LICENSE)
+* [Packages & details](https://github.com/JcDenis/dcAdvancedCleaner/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner))
+* [Sources & contributions](https://github.com/JcDenis/dcAdvancedCleaner)
+* [Issues & security](https://github.com/JcDenis/dcAdvancedCleaner/issues)
 * [Discuss & help](https://forum.dotclear.org/viewtopic.php?id=40381)
 
 ## CONTRIBUTORS

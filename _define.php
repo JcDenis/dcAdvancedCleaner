@@ -26,8 +26,9 @@ $this->registerModule(
         ],
         'permissions' => 'My',
         'type'        => 'plugin',
-        'support'     => 'https://git.dotclear.watch/JcDenis/' . basename(__DIR__) . '/issues',
-        'details'     => 'https://git.dotclear.watch/JcDenis/' . basename(__DIR__) . '/src/branch/master/README.md',
-        'repository'  => 'https://git.dotclear.watch/JcDenis/' . basename(__DIR__) . '/raw/branch/master/dcstore.xml',
+        'support'     => 'https://github.com/JcDenis/' . basename(__DIR__) . '/issues',
+        'details'     => 'https://github.com/JcDenis/' . basename(__DIR__) . '/src/branch/master/README.md',
+        'repository'  => 'https://github.com/JcDenis/' . basename(__DIR__) . '/raw/branch/master/dcstore.xml',
+        'date'        => '2025-02-22T10:10:10+00:00',
     ]
 );
