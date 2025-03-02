@@ -4,7 +4,7 @@
 ![Date](https://img.shields.io/github/release-date/jcdenis/dcAdvancedCleaner?color=red)
 [![Dotclear](https://img.shields.io/badge/dotclear-v2.33-137bbb.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner)
-[![License](https://img.shields.io/github/license/jcdenis/dcAdvancedCleaner?color=white)](https://github.com/JcDenis/dcAdvancedCleaner/src/branch/master/LICENSE)
+[![License](https://img.shields.io/github/license/jcdenis/dcAdvancedCleaner?color=white)](https://github.com/JcDenis/dcAdvancedCleaner/blob/master/LICENSE)
 
 ## ABOUT
 
@@ -29,7 +29,7 @@ Once it's done you can manage cleaners from menu
 
 ## LINKS
 
-* [License](https://github.com/JcDenis/dcAdvancedCleaner/src/branch/master/LICENSE)
+* [License](https://github.com/JcDenis/dcAdvancedCleaner/blob/master/LICENSE)
 * [Packages & details](https://github.com/JcDenis/dcAdvancedCleaner/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner))
 * [Sources & contributions](https://github.com/JcDenis/dcAdvancedCleaner)
 * [Issues & security](https://github.com/JcDenis/dcAdvancedCleaner/issues)
