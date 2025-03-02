@@ -1,3 +1,9 @@
+dcAdvancedCleaner 1.7.1 - 2025.03.02
+===========================================================
+* Require Dotclear 2.33
+* Require PHP 8.1
+* Fix repository URLs
+
 dcAdvancedCleaner 1.7 - 2025.02.22
 ===========================================================
 * Require Dotclear 2.33
