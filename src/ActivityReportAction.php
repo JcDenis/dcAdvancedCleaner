@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dcAdvancedCleaner;
 
-use Dotclear\Core\Process;
+use Dotclear\Helper\Process\TraitProcess;
 use Dotclear\Plugin\activityReport\{
     Action,
     ActivityReport,
@@ -19,8 +19,10 @@ use Dotclear\Plugin\Uninstaller\Uninstaller;
  * @author      Jean-Christian Denis (author)
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class ActivityReportAction extends Process
+class ActivityReportAction
 {
+    use TraitProcess;
+
     public static function init(): bool
     {
         return self::status(true);
