@@ -1,3 +1,8 @@
+dcAdvancedCleaner 1.8 - 2025.09.09
+===========================================================
+* Bump Dotclear from 2.33 to 2.36
+* Use TraitProcess
+
 dcAdvancedCleaner 1.7.1 - 2025.03.02
 ===========================================================
 * Require Dotclear 2.33
