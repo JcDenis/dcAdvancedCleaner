@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\dcAdvancedCleaner;
 
 use Dotclear\Helper\Process\TraitProcess;
-use Dotclear\Plugin\activityReport\{
-    Action,
-    ActivityReport,
-    Group
-};
+use Dotclear\Plugin\activityReport\Action;
+use Dotclear\Plugin\activityReport\ActivityReport;
+use Dotclear\Plugin\activityReport\Group;
 use Dotclear\Plugin\Uninstaller\Uninstaller;
 
 /**

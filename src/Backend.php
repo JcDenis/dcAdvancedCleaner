@@ -36,7 +36,7 @@ class Backend
             'adminDashboardFavoritesV2' => function (Favorites $favs): void {
                 $favs->register(My::id(), [
                     'title'      => My::name(),
-                    'url'        => My::manageURL(),
+                    'url'        => My::manageUrl(),
                     'small-icon' => My::icons(),
                     'large-icon' => My::icons(),
                 ]);

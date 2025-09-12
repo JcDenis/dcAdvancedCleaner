@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\dcAdvancedCleaner;
 
-use Dotclear\Plugin\Uninstaller\{
-    CleanerParent,
-    CleanersStack,
-    Uninstaller
-};
+use Dotclear\Plugin\Uninstaller\CleanerParent;
+use Dotclear\Plugin\Uninstaller\CleanersStack;
+use Dotclear\Plugin\Uninstaller\Uninstaller;
 use Exception;
 
 /**
@@ -23,9 +21,9 @@ class ManageVars
     /**
      * self instance.
      *
-     * @var     ManageVars  $container
+     * @var     ManageVars  $instance
      */
-    private static $container;
+    private static ManageVars $instance;
 
     /**
      * The cleaners stack.
@@ -101,10 +99,10 @@ class ManageVars
 
     public static function init(): ManageVars
     {
-        if (!(self::$container instanceof self)) {
-            self::$container = new self();
+        if (!isset(self::$instance)) {
+            self::$instance = new self();
         }
 
-        return self::$container;
+        return self::$instance;
     }
 }
