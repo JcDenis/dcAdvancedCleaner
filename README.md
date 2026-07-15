@@ -3,7 +3,7 @@
 [![Release](https://img.shields.io/github/v/release/jcdenis/dcAdvancedCleaner?color=lightblue)](https://github.com/JcDenis/dcAdvancedCleaner/releases)
 ![Date](https://img.shields.io/github/release-date/jcdenis/dcAdvancedCleaner?color=red)
 [![Dotclear](https://img.shields.io/badge/dotclear-v2.36-137bbb.svg)](https://fr.dotclear.org/download)
-[![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner)
+[![Repository](https://img.shields.io/badge/repository-official-9ac123.svg)](https://dotclear.org/plugin/detail/dcAdvancedCleaner)
 [![License](https://img.shields.io/github/license/jcdenis/dcAdvancedCleaner?color=white)](https://github.com/JcDenis/dcAdvancedCleaner/blob/master/LICENSE)
 
 ## ABOUT
@@ -22,7 +22,7 @@ _dcAdvancedCleaner_ is a plugin for the open-source web publishing software call
 ## USAGE
 
 First install _dcAdvancedCleaner_, manualy from a zip package or from 
-Dotaddict repository. (See Dotclear's documentation to know how do this)
+Dotclear plugins repository. (See Dotclear's documentation to know how do this)
 
 Once it's done you can manage cleaners from menu 
 ''Advanced cleaner'' on sidebar or you can add dashboard icon.
@@ -30,7 +30,7 @@ Once it's done you can manage cleaners from menu
 ## LINKS
 
 * [License](https://github.com/JcDenis/dcAdvancedCleaner/blob/master/LICENSE)
-* [Packages & details](https://github.com/JcDenis/dcAdvancedCleaner/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/dcAdvancedCleaner))
+* [Packages & details](https://github.com/JcDenis/dcAdvancedCleaner/releases) (or on [Repository](https://dotclear.org/plugin/detail/dcAdvancedCleaner))
 * [Sources & contributions](https://github.com/JcDenis/dcAdvancedCleaner)
 * [Issues & security](https://github.com/JcDenis/dcAdvancedCleaner/issues)
 * [Discuss & help](https://forum.dotclear.org/viewtopic.php?id=40381)

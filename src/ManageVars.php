@@ -71,9 +71,9 @@ class ManageVars
     {
         $this->cleaners = Uninstaller::instance()->cleaners;
 
-        $related = $_REQUEST['related'] ?? '';
-        $entries = $_REQUEST['entries'] ?? [];
-        $action  = $_POST['action']     ?? '';
+        $related = isset($_REQUEST['related']) && is_string($_REQUEST['related']) ? $_REQUEST['related'] : '';
+        $entries = isset($_REQUEST['entries']) && is_array($_REQUEST['entries']) ? $_REQUEST['entries'] : [];
+        $action  = isset($_POST['action']) && is_string($_POST['action']) ? $_POST['action'] : '';
 
         $cleaner = null;
         $combo   = [];
@@ -92,8 +92,8 @@ class ManageVars
 
         $this->cleaner = $cleaner;
         $this->related = $related;
-        $this->entries = is_array($entries) ? $entries : [];
-        $this->action  = is_string($action) ? $action : '';
+        $this->entries = array_values(array_filter($entries, is_string(...)));
+        $this->action  = $action;
         $this->combo   = $combo;
     }
 
