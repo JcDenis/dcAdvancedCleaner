@@ -25,7 +25,7 @@ $this->registerModule(
     '1.8.1',
     [
         'requires' => [
-            ['core', '2.36'],
+            ['core', '2.39'],
             ['Uninstaller', '1.0'],
         ],
         'permissions' => 'My',
