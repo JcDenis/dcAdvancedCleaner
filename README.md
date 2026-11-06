@@ -39,5 +39,6 @@ Once it's done you can manage cleaners from menu
 
 * Jean-Christian Denis (author)
 * Pierre Van Glabeke
+* Claude (AI assistant by Anthropic)
 
 You are welcome to contribute to this code.
