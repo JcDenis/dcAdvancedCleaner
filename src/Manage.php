@@ -76,22 +76,27 @@ class Manage
 
         if (!empty($vars->entries) && !empty($vars->action)) {
             try {
+                $done = false;
                 // special related
                 if (!empty($vars->related) && $vars->action == 'delete_related') {
                     $ns = '';
                     foreach ($vars->entries as $id) {
                         $ns .= $vars->related . ':' . $id . ';';
                     }
-                    $vars->cleaners->execute($vars->cleaner->id, $vars->action, $ns);
+                    $done = $vars->cleaners->execute($vars->cleaner->id, $vars->action, $ns);
                     // other actions
                 } elseif ($vars->action != 'delete_related') {
                     foreach ($vars->entries as $ns) {
-                        $vars->cleaners->execute($vars->cleaner->id, $vars->action, $ns);
+                        $done = $vars->cleaners->execute($vars->cleaner->id, $vars->action, $ns) || $done;
                     }
                 }
 
-                Notices::addSuccessNotice(__('Action successfuly excecuted'));
-                My::redirect(['part' => $vars->cleaner->id]);
+                if (!$done) {
+                    throw new Exception(__('Nothing has been done.'));
+                }
+
+                Notices::addSuccessNotice(__('Action successfully executed'));
+                My::redirect(array_filter(['part' => $vars->cleaner->id, 'related' => $vars->related]));
             } catch (Exception $e) {
                 App::error()->add($e->getMessage());
             }
@@ -110,7 +115,7 @@ class Manage
 
         Page::openModule(
             My::name(),
-            Page::jsJson('dcAdvancedCleaner', ['confirm_delete' => __('Are you sure you perform these ations?')]) .
+            Page::jsJson('dcAdvancedCleaner', ['confirm_delete' => __('Are you sure you want to perform these actions?')]) .
             My::cssLoad('backend') .
             My::jsLoad('backend')
         );
@@ -164,7 +169,7 @@ class Manage
 
             $rs = $vars->cleaner->values();
             if (empty($rs)) {
-                echo (new Text('p', __('There is nothing to display')))->class('error')->render();
+                echo (new Text('p', __('There is nothing to display')))->class('info')->render();
             } else {
                 $combo_actions = [];
                 $has_related   = false;
@@ -175,7 +180,12 @@ class Manage
 
                         continue;
                     }
-                    $combo_actions[$descriptor->select] = $descriptor->id;
+                    // Keep each action even if two of them have the same (translated) label
+                    $label = $descriptor->select;
+                    if (isset($combo_actions[$label])) {
+                        $label .= ' (' . $descriptor->id . ')';
+                    }
+                    $combo_actions[$label] = $descriptor->id;
                 }
 
                 $lines = [];
@@ -225,7 +235,7 @@ class Manage
                             ->class('table-outer')
                             ->items([
                                 (new Table())
-                                    ->caption(new Caption(sprintf(__('There are %s entries'), count($rs))))
+                                    ->caption(new Caption(sprintf(__('There is %s entry', 'There are %s entries', count($lines)), count($lines))))
                                     ->thead(
                                         (new Thead())
                                             ->rows([
@@ -248,7 +258,7 @@ class Manage
                         (new Para())->items([
                             (new Label(__('Action on selected rows:'), Label::OUTSIDE_LABEL_BEFORE))->for('select_action'),
                             (new Select(['action', 'select_action']))->items($combo_actions),
-                            (new Submit('do-action'))->class('delete')->value(__('I understand and I am want to delete this')),
+                            (new Submit('do-action'))->class('delete')->value(__('I understand and I want to delete this')),
                             (new Hidden(['part'], $vars->cleaner->id)),
                             ... My::hiddenFields(),
                         ]),
@@ -285,7 +295,7 @@ class Manage
             $distrib = in_array($vars->related, $vars->cleaner->distributed());
             $rs      = $vars->cleaner->related($vars->related);
             if (empty($rs)) {
-                echo (new Text('p', __('There is nothing to display')))->class('error')->render();
+                echo (new Text('p', __('There is nothing to display')))->class('info')->render();
             } else {
                 $lines = [];
                 foreach ($rs as $key => $value) {
@@ -316,7 +326,7 @@ class Manage
                             ->class('table-outer')
                             ->items([
                                 (new Table())
-                                    ->caption(new Caption(sprintf(__('There are %s related entries for the group "%s"'), count($rs), $vars->related)))
+                                    ->caption(new Caption(sprintf(__('There is %s related entry for the group "%s"', 'There are %s related entries for the group "%s"', count($rs)), count($rs), $vars->related)))
                                     ->thead(
                                         (new Thead())
                                             ->rows([
@@ -336,7 +346,7 @@ class Manage
                                     ),
                             ]),
                         (new Para())->items([
-                            (new Submit('do-action'))->class('delete')->value(__('I understand and I am want to delete this')),
+                            (new Submit('do-action'))->class('delete')->value(__('I understand and I want to delete this')),
                             ... My::hiddenFields([
                                 'related' => $vars->related,
                                 'part'    => $vars->cleaner->id,
