@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: src/Manage.php:93
-msgid "Action successfuly excecuted"
+msgid "Action successfully executed"
 msgstr "Action exécutée avec succès"
 
 #: src/Manage.php:134
@@ -25,8 +25,10 @@ msgid "There is nothing to display"
 msgstr "Il n'y a rien à afficher"
 
 #: src/Manage.php:184
-msgid "There are %s entries"
-msgstr "Il y a %s entrées"
+msgid "There is %s entry"
+msgid_plural "There are %s entries"
+msgstr[0] "Il y a %s entrée"
+msgstr[1] "Il y a %s entrées"
 
 #: src/Manage.php:185
 msgid "Objects"
@@ -41,7 +43,7 @@ msgid "Action on selected rows:"
 msgstr "Action sur les lignes sélectionnées :"
 
 #: src/Manage.php:220
-msgid "I understand and I am want to delete this"
+msgid "I understand and I want to delete this"
 msgstr "J'ai compris et je veux effacer ceci"
 
 #: src/Manage.php:226
@@ -57,8 +59,10 @@ msgid "Hide Dotclear default properties"
 msgstr "Cacher les propriétés de Dotclear"
 
 #: src/Manage.php:254
-msgid "There are %s related entries for the group \"%s\""
-msgstr "Il y a %s entrées relatives au group \"%s\""
+msgid "There is %s related entry for the group \"%s\""
+msgid_plural "There are %s related entries for the group \"%s\""
+msgstr[0] "Il y a %s entrée relative au groupe \"%s\""
+msgstr[1] "Il y a %s entrées relatives au groupe \"%s\""
 
 #: src/ManageVars.php:57
 msgid "Failed to load cleaner"
@@ -74,3 +78,8 @@ msgstr "Nettoyeur avancé"
 msgid "Make a huge cleaning of dotclear"
 msgstr "Faites un énorme nettoyage de dotclear"
 
+msgid "Are you sure you want to perform these actions?"
+msgstr "Êtes-vous sûr de vouloir effectuer ces actions ?"
+
+msgid "Nothing has been done."
+msgstr "Rien n'a été fait."
