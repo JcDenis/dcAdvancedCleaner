@@ -1,6 +1,5 @@
 dcAdvancedCleaner 1.10 - 2026.11.14
 ===========================================================
-* Add Claude to contributors
 * Add a user guide in French, with screenshots
 * Add admin help in English and French
 
