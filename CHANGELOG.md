@@ -1,3 +1,8 @@
+dcAdvancedCleaner 1.11 - 2026.11.14
+===========================================================
+* Fix actions with same label, entries count, redirect and messages after actions
+* Fix texts and translations
+
 dcAdvancedCleaner 1.10 - 2026.11.14
 ===========================================================
 * Add a user guide in French, with screenshots
