@@ -12,6 +12,8 @@ _dcAdvancedCleaner_ is a plugin for the open-source web publishing software call
 
 > It help clean up Dotclear install, plugins, themes, settings, tables, cache, etc...
 
+A user guide with screenshots is available in French: [guide d'utilisation](https://github.com/JcDenis/dcAdvancedCleaner/blob/master/docs/fr/utilisation.md).
+
 ## REQUIREMENTS
 
 * Dotclear 2.39
@@ -30,6 +32,7 @@ Once it's done you can manage cleaners from menu
 ## LINKS
 
 * [License](https://github.com/JcDenis/dcAdvancedCleaner/blob/master/LICENSE)
+* [User guide (in French)](https://github.com/JcDenis/dcAdvancedCleaner/blob/master/docs/fr/utilisation.md)
 * [Packages & details](https://github.com/JcDenis/dcAdvancedCleaner/releases) (or on [Repository](https://dotclear.org/plugin/detail/dcAdvancedCleaner))
 * [Sources & contributions](https://github.com/JcDenis/dcAdvancedCleaner)
 * [Issues & security](https://github.com/JcDenis/dcAdvancedCleaner/issues)
