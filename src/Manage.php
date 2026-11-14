@@ -350,6 +350,7 @@ class Manage
             }
         }
 
+        Page::helpBlock(My::id() . (empty($vars->related) ? '-cleaners' : '-related'));
         Page::closeModule();
     }
 }
