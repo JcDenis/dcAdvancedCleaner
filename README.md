@@ -19,7 +19,7 @@ A user guide with screenshots is available in French: [guide d'utilisation](http
 * Dotclear 2.39
 * PHP 8.1+
 * Plugin Uninstaller (from distribution)
-* Dotclaer superadmin permission
+* Dotclear superadmin permission
 
 ## USAGE
 
